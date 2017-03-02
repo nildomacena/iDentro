@@ -1,0 +1,19 @@
+page-filtro-ingredientes {
+    .center-spinner {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; 
+        height: 100%;
+        padding-bottom: 4em; 
+    }
+
+    ion-spinner * {
+        width: 40px;
+        height: 40px;
+        stroke: #444;
+        fill: #222;
+        display: block;
+        margin: auto;
+    }
+}

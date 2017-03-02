@@ -1,0 +1,38 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{lanche? lanche.nome_estabelecimento: 'Detalhes'}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-grid *ngIf="lanche">
+    <ion-row>
+      <ion-col width-33 >
+        <ion-avatar>
+          <img [src]="lanche.imagem" />
+        </ion-avatar>
+      </ion-col>
+      <ion-col width-67 class="info">
+        <b><h4>{{lanche.nome}}</h4></b><br>
+        <h5>R${{lanche.preco}},00</h5>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <div class="divisor"></div>
+  <ion-list *ngIf="lanche">
+    <ion-list-header>Ingredientes</ion-list-header>
+    <ion-item *ngFor="let ingrediente of lanche.ingredientes" >
+      <ion-label>{{ingrediente.charAt(0).toUpperCase() + ingrediente.slice(1)}}</ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-fab left bottom >
+    <button ion-fab color="primary" (click)="goBack()"><ion-icon name="arrow-back"></ion-icon></button>
+  </ion-fab>
+  <ion-fab right bottom >
+    <button [disabled]="justAddedToCart" ion-fab color="primary" (click)="addToCart()"><ion-icon name="cart"></ion-icon></button>
+  </ion-fab>
+</ion-content>

@@ -1,0 +1,29 @@
+<ion-menu [content]="content">
+  <ion-content class="menu-left">
+    <div text-center padding-top padding-bottom class="primary-bg menu-left">
+      <a menuClose>
+        <div>
+          <h4 light >iDentro</h4>
+          <hr>
+          <ion-list class="list-full-border">
+            <button class="item-menu" ion-item menuClose clear (click)="goToCarrinho()" >
+              <ion-icon item-left name="cart"></ion-icon>Carrinho
+            </button>
+            <button class="item-menu" ion-item menuClose clear (click)="goToLocalizacao()" >  
+              <ion-icon item-left name="locate"></ion-icon> Definir localização
+            </button>
+            <button class="item-menu" ion-item menuClose clear (click)="goToCarrinho()" >
+              <ion-icon item-left name="log-out"></ion-icon>Sair
+            </button>
+          </ion-list>
+        </div>
+      </a>
+    </div>
+    <div class="contato" padding-left (click)="goToContato()" >
+      <p><b>Entre em contato</b></p>
+    </div>
+
+  </ion-content>
+</ion-menu>
+
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

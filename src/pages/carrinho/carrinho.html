@@ -1,0 +1,23 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Carrinho</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list [virtualScroll]="carrinho">
+      <ion-item *virtualItem="let item" >
+        <ion-avatar item-left >
+          <img [src]="item.lanche.imagem">
+        </ion-avatar>
+        <div>
+          {{ item.lanche.nome }}<br>
+          Valor: R$ {{item.lanche.preco}}
+          Quantidade: {{item.quantidade}}
+        </div>
+      </ion-item>
+    </ion-list>
+</ion-content>

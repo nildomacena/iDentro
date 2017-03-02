@@ -1,0 +1,24 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Filtro ingredientes</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div class="center-spinner" *ngIf='isLoading'>
+    <ion-spinner name="crescent" mode="md"></ion-spinner>
+  </div>
+  <ion-list [virtualScroll]="lanchesFiltrados">
+      <ion-item *virtualItem="let lanche" (click)="goToLanche(lanche)" >
+        <h4>{{lanche.nome}}</h4>
+        {{lanche.nome_estabelecimento}}
+      </ion-item>
+  </ion-list>
+  <h4 *ngIf="lanchesFiltrados.length == 0 && !isLoading">Não foi encontrado nenhum lanche que essas características.</h4>
+  <ion-fab left bottom >
+    <button ion-fab color="primary" (click)="goBack()"><ion-icon name="arrow-back"></ion-icon></button>
+  </ion-fab>
+</ion-content>

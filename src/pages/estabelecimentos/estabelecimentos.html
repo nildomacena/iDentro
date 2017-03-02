@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle *ngIf="!showToolbar">
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title *ngIf="!showToolbar" >Estabelecimentos</ion-title>
+        <ion-searchbar #searchbar *ngIf="showToolbar"
+          placeholder= "Pesquisar"
+          [(ngModel)]="myInput"
+          [showCancelButton]="true"
+          (ionInput)="filter($event)"
+          (ionCancel)="toggleSearchbar()">
+        </ion-searchbar>
+
+    <ion-buttons end *ngIf="!showToolbar">
+      <button ion-button icon-only (click)="toggleSearchbar()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+  <ion-content padding>
+    <div class="center-spinner" *ngIf='isLoading'>
+      <ion-spinner name="crescent" mode="md"></ion-spinner>
+    </div>
+    <ion-list [virtualScroll]="estabelecimentos">
+      <ion-item-sliding *virtualItem="let estabelecimento" >
+        <ion-item>
+          <ion-avatar item-left >
+            <img [src]="estabelecimento.imagemCapa">
+          </ion-avatar>
+          <div (click)="onSelectEstabelecimento(estabelecimento)" >
+            {{ estabelecimento.nome }}<br>
+            <div class="telefone-wrapper">
+                <ion-icon name="call"></ion-icon>&nbsp;{{estabelecimento.telefone}}&nbsp;&nbsp;&nbsp;
+                <ion-icon name="phone-portrait"></ion-icon>&nbsp;{{estabelecimento.telefone}}
+            </div>
+          </div>
+        </ion-item>
+        <ion-item-options side="right">
+          <button (click)="call(estabelecimento)" ion-button color="secondary">
+            <ion-icon name="call"></ion-icon>
+            Ligar
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+      
+      
+    </ion-list>
+  </ion-content>

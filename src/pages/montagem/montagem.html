@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Monte seu lanche</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-list [virtualScroll]="ingredientes">
+      <ion-item *virtualItem="let ingrediente" >
+        <ion-label>{{ingrediente.$value}}</ion-label>
+        <ion-checkbox (ionChange)="onChange($event, ingrediente)" ></ion-checkbox>
+      </ion-item>
+  </ion-list>
+   <ion-fab right bottom *ngIf="ingredientesSelecionados.length > 0" >
+    <button ion-fab color="primary" (click)="console()"><ion-icon name="arrow-forward"></ion-icon></button>
+   </ion-fab>
+</ion-content>  

@@ -10,6 +10,7 @@ import { NavController, NavParams, ToastController } from 'ionic-angular';
 export class LancheDetailPage {
   lanche: any;
   justAddedToCart: boolean = false;
+  estabelecimento: any;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -17,7 +18,7 @@ export class LancheDetailPage {
     public fireService: FireService
     ) {
       let key_lanche = this.navParams.get('lanche').$key;
-      
+      this.estabelecimento = this.navParams.get('estabelecimento');
       this.fireService.getLancheByKey(key_lanche)
         .subscribe(lanche => {
           this.lanche = lanche;
@@ -36,7 +37,7 @@ export class LancheDetailPage {
 
   addToCart(){
     this.justAddedToCart = true;
-    this.fireService.addToCart(this.lanche);
+    this.fireService.addToCart(this.lanche, this.estabelecimento);
     let toast = this.toastCtrl.create({
       message: this.lanche.nome+' adicionado ao carrinho',
       duration: 2500,

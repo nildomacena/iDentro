@@ -6,9 +6,9 @@
 <ion-content>
 <ion-tabs tabsHighlight="true" color="primary" class="tabs-basic">
   <ion-tab [root]="cardapioPage" tabTitle="Pratos" [rootParams]="estabelecimento"></ion-tab>
-  <ion-tab [root]="bebidasPage" tabTitle="Bebidas" [rootParams]="estabelecimento"></ion-tab>
+  <ion-tab [root]="bebidasPage" tabTitle="Acompanhamentos" [rootParams]="estabelecimento"></ion-tab>
 </ion-tabs>
-  <ion-fab right bottom *ngIf="estabelecimento.telefone || estabelecimento.celular" >
+  <ion-fab center bottom *ngIf="estabelecimento.telefone || estabelecimento.celular" >
     <button ion-fab color="primary" (click)="call()"><ion-icon name="call"></ion-icon></button>
   </ion-fab>
 </ion-content>

@@ -8,16 +8,53 @@
 
 
 <ion-content padding>
-  <ion-list [virtualScroll]="carrinho">
-      <ion-item *virtualItem="let item" >
-        <ion-avatar item-left >
-          <img [src]="item.lanche.imagem">
-        </ion-avatar>
-        <div>
-          {{ item.lanche.nome }}<br>
-          Valor: R$ {{item.lanche.preco}}
-          Quantidade: {{item.quantidade}}
-        </div>
-      </ion-item>
-    </ion-list>
+
+  <div class="vazio" *ngIf="!carrinho.estabelecimento">
+    <h4>Você ainda não adicionou itens ao carrinho. Não perca tempo, faça já seu pedido.</h4>
+    <button ion-button primary style="width: 100%" (click)="goBack()" >
+        Visualizar ofertas
+    </button>
+  </div>
+  <ion-card *ngFor="let item of carrinho.itens" >    
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col width-20>
+            <div class="valign avatar-wrapper">
+              <ion-avatar>
+                <img [src]="item.lanche.imagem"/>
+              </ion-avatar>
+            </div>
+          </ion-col>
+          <ion-col width-80 class="titulo-lanche" >
+            <ion-row>
+              <ion-col>
+                {{item.lanche.nome}}
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col width-67>
+                <div class="descricao-lanche">
+                  R$ {{item.lanche.preco}} X {{item.quantidade}}
+                </div>
+              </ion-col>
+              <ion-col width-33> 
+                <div class="valign botoes">
+                  <button class="botao-comprar" (click)="addItem(item, index)" ion-button icon-only>
+                      <ion-icon name="add"></ion-icon>
+                  </button>
+                  <button class="botao-comprar" (click)="removeItem(item, index)" ion-button icon-only>
+                    <ion-icon name="remove"></ion-icon>
+                  </button>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+          
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <button ion-button primary style="width: 100%" (click)="fecharPedido()" *ngIf="carrinho.estabelecimento" >Valor total: R${{carrinho.valor_total}},00. Fechar pedido</button>
+  
 </ion-content>

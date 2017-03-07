@@ -1,7 +1,7 @@
 import { LancheDetailPage } from './../lanche-detail/lanche-detail';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, App } from 'ionic-angular';
+import { NavController, NavParams, App, AlertController } from 'ionic-angular';
 
 
 @Component({
@@ -15,6 +15,7 @@ export class CardapioPage {
               public navCtrl: NavController, 
               public navParams: NavParams,
               public fireService: FireService,
+              public alertCtrl: AlertController,
               public app: App
     ) {
 
@@ -29,6 +30,30 @@ export class CardapioPage {
   }
 
   goToLanche(lanche){
-    this.app.getRootNav().push(LancheDetailPage, {lanche: lanche, key_estabelecimento: this.estabelecimento.$key});
+    this.app.getRootNav().push(LancheDetailPage, {lanche: lanche, estabelecimento: this.estabelecimento});
+  }
+
+  addToCart(lanche){
+    if(this.fireService.addToCart(lanche, this.estabelecimento) == 'error'){
+      let alert = this.alertCtrl.create({
+        title: 'Alerta',
+        subTitle: 'Você tem itens de outro estabelecimento adicionados ao carrinho. Deseja limpar o carrinho para adiconar este novo item?',
+        buttons: [
+          {
+            text: 'Não',
+            role: 'cancel'
+          },
+          {
+            text: 'Sim',
+            handler: () => {
+              this.fireService.limpaCarrinho();
+              this.fireService.addToCart(lanche, this.estabelecimento);
+            }
+          }
+        ]
+      })
+      alert.present();
+
+    }
   }
 }

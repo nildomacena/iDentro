@@ -13,6 +13,7 @@ export class EstabelecimentoPage {
   photo: string;
   bebidasPage = BebidasPage;
   cardapioPage = CardapioPage;
+  favorito: boolean = false;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -84,4 +85,7 @@ export class EstabelecimentoPage {
     alert.present();
   }
 
+  toggleFavorito(){
+    this.favorito = !this.favorito;
+  }
 }

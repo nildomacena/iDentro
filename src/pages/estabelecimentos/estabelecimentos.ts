@@ -2,7 +2,7 @@ import { EstabelecimentoPage } from './../estabelecimento/estabelecimento';
 import { FireService } from './../../services/fire.service';
 import { Component, ViewChildren, ChangeDetectorRef, ViewChild, QueryList } from '@angular/core';
 import { NavController, NavParams, App, Searchbar, Content, AlertController, ToastController } from 'ionic-angular';
-
+import { CallNumber } from 'ionic-native';
 
 @Component({
   selector: 'page-estabelecimentos',
@@ -10,6 +10,7 @@ import { NavController, NavParams, App, Searchbar, Content, AlertController, Toa
 })
 export class EstabelecimentosPage {
   estabelecimentos: any[];
+  filteredEstabelecimentos: any[];
   showToolbar:boolean = false;
   isSearch: boolean = false;
   isSearchEmpty: boolean = true;
@@ -34,12 +35,12 @@ export class EstabelecimentosPage {
    this.fireService.getEstabelecimentos()
       .subscribe(estabelecimentos => {
         this.isLoading = false;
-        this.estabelecimentos = estabelecimentos;
+        this.estabelecimentos = this.filteredEstabelecimentos = estabelecimentos;
         let toast = this.toastCtrl.create({
           message: '← Deslize para a esquerda para ligar.',
           showCloseButton: true,
           closeButtonText: 'x',
-          duration: 3500
+          duration: 4500
         })
         toast.present();
       });
@@ -65,15 +66,19 @@ export class EstabelecimentosPage {
 
     filter(event: Event){
       let search:string = event.srcElement['value'];
-      if(!search)
+      if(!search){
         this.isSearchEmpty = true;
+        this.filteredEstabelecimentos = this.estabelecimentos;
+      }
       else{
-        console.log(search);
-        /*
+        console.log('search: ', search);
+
         this.isSearchEmpty = search.length > 0? false: true; //Verifica se o usuário digitou alguma coisa no searchbox para que o aplicativo não pesquise com o searchbox vazio
-        this.filteredEstabelecimentos = this.estabelecimentos.filter(estabelecimento => estabelecimento.nome.toUpperCase().includes(search.toUpperCase()) || estabelecimento.palavras_chave.toUpperCase().includes(search.toUpperCase()));
+        this.filteredEstabelecimentos = this.estabelecimentos.filter(estabelecimento => 
+          estabelecimento.nome.toUpperCase().includes(search.toUpperCase()));
+
         console.log(this.filteredEstabelecimentos);
-        console.log('searchbar: ', this.searchbar); */
+        console.log('searchbar: ', this.searchbar);
       }
     } 
 
@@ -87,11 +92,15 @@ export class EstabelecimentosPage {
         buttons = [
           {
             text: estabelecimento.telefone,
-            handler: () => {console.log(estabelecimento.telefone)}
+            handler: () => {
+              CallNumber.call(estabelecimento.telefone)
+            }
           },
           {
             text: estabelecimento.celular.numero,
-            handler: () => {console.log(estabelecimento.celular.numero)}
+            handler: () => {
+              CallNumber.call(estabelecimento.celular.numero)
+            }
           },
           {
             text: 'Cancelar',
@@ -107,7 +116,9 @@ export class EstabelecimentosPage {
             },
             {
               text: 'Ligar',
-              handler: () => {console.log(estabelecimento.celular)}
+              handler: () => {
+                CallNumber.call(estabelecimento.celular)
+              }
             }
           ]
         }
@@ -120,7 +131,9 @@ export class EstabelecimentosPage {
             },
             {
               text: 'Ligar',
-              handler: () => {console.log(estabelecimento.celular.numero)}
+              handler: () => {
+                CallNumber.call(estabelecimento.celular.numero)
+              }
             }
           ]
         }

@@ -2,6 +2,8 @@ import { lanches, estabelecimentos, lanches_por_estabelecimento } from './dados'
 import { Injectable } from '@angular/core';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { AngularFireOffline, ListObservable, ObjectObservable } from 'angularfire2-offline';
+import { Observable } from 'rxjs';
+import * as firebase from 'firebase';
 import 'rxjs/add/operator/toPromise';
 
 
@@ -197,5 +199,23 @@ export class FireService {
 
     getCart(){
         return this.cart;
+    }
+
+
+    addBairro(nomeBairro: string):firebase.Promise<any>{
+        return this.af.database.list('bairros').push({nome: nomeBairro});
+    }
+
+    getBairros(): Observable<any>{
+        console.log('getBairros');
+        return this.af.database.list('bairros', {
+            query: {
+                orderByChild: 'nome'
+            }
+        });
+    }
+
+    getBairroByKey(key: string):Observable<any>{
+        return this.af.database.object('bairros/'+key);
     }
 }

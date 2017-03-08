@@ -24,3 +24,21 @@
   left: 0;
   text-align: center;
 }
+
+ion-spinner * {
+    width: 60px;
+    height: 60px;
+    stroke: #444;
+    fill: #222;
+    display: block;
+    margin: auto;
+}
+
+.center-spinner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    height: 100%;
+    padding-bottom: 4em; 
+}

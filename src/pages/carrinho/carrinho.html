@@ -55,6 +55,7 @@
       </ion-grid>
     </ion-card-content>
   </ion-card>
-  <button ion-button primary style="width: 100%" (click)="fecharPedido()" *ngIf="carrinho.estabelecimento" >Valor total: R${{carrinho.valor_total}},00. Fechar pedido</button>
+  <button ion-button primary style="width: 100%" (click)="fecharPedido()" *ngIf="carrinho.estabelecimento && localizacaoDefinida" >Valor total: R${{carrinho.valor_total}},00. Fechar pedido</button>
+  <button ion-button primary style="width: 100%" (click)="definirLocalizacao()" *ngIf="carrinho.estabelecimento && !localizacaoDefinida" >  <ion-icon name="locate"></ion-icon> &nbsp;Defina sua localização</button>
   
 </ion-content>

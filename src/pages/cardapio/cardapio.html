@@ -19,6 +19,9 @@
       <ion-col width-100 class="divisor"></ion-col>
     </ion-row>
   </ion-grid>
+  <div class="center-spinner" *ngIf='isLoadingCardapio'>
+    <ion-spinner name="crescent" mode="md"></ion-spinner>
+  </div>
     <ion-card *ngFor="let lanche of lanches" >
       <ion-card-content>
         <ion-grid>

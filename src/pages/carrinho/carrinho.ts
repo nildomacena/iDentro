@@ -1,6 +1,7 @@
+import { LocalizacaoPage } from './../localizacao/localizacao';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, ModalController } from 'ionic-angular';
 
 
 @Component({
@@ -13,7 +14,8 @@ export class CarrinhoPage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     public fireService: FireService,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public modalCtrl: ModalController
     ) {
       this.carrinho = this.fireService.getCart();
       console.log(this.carrinho);
@@ -59,5 +61,13 @@ export class CarrinhoPage {
 
   fecharPedido(){
     console.log('Fechar pedido')
+  }
+
+  definirLocalizacao(){
+    let modal = this.modalCtrl.create(LocalizacaoPage, {modal: true});
+    modal.present();
+    modal.onDidDismiss(_ => {
+      console.log('Modal fechado.');
+    })
   }
 }

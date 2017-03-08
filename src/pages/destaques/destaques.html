@@ -8,11 +8,29 @@
 </ion-header>
 
 <ion-content padding>
-  Destaques Page
-  <ion-list>
-    <ion-item>
-      <ion-label floating>Username</ion-label>
-      <ion-input type="text"></ion-input>
-    </ion-item>
-  </ion-list>
+      <ion-card *ngFor=" let estabelecimento of estabelecimentos">
+        <img [src]="estabelecimento.imagemCapa"/>
+        <ion-card-content>
+          <ion-card-title>
+            {{estabelecimento.nome}}
+            </ion-card-title>
+          <p>
+            {{estabelecimento.fraseDestaque}}
+          </p>
+        </ion-card-content>
+          <ion-row no-padding>
+            <ion-col>
+              <button ion-button clear small color="danger" (click)="onSelectEstabelecimento(estabelecimento)" icon-left>
+                <ion-icon name='arrow-forward'></ion-icon>
+                Visualizar
+              </button>
+            </ion-col>
+            <ion-col text-right>
+              <button ion-button clear small color="danger" (click)="call(estabelecimento)" icon-left>
+                <ion-icon name='call'></ion-icon>
+                Ligar
+              </button>
+            </ion-col>
+          </ion-row>
+      </ion-card>
 </ion-content>

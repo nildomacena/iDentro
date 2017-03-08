@@ -23,7 +23,7 @@
     <div class="center-spinner" *ngIf='isLoading'>
       <ion-spinner name="crescent" mode="md"></ion-spinner>
     </div>
-    <ion-list [virtualScroll]="estabelecimentos">
+    <ion-list [virtualScroll]="filteredEstabelecimentos">
       <ion-item-sliding *virtualItem="let estabelecimento" >
         <ion-item>
           <ion-avatar item-left >

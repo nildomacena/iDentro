@@ -9,7 +9,7 @@ import { NavController, NavParams, Checkbox } from 'ionic-angular';
   templateUrl: 'montagem.html'
 })
 export class MontagemPage {
-
+  isLoading: boolean = true;
   ingredientes: any[];
   checkbox: any;
   ingredientesSelecionados: string[] = [];
@@ -22,7 +22,7 @@ export class MontagemPage {
   ionViewDidLoad() {
     this.fireService.getIngredientes()
       .subscribe(ingredientes => {
-
+        this.isLoading = false;
         this.ingredientes = ingredientes;
         console.log(this.ingredientes);
       })

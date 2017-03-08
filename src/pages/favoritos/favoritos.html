@@ -1,0 +1,44 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Favoritos</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div class="center-spinner" *ngIf='isLoading'>
+    <ion-spinner name="crescent" mode="md"></ion-spinner>
+  </div>
+  <div class="vazio" *ngIf="vazio">
+    <h4>Você ainda não adicionou nenhum estabelecimento à sua lista de favoritos. Não perca tempo, visite nossos parceiros.</h4>
+    <button ion-button primary style="width: 100%" (click)="goBack()" >
+        Visualizar ofertas
+    </button>
+  </div>
+  <ion-list [virtualScroll]="favoritos">
+    <ion-item-sliding *virtualItem="let estabelecimento" >
+      <ion-item>
+        <ion-avatar item-left >
+          <img [src]="estabelecimento.imagemCapa">
+        </ion-avatar>
+        <div (click)="onSelectEstabelecimento(estabelecimento)" >
+          {{ estabelecimento.nome }}<br>
+          <div class="telefone-wrapper">
+              <ion-icon name="call"></ion-icon>&nbsp;{{estabelecimento.telefone}}&nbsp;&nbsp;&nbsp;
+              <ion-icon name="phone-portrait"></ion-icon>&nbsp;{{estabelecimento.telefone}}
+          </div>
+        </div>
+      </ion-item>
+      <ion-item-options side="right">
+        <button (click)="call(estabelecimento)" ion-button color="secondary">
+          <ion-icon name="call"></ion-icon>
+          Ligar
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+    
+    
+  </ion-list>
+</ion-content>

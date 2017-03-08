@@ -20,6 +20,10 @@ export class FireService {
         return this.af.database.list('estabelecimentos');
     }
 
+    getEstabelecimentoByKey(estabelecimento_key: string): Observable<any>{
+        console.log(estabelecimento_key);
+        return this.af.database.object('estabelecimentos/'+estabelecimento_key);
+    }
     getIngredientes(){
         return this.af.database.list('ingredientes');
     }
@@ -217,5 +221,39 @@ export class FireService {
 
     getBairroByKey(key: string):Observable<any>{
         return this.af.database.object('bairros/'+key);
+    }
+
+    addToFavorito(estabelecimento:any, jaFavorito:boolean):firebase.Promise<any>{
+        console.log(estabelecimento);
+        if(jaFavorito){
+            return firebase.database().ref('usuarios/id_usuario/favoritos/'+estabelecimento.$key).remove();
+        }
+        else{
+            return firebase.database().ref('usuarios/id_usuario/favoritos/'+estabelecimento.$key).set({
+                nome: estabelecimento.nome,
+                key: estabelecimento.$key,
+                imagemCapa: estabelecimento.imagemCapa,
+                telefone: estabelecimento.telefone,
+                celular: estabelecimento.celular
+            })
+        }
+    }
+
+    checkFavorito(estabelecimento_key: string): Promise<boolean>{
+        let promise = new Promise((resolve, reject) => {
+            firebase.database().ref('usuarios/id_usuario/favoritos/'+estabelecimento_key).once('value')
+                .then(snap => {
+                    console.log('snap favorito: ', snap.val());
+                    if(snap.val())
+                        resolve(true)
+                    else    
+                        resolve(false);
+                })
+        })
+        return promise;
+    }
+
+    getFavoritos():Observable<any>{
+        return this.af.database.list('usuarios/id_usuario/favoritos');
     }
 }

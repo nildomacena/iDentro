@@ -1,3 +1,4 @@
+import { FireService } from './../../services/fire.service';
 import { CardapioPage } from './../cardapio/cardapio';
 import { BebidasPage } from './../bebidas/bebidas';
 import { Component } from '@angular/core';
@@ -13,11 +14,13 @@ export class EstabelecimentoPage {
   photo: string;
   bebidasPage = BebidasPage;
   cardapioPage = CardapioPage;
-  favorito: boolean = false;
+  favorito: boolean;
+  adicionando: boolean = false;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public fireService: FireService
     ) {
 
     this.estabelecimento = this.navParams.get('estabelecimento');
@@ -25,7 +28,11 @@ export class EstabelecimentoPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad EstabelecimentoPage');
+    this.fireService.checkFavorito(this.estabelecimento.$key)
+      .then(result => {
+        console.log('result load: ',result);
+        this.favorito = result;
+      })
   }
 
   call(){
@@ -85,7 +92,16 @@ export class EstabelecimentoPage {
     alert.present();
   }
 
-  toggleFavorito(){
-    this.favorito = !this.favorito;
+  addToFavorito(){
+    this.adicionando = true;
+    this.fireService.addToFavorito(this.estabelecimento, this.favorito)
+      .then(_ => {
+        this.fireService.checkFavorito(this.estabelecimento.$key)
+          .then(result => {
+            console.log('reslt: ', result)
+            this.adicionando = false;
+            this.favorito = result;
+          })
+      })
   }
 }

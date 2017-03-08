@@ -1,3 +1,4 @@
+import { FavoritosPage } from './../pages/favoritos/favoritos';
 import { ContatoPage } from './../pages/contato/contato';
 import { LocalizacaoPage } from './../pages/localizacao/localizacao';
 import { CarrinhoPage } from './../pages/carrinho/carrinho';
@@ -35,5 +36,8 @@ export class MyApp {
 
   goToContato(){
     this.nav.push(ContatoPage);
+  }
+  goToFavoritos(){
+    this.nav.push(FavoritosPage)
   }
 }

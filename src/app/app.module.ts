@@ -1,3 +1,4 @@
+import { FavoritosPage } from './../pages/favoritos/favoritos';
 import { FechamentoPedidoPage } from './../pages/fechamento-pedido/fechamento-pedido';
 import { ContatoPage } from './../pages/contato/contato';
 import { LocalizacaoPage } from './../pages/localizacao/localizacao';
@@ -45,6 +46,7 @@ const config = {
     LocalizacaoPage,
     ContatoPage,
     FechamentoPedidoPage,
+    FavoritosPage,
     ParallaxHeader
   ],
   imports: [
@@ -68,6 +70,7 @@ const config = {
     LocalizacaoPage,
     ContatoPage,
     FechamentoPedidoPage,
+    FavoritosPage,
     CarrinhoPage
   ],
   providers: [

@@ -22,6 +22,7 @@ export class FiltroIngredientesPage {
   }
 
   ionViewDidLoad() {
+    console.log(this.ingredientes);
     this.lanchesFiltrados = [];
     this.isLoading = true;
     this.fireService.getLanchesPorIngredientes(this.ingredientes)
@@ -41,12 +42,13 @@ export class FiltroIngredientesPage {
     let ingredientes_truncados:string = '';
     let aux_filtro = [];
     this.ingredientes.map(ingrediente => {
-      ingredientes_truncados += ingrediente;
+      ingredientes_truncados += ingrediente.$value;
     })
 
     lanches.map(lanche => {
       lanche.ingredientes.map(ingrediente => {
         let repetido = false;
+        console.log(ingrediente);
         if(ingredientes_truncados.toUpperCase().includes(ingrediente.toUpperCase())){
           aux_filtro.map(aux => {
             if(lanche == aux)
@@ -58,9 +60,11 @@ export class FiltroIngredientesPage {
         }
       })
     })
+    console.log(aux_filtro);
     this.ingredientes.map(ingrediente => {
       aux_filtro.map((lanche, index) => {
-        if(!lanche.ingredientes_truncados.toUpperCase().includes(ingrediente.toUpperCase())){
+        console.log('lanche: ', lanche);
+        if(!lanche.ingredientes_truncados.toUpperCase().includes(ingrediente.$value.toUpperCase())){
           aux_filtro.length == 1? aux_filtro = []: aux_filtro.splice(index,1);
         }
       })
@@ -70,7 +74,7 @@ export class FiltroIngredientesPage {
     //É preciso repetir a operação, pois o último elemento do array não é checado na função acima
     this.ingredientes.map(ingrediente => {
       aux_filtro.map((lanche, index) => {
-        if(!lanche.ingredientes_truncados.toUpperCase().includes(ingrediente.toUpperCase())){
+        if(!lanche.ingredientes_truncados.toUpperCase().includes(ingrediente.$value.toUpperCase())){
           aux_filtro.length == 1? aux_filtro = []: aux_filtro.splice(index,1);
         }
       })

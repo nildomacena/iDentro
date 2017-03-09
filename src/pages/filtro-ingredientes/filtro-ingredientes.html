@@ -11,9 +11,10 @@
   <div class="center-spinner" *ngIf='isLoading'>
     <ion-spinner name="crescent" mode="md"></ion-spinner>
   </div>
+  <br>
   <ion-list [virtualScroll]="lanchesFiltrados">
       <ion-item *virtualItem="let lanche" (click)="goToLanche(lanche)" >
-        <h4>{{lanche.nome}}</h4>
+        {{lanche.nome}}<br>
         {{lanche.nome_estabelecimento}}
       </ion-item>
   </ion-list>

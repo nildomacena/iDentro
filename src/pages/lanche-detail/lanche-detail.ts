@@ -32,7 +32,7 @@ export class LancheDetailPage {
   }
 
   goBack(){
-    console.log(this.fireService.getCart());
+    this.navCtrl.pop();
   }
 
   addToCart(){

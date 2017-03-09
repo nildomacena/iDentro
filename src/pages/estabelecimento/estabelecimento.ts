@@ -1,3 +1,4 @@
+import { CallNumber } from 'ionic-native';
 import { FireService } from './../../services/fire.service';
 import { CardapioPage } from './../cardapio/cardapio';
 import { BebidasPage } from './../bebidas/bebidas';
@@ -66,7 +67,7 @@ export class EstabelecimentoPage {
         },
         {
           text: 'Ligar',
-          handler: () => {console.log(this.estabelecimento.celular)}
+          handler: () => {CallNumber.callNumber(this.estabelecimento.celular, false)}
         }
       ]
     }

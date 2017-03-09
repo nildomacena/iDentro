@@ -2,7 +2,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{lanche? lanche.nome_estabelecimento: 'Detalhes'}}</ion-title>
+    <ion-title>{{lanche? lanche.nome: 'Detalhes'}}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -11,18 +11,11 @@
 <ion-content>
   <ion-grid *ngIf="lanche">
     <ion-row>
-      <ion-col width-33 >
-        <ion-avatar>
-          <img [src]="lanche.imagem" />
-        </ion-avatar>
-      </ion-col>
-      <ion-col width-67 class="info">
-        <b><h4>{{lanche.nome}}</h4></b><br>
-        <h5>R${{lanche.preco}},00</h5>
+      <ion-col width-80 offset-20>
+        <img class="imagem-capa center-align" [src]="lanche.imagem">
       </ion-col>
     </ion-row>
   </ion-grid>
-  <div class="divisor"></div>
   <ion-list *ngIf="lanche">
     <ion-list-header>Ingredientes</ion-list-header>
     <ion-item *ngFor="let ingrediente of lanche.ingredientes" >

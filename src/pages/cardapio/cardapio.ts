@@ -1,3 +1,4 @@
+import { CallNumber } from 'ionic-native';
 import { LancheDetailPage } from './../lanche-detail/lanche-detail';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
@@ -91,7 +92,7 @@ export class CardapioPage {
         },
         {
           text: 'Ligar',
-          handler: () => {console.log(this.estabelecimento.celular)}
+          handler: () => {CallNumber.callNumber(this.estabelecimento.celular, false)}
         }
       ]
     }

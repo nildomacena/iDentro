@@ -1,12 +1,12 @@
 <ion-content>
-  <ion-grid>
+  <ion-grid no-padding>
     <ion-row>
-      <ion-col width-33 >
+      <ion-col col-4 >
         <ion-avatar>
           <img [src]="estabelecimento.imagemCapa">
         </ion-avatar>
       </ion-col>
-      <ion-col width-67 class="info">
+      <ion-col col-8 style="padding-left: 6px">
         <h4>{{estabelecimento.nome}}</h4>
         <div class="endereco">
           <ion-label>{{estabelecimento.endereco}}</ion-label>
@@ -17,7 +17,7 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col width-100 class="divisor"></ion-col>
+      <ion-col class="divisor"></ion-col>
     </ion-row>
   </ion-grid>
   <div class="center-spinner" *ngIf='isLoadingCardapio'>
@@ -25,31 +25,33 @@
   </div>
     <ion-card *ngFor="let lanche of lanches" >
       <ion-card-content>
-        <ion-grid>
+        <ion-grid no-padding>
           <ion-row>
-            <ion-col width-20>
-              <div class="valign">
+            <ion-col col-3>
+              <div>
                 <ion-avatar>
                   <img [src]="lanche.imagem"/>
                 </ion-avatar>
               </div>
             </ion-col>
-            <ion-col width-67 class="titulo-lanche" (click)="goToLanche(lanche)" >
-                <b>{{lanche.nome}}</b>
+            <ion-col style="padding-left: 6px" col-7 (click)="goToLanche(lanche)" >
+              
+              <b>{{lanche.nome}}</b>
               <div class="descricao-lanche">
                 {{lanche.ingredientes_truncados}}<br>
                 <b>Preço:</b> {{lanche.preco}}
               </div>
             </ion-col>
-            <ion-col width-10> 
-              <div class="valign">
-                <button class="botao-comprar" (click)="addToCart(lanche)" clear ion-button icon-only>
+            <ion-col col-2 align-self-center > 
+                <button (click)="addToCart(lanche)" clear ion-button icon-only>
                   <ion-icon name="cart"></ion-icon>
                 </button>
-              </div>
             </ion-col>
           </ion-row>
         </ion-grid>
       </ion-card-content>
     </ion-card>
+    <ion-fab center bottom *ngIf="estabelecimento.telefone || estabelecimento.celular" >
+      <button ion-fab mini color="primary" (click)="call()"><ion-icon name="call"></ion-icon></button>
+    </ion-fab>
 </ion-content>

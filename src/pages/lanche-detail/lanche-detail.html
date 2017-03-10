@@ -2,7 +2,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{lanche? lanche.nome: 'Detalhes'}}</ion-title>
+    <ion-title>{{lanche? lanche.nome_estabelecimento: 'Detalhes'}}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -11,21 +11,28 @@
 <ion-content>
   <ion-grid *ngIf="lanche">
     <ion-row>
-      <ion-col width-80 offset-20>
+      <ion-col col-8 offset-2 >
         <img class="imagem-capa center-align" [src]="lanche.imagem">
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ion-list *ngIf="lanche">
-    <ion-list-header>Ingredientes</ion-list-header>
-    <ion-item *ngFor="let ingrediente of lanche.ingredientes" >
-      <ion-label>{{ingrediente.charAt(0).toUpperCase() + ingrediente.slice(1)}}</ion-label>
-    </ion-item>
-  </ion-list>
+  <hr>
+  <br>
+  <div class="nome center-align">{{lanche?.nome}}</div>
+  <div class="preco center-align"><br>R$ {{lanche?.preco}}.00</div>
+  <br><br>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div style="margin-bottom: 2px">Ingredientes:</div>
+        <div class="ingredientes">{{lanche?.ingredientes_truncados}}</div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
   <ion-fab left bottom >
-    <button ion-fab color="primary" (click)="goBack()"><ion-icon name="arrow-back"></ion-icon></button>
+    <button [disabled]="justAddedToCart" ion-fab color="primary" (click)="call()"><ion-icon name="call"></ion-icon></button>
   </ion-fab>
-  <ion-fab right bottom >
-    <button [disabled]="justAddedToCart" ion-fab color="primary" (click)="addToCart()"><ion-icon name="cart"></ion-icon></button>
+  <ion-fab right bottom *ngIf="pesquisa" >
+    <button [disabled]="justAddedToCart" ion-fab color="primary" (click)="goToEstabelecimento()"><ion-icon name="open"></ion-icon></button>
   </ion-fab>
 </ion-content>

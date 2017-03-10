@@ -83,6 +83,10 @@ export class FiltroIngredientesPage {
   }
 
   goToLanche(lanche){
-    this.app.getRootNav().push(LancheDetailPage,{'lanche': lanche});
+    console.log(lanche);
+    this.app.getRootNav().push(LancheDetailPage,{
+      'lanche': lanche, 
+      'pesquisa': true
+    });
   }
 }

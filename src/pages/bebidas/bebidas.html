@@ -1,12 +1,12 @@
 <ion-content>
   <ion-grid>
     <ion-row>
-      <ion-col width-33 >
+      <ion-col col-4 >
         <ion-avatar>
           <img [src]="estabelecimento.imagemCapa">
         </ion-avatar>
       </ion-col>
-      <ion-col width-67 class="info">
+      <ion-col col-8 style="padding-left: 6px">
         <h4>{{estabelecimento.nome}}</h4>
         <div class="endereco">
           <ion-label>{{estabelecimento.endereco}}</ion-label>
@@ -16,7 +16,7 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col width-100 class="divisor"></ion-col>
+      <ion-col class="divisor"></ion-col>
     </ion-row>
   </ion-grid>
 <ion-card>

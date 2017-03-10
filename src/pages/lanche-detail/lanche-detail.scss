@@ -79,7 +79,20 @@ page-lanche-detail {
         height: 100%
     }
 
-    .imagem-capa{
-        max-height: 60px;
+    .nome{
+        color: #e65100;
+        font-weight: 600;
+        font-size: 25px;
+    }
+    .preco{
+        color: #e65100;
+        font-weight: 900;
+        font-size: 22px;
+    }
+
+    .ingredientes{
+        font-size: 15px;
+        font-weight: 300;
+        color: #757575;
     }
 }

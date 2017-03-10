@@ -8,10 +8,7 @@
     <ion-tab [root]="cardapioPage" tabTitle="Pratos" [rootParams]="estabelecimento"></ion-tab>
     <ion-tab [root]="bebidasPage" tabTitle="Acompanhamentos" [rootParams]="estabelecimento"></ion-tab>
   </ion-tabs>
-  <ion-fab center bottom *ngIf="estabelecimento.telefone || estabelecimento.celular" >
-    <button ion-fab color="primary" (click)="call()"><ion-icon name="call"></ion-icon></button>
-  </ion-fab>
   <ion-fab top right edge>
-    <button ion-fab mini color="primary" (click)="addToFavorito()" ><ion-icon [name]="favorito? 'star': 'star-outline'"></ion-icon></button>
+    <button ion-fab mini color="primary" (click)="addToFavorito()" ><ion-icon [name]="favorito? 'heart': 'heart-outline'"></ion-icon></button>
   </ion-fab>
 </ion-content>

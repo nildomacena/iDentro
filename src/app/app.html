@@ -3,7 +3,8 @@
     <div text-center padding-top padding-bottom class="primary-bg menu-left">
       <a menuClose>
         <div>
-          <h4 light >iDentro</h4>
+          <img *ngIf="user" class="profile-picture" [src]="user.photoURL"/>
+          <h4 light >{{user? user.displayName: 'iDentro'}}</h4>
           <hr>
           <ion-list class="list-full-border">
             <!-- Os itens comentados são funcionalidades a serem adicionadas depois de implementada a parte de pedidos -->
@@ -23,12 +24,21 @@
               <ion-icon item-left name="checkmark"></ion-icon>Pedidos realizados
             </button>
             -->
-            <button class="item-menu" ion-item menuClose clear (click)="goToFavoritos()" >
-              <ion-icon item-left name="heart"></ion-icon>Favoritos
-            </button>
-            <button class="item-menu" ion-item menuClose clear (click)="goToCarrinho()" >
-              <ion-icon item-left name="log-out"></ion-icon>Sair
-            </button>
+            <ion-grid *ngIf="!logado">
+              <ion-row>
+                <ion-col>
+                  <button style="background-color: #3b5997" ion-button full (click)="loginWithFacebook()" ><ion-icon name="logo-facebook"></ion-icon>&nbsp;&nbsp;Login com Facebook</button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <div *ngIf="logado">
+              <button class="item-menu" ion-item menuClose clear (click)="goToFavoritos()" >
+                <ion-icon item-left name="heart"></ion-icon>Favoritos
+              </button>
+              <button class="item-menu" ion-item menuClose clear (click)="logout()" >
+                <ion-icon item-left name="log-out"></ion-icon>Sair
+              </button>
+            </div>
           </ion-list>
         </div>
       </a>

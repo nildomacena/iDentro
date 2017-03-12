@@ -9,30 +9,35 @@
 
 
 <ion-content>
-  <ion-grid *ngIf="lanche">
-    <ion-row>
-      <ion-col col-8 offset-2 >
-        <img class="imagem-capa center-align" [src]="lanche.imagem">
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  <hr>
-  <br>
-  <div class="nome center-align">{{lanche?.nome}}</div>
-  <div class="preco center-align"><br>R$ {{lanche?.preco}}.00</div>
-  <br><br>
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <div style="margin-bottom: 2px">Ingredientes:</div>
-        <div class="ingredientes">{{lanche?.ingredientes_truncados}}</div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  <ion-fab left bottom >
-    <button [disabled]="justAddedToCart" ion-fab color="primary" (click)="call()"><ion-icon name="call"></ion-icon></button>
-  </ion-fab>
-  <ion-fab right bottom *ngIf="pesquisa" >
-    <button [disabled]="justAddedToCart" ion-fab color="primary" (click)="goToEstabelecimento()"><ion-icon name="open"></ion-icon></button>
-  </ion-fab>
+  <div class="center-spinner" *ngIf='!lanche'>
+    <ion-spinner name="crescent" mode="md"></ion-spinner>
+  </div>
+  <div *ngIf="lanche">
+    <ion-grid>
+      <ion-row>
+        <ion-col col-8 offset-2 >
+          <img class="imagem-capa center-align" [src]="lanche.imagem">
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <hr>
+    <br>
+    <div class="nome center-align">{{lanche?.nome}}</div>
+    <div class="preco center-align"><br>R$ {{lanche?.preco}}.00</div>
+    <br><br>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <div style="margin-bottom: 2px">Ingredientes:</div>
+          <div class="ingredientes">{{lanche?.ingredientes_truncados}}</div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-fab left bottom >
+      <button [disabled]="justAddedToCart" ion-fab color="primary" (click)="call()"><ion-icon name="call"></ion-icon></button>
+    </ion-fab>
+    <ion-fab right bottom *ngIf="pesquisa" >
+      <button [disabled]="justAddedToCart" ion-fab color="primary" (click)="goToEstabelecimento()"><ion-icon name="open"></ion-icon></button>
+    </ion-fab>
+  </div>
 </ion-content>

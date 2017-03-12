@@ -42,13 +42,13 @@ export class DestaquesPage {
           {
             text: estabelecimento.telefone,
             handler: () => {
-              CallNumber.call(estabelecimento.telefone)
+              CallNumber.callNumber(estabelecimento.telefone, true)
             }
           },
           {
             text: estabelecimento.celular.numero,
             handler: () => {
-              CallNumber.call(estabelecimento.celular.numero)
+              CallNumber.callNumber(estabelecimento.celular.numero,true)
             }
           },
           {
@@ -66,7 +66,7 @@ export class DestaquesPage {
             {
               text: 'Ligar',
               handler: () => {
-                CallNumber.call(estabelecimento.celular)
+                CallNumber.callNumber(estabelecimento.celular, true)
               }
             }
           ]
@@ -81,7 +81,7 @@ export class DestaquesPage {
             {
               text: 'Ligar',
               handler: () => {
-                CallNumber.call(estabelecimento.celular.numero)
+                CallNumber.callNumber(estabelecimento.celular.numero, true)
               }
             }
           ]

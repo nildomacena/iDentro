@@ -28,13 +28,14 @@
       <ion-item-sliding *virtualItem="let estabelecimento" >
         <ion-item>
           <ion-avatar item-left >
-            <img [src]="estabelecimento.imagemCapa">
+            <img *ngIf="!loaded" src="assets/img/loading.gif"/>
+            <img [hidden]="!loaded" (load)="loaded = true" [src]="estabelecimento.imagemCapa"/>
           </ion-avatar>
           <div (click)="onSelectEstabelecimento(estabelecimento)" >
             {{ estabelecimento.nome }}<br>
             <div class="telefone-wrapper">
-                <ion-icon name="call"></ion-icon>&nbsp;{{estabelecimento.telefone}}&nbsp;&nbsp;&nbsp;
-                <ion-icon name="phone-portrait"></ion-icon>&nbsp;{{estabelecimento.telefone}}
+                <ion-icon name="call"></ion-icon>&nbsp;{{estabelecimento.telefone1.numero}}&nbsp;&nbsp;&nbsp;
+                <ion-icon name="phone-portrait"></ion-icon>&nbsp;{{estabelecimento.telefone2.numero}}
             </div>
           </div>
         </ion-item>

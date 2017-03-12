@@ -2,12 +2,13 @@
 <widget id="com.ionicframework.identro737668" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>iDentro</name>
   <description>An awesome Ionic/Cordova app.</description>
-  <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-  <content src="index.html"/>
+  <author email="hi@ionicframework" href="http://ionicframework.com/">Koine Development</author>
+  <content src="http://10.0.0.104:8100" original-src="index.html"/>
   <access origin="*"/>
   <allow-navigation href="http://ionic.local/*"/>
   <allow-navigation href="http://172.24.3.169:8100"/>
   <allow-navigation href="http://192.168.43.184:8100"/>
+  <allow-navigation href="http://10.0.0.104:8100"/>
   <allow-intent href="http://*/*"/>
   <allow-intent href="https://*/*"/>
   <allow-intent href="tel:*"/>
@@ -38,4 +39,8 @@
   <plugin name="cordova-plugin-statusbar" spec="2.2.1"/>
   <plugin name="cordova-plugin-device" spec="1.1.4"/>
   <plugin name="cordova-plugin-splashscreen" spec="~4.0.1"/>
+  <plugin name="cordova-plugin-facebook4" spec="~1.7.4">
+    <variable name="APP_ID" value="1859227571000597"/>
+    <variable name="APP_NAME" value="iDentro"/>
+  </plugin>
 </widget>

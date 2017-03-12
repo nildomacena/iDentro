@@ -65,17 +65,17 @@ export class CardapioPage {
     let buttons;
     let subTitle;
     
-    this.estabelecimento.celular && this.estabelecimento.telefone? subTitle = 'Selecione o número para o qual deseja ligar.': 'Deseja realmente ligar?'
+    this.estabelecimento.telefone2 && this.estabelecimento.telefone1? subTitle = 'Selecione o número para o qual deseja ligar.': 'Deseja realmente ligar?'
 
-    if(this.estabelecimento.celular && this.estabelecimento.telefone){
+    if(this.estabelecimento.telefone2 && this.estabelecimento.telefone1){
       buttons = [
         {
-          text: this.estabelecimento.telefone,
-          handler: () => {console.log(this.estabelecimento.telefone)}
+          text: this.estabelecimento.telefone1,
+          handler: () => {console.log(this.estabelecimento.telefone1)}
         },
         {
-          text: this.estabelecimento.celular.numero,
-          handler: () => {console.log(this.estabelecimento.celular.numero)}
+          text: this.estabelecimento.telefone2.numero,
+          handler: () => {console.log(this.estabelecimento.telefone2.numero)}
         },
         {
           text: 'Cancelar',
@@ -84,7 +84,7 @@ export class CardapioPage {
       ]
     }
 
-    else if(this.estabelecimento.celular){
+    else if(this.estabelecimento.telefone2){
       buttons = [
         {
           text: 'Cancelar',
@@ -92,12 +92,12 @@ export class CardapioPage {
         },
         {
           text: 'Ligar',
-          handler: () => {CallNumber.callNumber(this.estabelecimento.celular, false)}
+          handler: () => {CallNumber.callNumber(this.estabelecimento.telefone2, false)}
         }
       ]
     }
 
-    else if(this.estabelecimento.telefone){
+    else if(this.estabelecimento.telefone1){
       buttons = [
         {
           text: 'Cancelar',
@@ -105,7 +105,7 @@ export class CardapioPage {
         },
         {
           text: 'Ligar',
-          handler: () => {console.log(this.estabelecimento.celular.numero)}
+          handler: () => {console.log(this.estabelecimento.telefone2.numero)}
         }
       ]
     }

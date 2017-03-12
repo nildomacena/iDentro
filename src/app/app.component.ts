@@ -1,3 +1,4 @@
+import { FireService } from './../services/fire.service';
 import { FavoritosPage } from './../pages/favoritos/favoritos';
 import { ContatoPage } from './../pages/contato/contato';
 import { LocalizacaoPage } from './../pages/localizacao/localizacao';
@@ -5,7 +6,7 @@ import { CarrinhoPage } from './../pages/carrinho/carrinho';
 import { Component, ViewChild } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
-
+import * as firebase from 'firebase';
 import { HomePage } from '../pages/home/home';
 
 
@@ -18,10 +19,20 @@ import { HomePage } from '../pages/home/home';
 export class MyApp {
   rootPage = HomePage;
   public nav: any;
-  constructor(platform: Platform) {
+  user: any;
+  logado = false;
+  constructor(platform: Platform, public fireService: FireService) {
     platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
+      firebase.auth().onAuthStateChanged(user => {
+        if(user){
+          this.logado = true;
+          this.user = user;
+          console.log(user);
+        }
+        else{
+          this.logado = false
+        }
+      })
       StatusBar.styleDefault();
       Splashscreen.hide();
     });
@@ -39,5 +50,22 @@ export class MyApp {
   }
   goToFavoritos(){
     this.nav.push(FavoritosPage)
+  }
+
+  loginWithFacebook(){
+    this.fireService.loginWithFacebook()
+      .then(_ => {
+
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
+  logout(){
+    this.fireService.logout()
+      .then(_ => {
+        this.user = null;
+      })
   }
 }

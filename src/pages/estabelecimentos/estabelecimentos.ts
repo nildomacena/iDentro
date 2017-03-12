@@ -86,20 +86,20 @@ export class EstabelecimentosPage {
       let buttons;
       let subTitle;
       
-      estabelecimento.celular && estabelecimento.telefone? subTitle = 'Selecione o número para o qual deseja ligar.': 'Deseja realmente ligar?'
+      estabelecimento.telefone2 && estabelecimento.telefone1? subTitle = 'Selecione o número para o qual deseja ligar.': 'Deseja realmente ligar?'
 
-      if(estabelecimento.celular && estabelecimento.telefone){
+      if(estabelecimento.telefone1 && estabelecimento.telefone1){
         buttons = [
           {
-            text: estabelecimento.telefone,
+            text: estabelecimento.telefone1.numero,
             handler: () => {
-              CallNumber.callNumber(estabelecimento.telefone, true)
+              CallNumber.callNumber(estabelecimento.telefone1.numero, true)
             }
           },
           {
-            text: estabelecimento.celular.numero,
+            text: estabelecimento.telefone2.numero,
             handler: () => {
-              CallNumber.callNumber(estabelecimento.celular.numero, true)
+              CallNumber.callNumber(estabelecimento.telefone2.numero, true)
             }
           },
           {
@@ -108,7 +108,7 @@ export class EstabelecimentosPage {
           }
         ]
       }
-      else if(estabelecimento.celular){
+      else if(estabelecimento.telefone2){
           buttons = [
             {
               text: 'Cancelar',
@@ -117,13 +117,13 @@ export class EstabelecimentosPage {
             {
               text: 'Ligar',
               handler: () => {
-                CallNumber.callNumber(estabelecimento.celular, true)
+                CallNumber.callNumber(estabelecimento.telefone2, true)
               }
             }
           ]
         }
 
-        else if(estabelecimento.telefone){
+        else if(estabelecimento.telefone1){
           buttons = [
             {
               text: 'Cancelar',
@@ -132,7 +132,7 @@ export class EstabelecimentosPage {
             {
               text: 'Ligar',
               handler: () => {
-                CallNumber.callNumber(estabelecimento.celular.numero, true)
+                CallNumber.callNumber(estabelecimento.telefone2.numero, true)
               }
             }
           ]
@@ -146,5 +146,7 @@ export class EstabelecimentosPage {
         alert.present();
       }
 
-
+      console(a){
+        console.log(a);
+      }
   }

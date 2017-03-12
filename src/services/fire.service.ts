@@ -3,18 +3,28 @@ import { Injectable } from '@angular/core';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { AngularFireOffline, ListObservable, ObjectObservable } from 'angularfire2-offline';
 import { Observable } from 'rxjs';
+import { Facebook } from 'ionic-native';
 import * as firebase from 'firebase';
 import 'rxjs/add/operator/toPromise';
 
 
 @Injectable()
 export class FireService {
-    uid = '123456789';
+    uid= '';
     cart: any = {};
+    public auth = firebase.auth();
+    public user = this.auth.currentUser;
     constructor(
         private afo: AngularFireOffline,
         private af: AngularFire
-    ) { }
+    ) {
+         firebase.auth().onAuthStateChanged(user => {
+            if(user){
+                this.uid = user.uid;
+                console.log('onAuthState ',user);
+            }
+        })
+    }
 
     getEstabelecimentos(){
         return this.af.database.list('estabelecimentos');
@@ -226,10 +236,10 @@ export class FireService {
     addToFavorito(estabelecimento:any, jaFavorito:boolean):firebase.Promise<any>{
         console.log(estabelecimento);
         if(jaFavorito){
-            return firebase.database().ref('usuarios/id_usuario/favoritos/'+estabelecimento.$key).remove();
+            return firebase.database().ref('usuarios_favoritos/'+this.uid+'/favoritos/'+estabelecimento.$key).remove();
         }
         else{
-            return firebase.database().ref('usuarios/id_usuario/favoritos/'+estabelecimento.$key).set({
+            return firebase.database().ref('usuarios_favoritos/'+this.uid+'/favoritos/'+estabelecimento.$key).set({
                 nome: estabelecimento.nome,
                 key: estabelecimento.$key,
                 imagemCapa: estabelecimento.imagemCapa,
@@ -241,7 +251,7 @@ export class FireService {
 
     checkFavorito(estabelecimento_key: string): Promise<boolean>{
         let promise = new Promise((resolve, reject) => {
-            firebase.database().ref('usuarios/id_usuario/favoritos/'+estabelecimento_key).once('value')
+            firebase.database().ref('usuarios_favoritos/'+this.uid+'/favoritos/'+estabelecimento_key).once('value')
                 .then(snap => {
                     console.log('snap favorito: ', snap.val());
                     if(snap.val())
@@ -254,6 +264,49 @@ export class FireService {
     }
 
     getFavoritos():Observable<any>{
-        return this.af.database.list('usuarios/id_usuario/favoritos');
+        return this.af.database.list('usuarios_favoritos/'+this.uid+'/favoritos');
+    }
+
+    loginWithFacebook(): Promise<any>{
+        let promise: Promise<any>;
+        promise = new Promise((resolve, reject) => {
+            Facebook.login(['user_friends', 'public_profile', 'email'])
+                .then(userFacebook => {
+                    let accessToken = userFacebook.authResponse.accessToken;
+                    let credential: firebase.auth.AuthCredential;
+            
+                    console.log('credential: ', credential)
+                    console.log('firebase authProvider: ', firebase.auth.FacebookAuthProvider.credential(accessToken));
+                    firebase.auth().signInWithCredential(firebase.auth.FacebookAuthProvider.credential(accessToken))
+                        .then(user => {
+                            console.log('User após credencial: ', user);
+                            this.saveUserInfoCurrent();
+                            return resolve('logado');
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            if(err['code'] == "auth/email-already-in-use" || err['code'] == "auth/account-exists-with-different-credential"){
+                                return resolve(err);
+
+                            }
+                        })
+                })
+        });
+        return promise;
+    }
+
+    saveUserInfoCurrent():firebase.Promise<any>{
+        let user = this.auth.currentUser;
+        let obj_user = {
+                uid: user.uid,
+                nome: user.displayName,
+                imagem: user.photoURL,
+                email: user.email 
+            }
+        return firebase.database().ref('usuarios_app/'+user.uid).set(obj_user)
+    }
+
+    logout(): firebase.Promise<any>{
+        return firebase.auth().signOut();
     }
 }

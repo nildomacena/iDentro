@@ -53,7 +53,9 @@ export class FireService {
     getUid(){
         return this.uid;
     }
-
+    sendMessage(email: string, message: string): firebase.Promise<any>{
+        return firebase.database().ref('contato').push({email: email, mensagem: message});
+    }
     addToCart(lanche, estabelecimento): string{
         
         let adicionado: boolean = false;

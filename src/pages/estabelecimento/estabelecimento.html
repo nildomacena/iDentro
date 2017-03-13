@@ -8,7 +8,7 @@
     <ion-tab [root]="cardapioPage" tabTitle="Pratos" [rootParams]="estabelecimento"></ion-tab>
     <ion-tab [root]="bebidasPage" tabTitle="Acompanhamentos" [rootParams]="estabelecimento"></ion-tab>
   </ion-tabs>
-  <ion-fab top right edge>
+  <ion-fab top right edge *ngIf="logado">
     <button ion-fab mini color="primary" [disabled]="adicionando" (click)="addToFavorito()" ><ion-icon [name]="favorito? 'heart': 'heart-outline'"></ion-icon></button>
   </ion-fab>
 </ion-content>

@@ -13,6 +13,7 @@ export class CardapioPage {
   estabelecimento: any;
   lanches: any[];
   isLoadingCardapio: boolean = true;
+  logado: boolean = false;
   constructor(
               public navCtrl: NavController, 
               public navParams: NavParams,

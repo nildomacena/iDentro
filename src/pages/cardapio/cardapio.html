@@ -23,6 +23,7 @@
   <div class="center-spinner" *ngIf='isLoadingCardapio'>
     <ion-spinner name="crescent" mode="md"></ion-spinner>
   </div>
+
     <ion-card *ngFor="let lanche of lanches" >
       <ion-card-content>
         <ion-grid no-padding>
@@ -34,7 +35,7 @@
                 </ion-avatar>
               </div>
             </ion-col>
-            <ion-col style="padding-left: 6px" col-7 (click)="goToLanche(lanche)" >
+            <ion-col col-8 offset-1 (click)="goToLanche(lanche)" >
               
               <b>{{lanche.nome}}</b>
               <div class="descricao-lanche">
@@ -42,15 +43,18 @@
                 <b>Preço:</b> {{lanche.preco}}
               </div>
             </ion-col>
+            <!--
             <ion-col col-2 align-self-center > 
                 <button (click)="addToCart(lanche)" clear ion-button icon-only>
                   <ion-icon name="cart"></ion-icon>
                 </button>
             </ion-col>
+            -->
           </ion-row>
         </ion-grid>
       </ion-card-content>
     </ion-card>
+
     <ion-fab center bottom *ngIf="estabelecimento.telefone1 || estabelecimento.telefone2" >
       <button ion-fab mini color="primary" (click)="call()"><ion-icon name="call"></ion-icon></button>
     </ion-fab>

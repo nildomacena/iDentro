@@ -17,6 +17,7 @@ export class EstabelecimentoPage {
   cardapioPage = CardapioPage;
   favorito: boolean;
   adicionando: boolean = false;
+  logado: boolean = false;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -26,6 +27,12 @@ export class EstabelecimentoPage {
 
     this.estabelecimento = this.navParams.get('estabelecimento');
     this.estabelecimento.imagemCapa? this.photo = this.estabelecimento.imagemCapa : this.photo = 'assets/no-photo.png';
+    console.log('user: ', this.fireService.user)
+      if(this.fireService.user)
+        this.logado = true;
+      else{
+        this.logado = false;
+      }
   }
 
   ionViewDidLoad() {

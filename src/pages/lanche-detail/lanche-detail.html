@@ -16,7 +16,8 @@
     <ion-grid>
       <ion-row>
         <ion-col col-8 offset-2 >
-          <img class="imagem-capa center-align" [src]="lanche.imagem">
+          <img *ngIf="!lanche.imagem" src="assets/img/no-photo.jpg">
+          <img *ngIf="lanche.imagem" class="imagem-capa center-align" [src]="lanche.imagem">
         </ion-col>
       </ion-row>
     </ion-grid>

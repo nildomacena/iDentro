@@ -28,14 +28,19 @@
       <ion-item-sliding *virtualItem="let estabelecimento" >
         <ion-item>
           <ion-avatar item-left >
-            <img *ngIf="!loaded" src="assets/img/loading.gif"/>
-            <img [hidden]="!loaded" (load)="loaded = true" [src]="estabelecimento.imagemCapa"/>
+            <img *ngIf="!loaded && estabelecimento.imagemCapa" src="assets/img/loading.gif"/>
+            <img *ngIf="!estabelecimento.imagemCapa" src="assets/img/no-photo.jpg">
+            <img *ngIf="estabelecimento.imagemCapa" [hidden]="!loaded" alt="imagemCapa" (load)="loaded = true" [src]="estabelecimento.imagemCapa"/>
           </ion-avatar>
           <div (click)="onSelectEstabelecimento(estabelecimento)" >
             {{ estabelecimento.nome }}<br>
             <div class="telefone-wrapper">
-                <ion-icon name="call"></ion-icon>&nbsp;{{estabelecimento.telefone1.numero}}&nbsp;&nbsp;&nbsp;
-                <ion-icon name="phone-portrait"></ion-icon>&nbsp;{{estabelecimento.telefone2.numero}}
+                <div *ngIf="estabelecimento.telefone1.numero">
+                  <ion-icon [name]="estabelecimento.telefone1.whatsapp? 'logo-whatsapp': 'phone-portrait'"></ion-icon>&nbsp;{{estabelecimento.telefone1.numero}}&nbsp;&nbsp;&nbsp;              
+                </div>  
+                <div *ngIf="estabelecimento.telefone2.numero">
+                  <ion-icon [name]="estabelecimento.telefone2.whatsapp? 'logo-whatsapp': 'phone-portrait'"></ion-icon>&nbsp;{{estabelecimento.telefone2.numero}}
+                </div>
             </div>
           </div>
         </ion-item>
@@ -46,7 +51,8 @@
           </button>
         </ion-item-options>
       </ion-item-sliding>
-      
-      
     </ion-list>
+    <ion-fab right bottom *ngIf="estabelecimentos" >
+      <button ion-fab color="primary" (click)="funnel()"><ion-icon name="funnel"></ion-icon></button>
+    </ion-fab>
   </ion-content>

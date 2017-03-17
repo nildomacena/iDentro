@@ -1,3 +1,7 @@
+import { CategoriaPage } from './../pages/categoria/categoria';
+import { Tab3Page } from './../pages/tab3/tab3';
+import { Tab2Page } from './../pages/tab2/tab2';
+import { Tab1Page } from './../pages/tab1/tab1';
 import { FavoritosPage } from './../pages/favoritos/favoritos';
 import { FechamentoPedidoPage } from './../pages/fechamento-pedido/fechamento-pedido';
 import { ContatoPage } from './../pages/contato/contato';
@@ -40,13 +44,15 @@ const config = {
     EstabelecimentoPage,
     FiltroIngredientesPage,
     LancheDetailPage,
-    BebidasPage,
-    CardapioPage,
     CarrinhoPage,
     LocalizacaoPage,
     ContatoPage,
     FechamentoPedidoPage,
     FavoritosPage,
+    Tab1Page,
+    Tab2Page,
+    Tab3Page,
+    CategoriaPage,
     ParallaxHeader
   ],
   imports: [
@@ -65,12 +71,14 @@ const config = {
     EstabelecimentoPage,
     FiltroIngredientesPage,
     LancheDetailPage,
-    BebidasPage,
-    CardapioPage,
     LocalizacaoPage,
     ContatoPage,
     FechamentoPedidoPage,
     FavoritosPage,
+    Tab1Page,
+    Tab2Page,
+    Tab3Page,
+    CategoriaPage,
     CarrinhoPage
   ],
   providers: [

@@ -1,9 +1,13 @@
 import { CallNumber } from 'ionic-native';
 import { FireService } from './../../services/fire.service';
+import { Tab3Page } from './../tab3/tab3';
+import { Tab2Page } from './../tab2/tab2';
+import { Tab1Page } from './../tab1/tab1';
 import { CardapioPage } from './../cardapio/cardapio';
 import { BebidasPage } from './../bebidas/bebidas';
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
+
 
 
 @Component({
@@ -18,6 +22,8 @@ export class EstabelecimentoPage {
   favorito: boolean;
   adicionando: boolean = false;
   logado: boolean = false;
+  abas: any[];
+  tabs: any[];
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -26,6 +32,13 @@ export class EstabelecimentoPage {
     ) {
 
     this.estabelecimento = this.navParams.get('estabelecimento');
+    this.abas = this.estabelecimento.abas;
+    this.tabs = [
+      {titulo: this.abas[0].nome, root: Tab1Page},
+      {titulo: this.abas[1].nome, root: Tab2Page},
+      {titulo: this.abas[2].nome, root: Tab3Page}
+    ];
+
     this.estabelecimento.imagemCapa? this.photo = this.estabelecimento.imagemCapa : this.photo = 'assets/no-photo.png';
     console.log('user: ', this.fireService.user)
       if(this.fireService.user)
@@ -36,6 +49,8 @@ export class EstabelecimentoPage {
   }
 
   ionViewDidLoad() {
+    this.logado = this.fireService.checkAuth();
+    console.log(this.abas);
     this.fireService.checkFavorito(this.estabelecimento.$key)
       .then(result => {
         console.log('result load: ',result);
@@ -53,11 +68,11 @@ export class EstabelecimentoPage {
       buttons = [
         {
           text: this.estabelecimento.telefone1,
-          handler: () => {console.log(this.estabelecimento.telefone1)}
+          handler: () => {CallNumber.callNumber(this.estabelecimento.telefone1.numero, true)}
         },
         {
           text: this.estabelecimento.telefone2.numero,
-          handler: () => {console.log(this.estabelecimento.telefone2.numero)}
+          handler: () => {CallNumber.callNumber(this.estabelecimento.telefone2.numero, true)}
         },
         {
           text: 'Cancelar',
@@ -74,7 +89,7 @@ export class EstabelecimentoPage {
         },
         {
           text: 'Ligar',
-          handler: () => {CallNumber.callNumber(this.estabelecimento.telefone2, false)}
+          handler: () => {CallNumber.callNumber(this.estabelecimento.telefone2.numero, false)}
         }
       ]
     }
@@ -87,7 +102,7 @@ export class EstabelecimentoPage {
         },
         {
           text: 'Ligar',
-          handler: () => {console.log(this.estabelecimento.telefone2.numero)}
+          handler: () => {CallNumber.callNumber(this.estabelecimento.telefone2.numero, true)}
         }
       ]
     }

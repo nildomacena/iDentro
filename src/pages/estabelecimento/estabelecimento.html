@@ -4,11 +4,37 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
+   <ion-tabs tabsHighlight="true" color="primary" class="tabs-basic">
+     <ion-tab *ngFor="let tab of tabs" [root]="tab.root" [tabTitle]="tab.titulo" [rootParams]="estabelecimento" ></ion-tab>
+   </ion-tabs>
+   <ion-fab top right edge *ngIf="logado">
+      <button ion-fab mini color="primary" [disabled]="adicionando" (click)="addToFavorito()" ><ion-icon [name]="favorito? 'heart': 'heart-outline'"></ion-icon></button>
+    </ion-fab>
+</ion-content>
+  <!-- <ion-tabs tabsHighlight="true" color="primary" class="tabs-basic">
+    <ion-tab [root]="tab1Page" [tabTitle]="abas[0].nome" [rootParams]="estabelecimento"></ion-tab>
+    <ion-tab [root]="tab2Page" [tabTitle]="abas[1].nome" [rootParams]="estabelecimento"></ion-tab>
+    <ion-tab [root]="tab3Page" [tabTitle]="abas[2].nome" [rootParams]="estabelecimento"></ion-tab>
+  </ion-tabs> ->
+  <ion-fab top right edge *ngIf="logado">
+    <button ion-fab mini color="primary" [disabled]="adicionando" (click)="addToFavorito()" ><ion-icon [name]="favorito? 'heart': 'heart-outline'"></ion-icon></button>
+  </ion-fab>
+</ion-content>
+
+<!-- Versão antiga com abas fixas
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{estabelecimento.nome}}</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
   <ion-tabs tabsHighlight="true" color="primary" class="tabs-basic">
     <ion-tab [root]="cardapioPage" tabTitle="Pratos" [rootParams]="estabelecimento"></ion-tab>
-    <ion-tab [root]="bebidasPage" tabTitle="Acompanhamentos" [rootParams]="estabelecimento"></ion-tab>
+    <ion- tab [root]="bebidasPage" tabTitle="Acompanhamentos" [rootParams]="estabelecimento"></ion-tab>
   </ion-tabs>
   <ion-fab top right edge *ngIf="logado">
     <button ion-fab mini color="primary" [disabled]="adicionando" (click)="addToFavorito()" ><ion-icon [name]="favorito? 'heart': 'heart-outline'"></ion-icon></button>
   </ion-fab>
 </ion-content>
+
+-->

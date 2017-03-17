@@ -146,7 +146,8 @@ export class EstabelecimentosPage {
         alert.present();
       }
 
-      console(a){
-        console.log(a);
+      funnel(){
+        
       }
   }
+

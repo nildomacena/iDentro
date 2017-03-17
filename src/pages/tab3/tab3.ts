@@ -6,63 +6,40 @@ import { NavController, NavParams, App, AlertController } from 'ionic-angular';
 
 
 @Component({
-  selector: 'page-cardapio',
-  templateUrl: 'cardapio.html'
+  selector: 'page-tab3',
+  templateUrl: 'tab3.html'
 })
-export class CardapioPage {
+export class Tab3Page {
+  itens: any[];
   estabelecimento: any;
-  lanches: any[];
-  isLoadingCardapio: boolean = true;
-  logado: boolean = false;
+  loading: boolean = true;
   constructor(
-              public navCtrl: NavController, 
-              public navParams: NavParams,
-              public fireService: FireService,
-              public alertCtrl: AlertController,
-              public app: App
+    public navCtrl: NavController, 
+    public alertCtrl: AlertController,
+    public navParams: NavParams,
+    public fireService: FireService,
+    public app: App
     ) {
-
-    this.estabelecimento = this.navParams.data;
-    console.log(this.navParams.data);
-    this.fireService.getLanchesPorEstabelecimento(this.estabelecimento.$key)
-      .subscribe(lanches => {
-        this.isLoadingCardapio = false;
-        this.lanches = lanches
-      });
-  }
+      this.estabelecimento = this.navParams.data;
+    }
 
   ionViewDidLoad() {
-  }
+    console.log('estabelecimento: ', this.estabelecimento);
+    this.fireService.getItensByAba(this.estabelecimento.$key, 2)
+      .subscribe(itens => {
+        this.loading = false;
+        this.itens = itens;
 
-  goToLanche(lanche){
-    this.app.getRootNav().push(LancheDetailPage, {lanche: lanche, estabelecimento: this.estabelecimento});
-  }
-
-  addToCart(lanche){
-    if(this.fireService.addToCart(lanche, this.estabelecimento) == 'error'){
-      let alert = this.alertCtrl.create({
-        title: 'Alerta',
-        subTitle: 'Você tem itens de outro estabelecimento adicionados ao carrinho. Deseja limpar o carrinho para adiconar este novo item?',
-        buttons: [
-          {
-            text: 'Não',
-            role: 'cancel'
-          },
-          {
-            text: 'Sim',
-            handler: () => {
-              this.fireService.limpaCarrinho();
-              this.fireService.addToCart(lanche, this.estabelecimento);
-            }
-          }
-        ]
+        console.log(itens);
       })
-      alert.present();
-
-    }
   }
 
-  call(){
+  goToItem(item){
+    console.log(item);
+    this.app.getRootNav().push(LancheDetailPage, {lanche: item, estabelecimento: this.estabelecimento});
+
+  }
+call(){
     let buttons;
     let subTitle;
     
@@ -71,7 +48,7 @@ export class CardapioPage {
     if(this.estabelecimento.telefone2 && this.estabelecimento.telefone1){
       buttons = [
         {
-          text: this.estabelecimento.telefone1,
+          text: this.estabelecimento.telefone1.numero,
           handler: () => {console.log(this.estabelecimento.telefone1)}
         },
         {
@@ -93,7 +70,7 @@ export class CardapioPage {
         },
         {
           text: 'Ligar',
-          handler: () => {CallNumber.callNumber(this.estabelecimento.telefone2, false)}
+          handler: () => {CallNumber.callNumber(this.estabelecimento.telefone2.numero, false)}
         }
       ]
     }
@@ -118,4 +95,5 @@ export class CardapioPage {
     });
     alert.present();
   }
+
 }

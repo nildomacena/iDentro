@@ -12,14 +12,19 @@
     <ion-spinner name="crescent" mode="md"></ion-spinner>
   </div>
   <br>
-  <ion-list [virtualScroll]="lanchesFiltrados">
-      <ion-item *virtualItem="let lanche" (click)="goToLanche(lanche)" >
-        {{lanche.nome}}<br>
-        {{lanche.nome_estabelecimento}}
-      </ion-item>
-  </ion-list>
-  <h4 *ngIf="lanchesFiltrados.length == 0 && !isLoading">Não foi encontrado nenhum lanche que essas características.</h4>
-  <ion-fab left bottom >
-    <button ion-fab color="primary" (click)="goBack()"><ion-icon name="arrow-back"></ion-icon></button>
-  </ion-fab>
+  <!-- <ion-list *ngIf="lanchesFiltrados.estabelecimentos" [virtualScroll]="lanchesFiltrados"> -->
+      <ion-item-group *ngFor="let estabelecimento of lanchesFiltrados; let i = index">
+        <div *ngIf="i != 0"></div>
+        <ion-item-divider color="light">{{estabelecimento.nome}}</ion-item-divider>
+        <ion-item *ngFor="let lanche of estabelecimento.lanches" (click)="goToLanche(lanche)" >
+          <ion-avatar item-left>
+            <img *ngIf="!lanche.imagem" src="assets/img/no-photo.jpg">
+            <img *ngIf="lanche.imagem" [src]="lanche.imagem">
+          </ion-avatar>
+          {{lanche.nome}}<br>
+          {{lanche.nome_estabelecimento}}
+        </ion-item>
+      </ion-item-group>
+ <!-- </ion-list> -->
+  <h4 *ngIf="lanchesFiltrados.length == 0 && !isLoading">Não foi encontrado nenhum lanche que essas características.</h4> 
 </ion-content>

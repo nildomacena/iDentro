@@ -3,7 +3,8 @@
     <ion-row>
       <ion-col col-4 >
         <ion-avatar>
-          <img [src]="estabelecimento.imagemCapa">
+          <img *ngIf="estabelecimento.imagemCapa" [src]="estabelecimento.imagemCapa">
+          <img *ngIf="!estabelecimento.imagemCapa" src="assets/img/no-photo.jpg">
         </ion-avatar>
       </ion-col>
       <ion-col col-8 style="padding-left: 6px">
@@ -20,27 +21,32 @@
       <ion-col class="divisor"></ion-col>
     </ion-row>
   </ion-grid>
-  <div class="center-spinner" *ngIf='isLoadingCardapio'>
+  <div class="center-spinner" *ngIf='loading'>
     <ion-spinner name="crescent" mode="md"></ion-spinner>
   </div>
-
-    <ion-card *ngFor="let lanche of lanches" >
+  <div class="vazio" *ngIf="!loading && itens?.length == 0">
+    <h4>Ainda não temos itens nessa seção. Aproveite as nossas outras ofertas.</h4>
+  </div>
+    <ion-card *ngFor="let item of itens" >
       <ion-card-content>
         <ion-grid no-padding>
           <ion-row>
             <ion-col col-3>
               <div>
                 <ion-avatar>
-                  <img [src]="lanche.imagem"/>
+                  <img *ngIf="item.imagem"[src]="item.imagem"/>
+                  <img *ngIf="!item.imagem" src="assets/img/no-photo.jpg">
                 </ion-avatar>
               </div>
             </ion-col>
-            <ion-col col-8 offset-1 (click)="goToLanche(lanche)" >
+            <ion-col col-8 offset-1 (click)="goToItem(item)" >
               
-              <b>{{lanche.nome}}</b>
-              <div class="descricao-lanche">
-                {{lanche.ingredientes_truncados}}<br>
-                <b>Preço:</b> {{lanche.preco}}
+              <b>{{item.nome}}</b>
+              <div class="descricao-lanche" *ngIf="item.ingredientes_truncados">
+                {{item.ingredientes_truncados}}<br>
+              </div>
+              <div class="preco-lanche">
+                R${{item.preco}}.00
               </div>
             </ion-col>
             <!--

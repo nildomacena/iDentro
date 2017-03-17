@@ -27,7 +27,6 @@ export class FiltroIngredientesPage {
     this.isLoading = true;
     this.fireService.getLanchesPorIngredientes(this.ingredientes)
       .subscribe(lanches => {
-        this.lanchesFiltrados = [];
         this.filtrarLanches(lanches);
         this.isLoading = false;
       });
@@ -42,29 +41,32 @@ export class FiltroIngredientesPage {
     let ingredientes_truncados:string = '';
     let aux_filtro = [];
     this.ingredientes.map(ingrediente => {
-      ingredientes_truncados += ingrediente.$value;
+      ingredientes_truncados += ingrediente.nome;
     })
 
     lanches.map(lanche => {
-      lanche.ingredientes.map(ingrediente => {
-        let repetido = false;
-        console.log(ingrediente);
-        if(ingredientes_truncados.toUpperCase().includes(ingrediente.toUpperCase())){
-          aux_filtro.map(aux => {
-            if(lanche == aux)
-              repetido = true;
-          })
-          if(!repetido){
-            aux_filtro.push(lanche);
+      console.log(lanche);
+      if(lanche.ingredientes){
+        lanche.ingredientes.map(ingrediente => {
+          let repetido = false;
+          console.log(ingrediente);
+          if(ingredientes_truncados.toUpperCase().includes(ingrediente.nome.toUpperCase())){
+            aux_filtro.map(aux => {
+              if(lanche == aux)
+                repetido = true;
+            })
+            if(!repetido){
+              aux_filtro.push(lanche);
+            }
           }
-        }
-      })
+        });
+      }
     })
-    console.log(aux_filtro);
+    //console.log(aux_filtro);
     this.ingredientes.map(ingrediente => {
       aux_filtro.map((lanche, index) => {
-        console.log('lanche: ', lanche);
-        if(!lanche.ingredientes_truncados.toUpperCase().includes(ingrediente.$value.toUpperCase())){
+    //    console.log('lanche: ', lanche);
+        if(!lanche.ingredientes_truncados.toUpperCase().includes(ingrediente.nome.toUpperCase())){
           aux_filtro.length == 1? aux_filtro = []: aux_filtro.splice(index,1);
         }
       })
@@ -74,12 +76,42 @@ export class FiltroIngredientesPage {
     //É preciso repetir a operação, pois o último elemento do array não é checado na função acima
     this.ingredientes.map(ingrediente => {
       aux_filtro.map((lanche, index) => {
-        if(!lanche.ingredientes_truncados.toUpperCase().includes(ingrediente.$value.toUpperCase())){
+        if(!lanche.ingredientes_truncados.toUpperCase().includes(ingrediente.nome.toUpperCase())){
           aux_filtro.length == 1? aux_filtro = []: aux_filtro.splice(index,1);
         }
       })
     });
-    this.lanchesFiltrados = aux_filtro;
+    //this.lanchesFiltrados = aux_filtro;
+    
+    aux_filtro.map(lanche => {
+      let inserido: boolean = false;
+      console.log(this.lanchesFiltrados, lanche);
+      if(this.lanchesFiltrados.length == 0){
+        this.lanchesFiltrados.push({
+          key: lanche.key_estabelecimento,
+          nome: lanche.nome_estabelecimento,
+          lanches: [lanche]
+        })
+        inserido = true;
+      }
+      else{
+        this.lanchesFiltrados.map(estabelecimento => {
+          console.log(estabelecimento)
+          if(estabelecimento.key == lanche.key_estabelecimento){
+            estabelecimento.lanches.push(lanche);
+            inserido = true;
+            console.log(estabelecimento);
+          }
+        })
+      }
+      if(!inserido){
+        this.lanchesFiltrados.push({
+          key: lanche.key_estabelecimento,
+          nome: lanche.nome_estabelecimento,
+          lanches: [lanche]
+        })
+      }
+    })
   }
 
   goToLanche(lanche){

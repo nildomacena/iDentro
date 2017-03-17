@@ -28,16 +28,19 @@ export class MontagemPage {
       })
   }
 
-  console(){
+  filtrar(){
+    console.log(this.ingredientesSelecionados);
     this.navCtrl.push(FiltroIngredientesPage, {'ingredientes': this.ingredientesSelecionados},{animate: false});
   }
 
   onChange(event: Checkbox, ingrediente){
+    console.log(ingrediente);
+    console.log(this.ingredientesSelecionados);
     if(event.checked)
-      this.ingredientesSelecionados.push(ingrediente);
+      this.ingredientesSelecionados.push(ingrediente.nome);
     if(!event.checked){
       let index = this.ingredientesSelecionados.findIndex((element) => {
-        return element == ingrediente;
+        return element == ingrediente.nome;
       })
       this.ingredientesSelecionados.splice(index,1);
     }

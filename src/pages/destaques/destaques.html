@@ -6,10 +6,12 @@
     <ion-title>Destaques</ion-title>
   </ion-navbar>
 </ion-header>
-
+<!--
 <ion-content padding>
-      <ion-card *ngFor=" let estabelecimento of estabelecimentos">
-        <img [src]="estabelecimento.imagemCapa"/>
+  <ion-slides autoplay="2500" loop="true" *ngIf="estabelecimentos" effect="fade">
+    <ion-slide *ngFor="let estabelecimento of estabelecimentos">
+      <ion-card>
+        <img [src]="estabelecimento.imagemCapa" class="imagem-capa"/>
         <ion-card-content>
           <ion-card-title>
             {{estabelecimento.nome}}
@@ -33,4 +35,36 @@
             </ion-col>
           </ion-row>
       </ion-card>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
+-->
+
+<ion-content padding>
+  <ion-card *ngFor=" let estabelecimento of estabelecimentos">
+    <img *ngIf="estabelecimento.imagemCapa" [src]="estabelecimento.imagemCapa">
+    <img *ngIf="!estabelecimento.imagemCapa" src="assets/img/no-photo.jpg">
+    <ion-card-content>
+      <ion-card-title>
+        {{estabelecimento.nome}}
+        </ion-card-title>
+      <p>
+        {{estabelecimento.fraseDestaque}}
+      </p>
+    </ion-card-content>
+      <ion-row no-padding>
+        <ion-col>
+          <button ion-button clear small color="danger" (click)="onSelectEstabelecimento(estabelecimento)" icon-left>
+            <ion-icon name='arrow-forward'></ion-icon>
+            Visualizar
+          </button>
+        </ion-col>
+        <ion-col text-right>
+          <button ion-button clear small color="danger" (click)="call(estabelecimento)" icon-left>
+            <ion-icon name='call'></ion-icon>
+            Ligar
+          </button>
+        </ion-col>
+      </ion-row>
+  </ion-card>
 </ion-content>

@@ -50,6 +50,17 @@ export class FireService {
         console.log('key_lanche: ', key_lanche)
         return this.af.database.object('lanches/'+key_lanche);
     }
+
+    getItensByAba(key_estabelecimento: string, aba: number){
+        console.log(key_estabelecimento, aba);
+        return this.af.database.list('lanches_por_estabelecimento/'+key_estabelecimento, {
+            query: {
+                orderByChild: 'aba_key',
+                equalTo: aba
+            }
+        })
+    }
+
     getUid(){
         return this.uid;
     }
@@ -236,18 +247,32 @@ export class FireService {
     }
 
     addToFavorito(estabelecimento:any, jaFavorito:boolean):firebase.Promise<any>{
-        console.log(estabelecimento);
-        if(jaFavorito){
-            return firebase.database().ref('usuarios_favoritos/'+this.uid+'/favoritos/'+estabelecimento.$key).remove();
+        let user = firebase.auth().currentUser;
+        if(user){
+            if(jaFavorito){
+                return firebase.database().ref('usuarios_favoritos/'+this.uid+'/favoritos/'+estabelecimento.$key).remove()
+                    .then(_ => {
+                        firebase.database().ref('estabelecimentos_favoritos/'+estabelecimento.$key+'/'+this.uid).remove();
+                    })
+            }
+            else{
+                return firebase.database().ref('usuarios_favoritos/'+this.uid+'/favoritos/'+estabelecimento.$key).set({
+                    nome: estabelecimento.nome,
+                    key: estabelecimento.$key,
+                    imagemCapa: estabelecimento.imagemCapa,
+                    telefone: estabelecimento.telefone,
+                    celular: estabelecimento.celular
+                }).then(_ => {
+                    return firebase.database().ref('estabelecimentos_favoritos/'+estabelecimento.$key+'/'+this.uid).set({
+                        nome: user.displayName,
+                        email: user.email
+                    })
+                })
+            }
         }
+        
         else{
-            return firebase.database().ref('usuarios_favoritos/'+this.uid+'/favoritos/'+estabelecimento.$key).set({
-                nome: estabelecimento.nome,
-                key: estabelecimento.$key,
-                imagemCapa: estabelecimento.imagemCapa,
-                telefone: estabelecimento.telefone,
-                celular: estabelecimento.celular
-            })
+            return firebase.Promise.resolve(false);
         }
     }
 
@@ -308,6 +333,13 @@ export class FireService {
         return firebase.database().ref('usuarios_app/'+user.uid).set(obj_user)
     }
 
+    checkAuth(): boolean{
+        console.log('User: ', firebase.auth().currentUser);
+        if(firebase.auth().currentUser)
+            return true;
+        else    
+            return false;
+    }
     logout(): firebase.Promise<any>{
         return firebase.auth().signOut();
     }

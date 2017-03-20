@@ -12,6 +12,7 @@ export class FiltroIngredientesPage {
   ingredientes: any[];
   lanchesFiltrados: any[] = [];
   isLoading = true;
+  categoria: any;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -19,14 +20,15 @@ export class FiltroIngredientesPage {
     public app: App
     ) {
     this.ingredientes = this.navParams.get('ingredientes');
+    this.categoria = this.navParams.get('categoria');
   }
 
   ionViewDidLoad() {
-    console.log(this.ingredientes);
     this.lanchesFiltrados = [];
     this.isLoading = true;
-    this.fireService.getLanchesPorIngredientes(this.ingredientes)
+    this.fireService.getLanchesPorCategoria(this.categoria)
       .subscribe(lanches => {
+        console.log(lanches);
         this.filtrarLanches(lanches);
         this.isLoading = false;
       });
@@ -41,15 +43,15 @@ export class FiltroIngredientesPage {
     let ingredientes_truncados:string = '';
     let aux_filtro = [];
     this.ingredientes.map(ingrediente => {
-      ingredientes_truncados += ingrediente.nome;
+      ingredientes_truncados += ingrediente;
     })
-
+    console.log('ingredientes truncados: ', ingredientes_truncados);
     lanches.map(lanche => {
-      console.log(lanche);
       if(lanche.ingredientes){
+        console.log(lanche.ingredientes);
         lanche.ingredientes.map(ingrediente => {
-          let repetido = false;
           console.log(ingrediente);
+          let repetido = false;
           if(ingredientes_truncados.toUpperCase().includes(ingrediente.nome.toUpperCase())){
             aux_filtro.map(aux => {
               if(lanche == aux)
@@ -62,11 +64,11 @@ export class FiltroIngredientesPage {
         });
       }
     })
-    //console.log(aux_filtro);
+    console.log(aux_filtro);
     this.ingredientes.map(ingrediente => {
       aux_filtro.map((lanche, index) => {
     //    console.log('lanche: ', lanche);
-        if(!lanche.ingredientes_truncados.toUpperCase().includes(ingrediente.nome.toUpperCase())){
+        if(!lanche.ingredientes_truncados.toUpperCase().includes(ingrediente.toUpperCase())){
           aux_filtro.length == 1? aux_filtro = []: aux_filtro.splice(index,1);
         }
       })
@@ -76,7 +78,7 @@ export class FiltroIngredientesPage {
     //É preciso repetir a operação, pois o último elemento do array não é checado na função acima
     this.ingredientes.map(ingrediente => {
       aux_filtro.map((lanche, index) => {
-        if(!lanche.ingredientes_truncados.toUpperCase().includes(ingrediente.nome.toUpperCase())){
+        if(!lanche.ingredientes_truncados.toUpperCase().includes(ingrediente.toUpperCase())){
           aux_filtro.length == 1? aux_filtro = []: aux_filtro.splice(index,1);
         }
       })

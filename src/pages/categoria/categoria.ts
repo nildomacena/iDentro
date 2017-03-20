@@ -1,22 +1,40 @@
+import { MontagemPage } from './../montagem/montagem';
+import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, App } from 'ionic-angular';
 
-/*
-  Generated class for the Categoria page.
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: 'page-categoria',
   templateUrl: 'categoria.html'
 })
 export class CategoriaPage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+  categorias: any;
+  categoriaSelecionada: any = null;
+  isLoading: boolean = true;
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams,
+    public fireService: FireService,
+    public app: App
+    ) {
+      this.fireService.getCategorias()
+        .subscribe(categorias => {
+          this.categorias = categorias;
+          this.isLoading = false;
+        })
+    } 
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad CategoriaPage');
+
+  }
+  
+  onSelect(categoria){
+    this.categoriaSelecionada = categoria;
+    console.log(this.categoriaSelecionada);
   }
 
+  irParaIngredientes(){
+    this.app.getRootNav().push(MontagemPage, {categoria: this.categoriaSelecionada})
+  }
 }

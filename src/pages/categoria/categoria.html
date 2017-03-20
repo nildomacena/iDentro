@@ -1,18 +1,26 @@
-<!--
-  Generated template for the Categoria page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
-    <ion-title>categoria</ion-title>
+    <ion-title>Monte seu lanche</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
-
+<ion-content>
+  <br>
+  <div class="center-spinner" *ngIf='isLoading'>
+    <ion-spinner name="crescent" mode="md"></ion-spinner>
+  </div>
+  <h5 style="text-align: center" *ngIf="!isLoading">Selecione o tipo de lanche</h5>
+  <hr>
+  <ion-list radio-group >
+    <ion-item *ngFor="let categoria of categorias" >
+      <ion-label>{{categoria.nome}}</ion-label>
+      <ion-radio (ionSelect)="onSelect(categoria)" ></ion-radio>
+    </ion-item>
+  </ion-list>
+  <ion-fab right bottom *ngIf="categoriaSelecionada" >
+    <button ion-fab color="primary" (click)="irParaIngredientes()"><ion-icon name="arrow-forward"></ion-icon></button>
+  </ion-fab>
 </ion-content>

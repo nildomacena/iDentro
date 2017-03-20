@@ -2,6 +2,77 @@ page-tab1 {
     .vazio{
         margin: 10px;
     }
+    .divisor{
+        width: 100%;
+        height: 12px;
+        background-color: #e65100;
+    }
+    .label-md{
+        margin-top: 1px;
+        margin-bottom: 1px;
+        font-size: 90%;
+        font-weight: 400;
+    }
+    h4{
+        margin-bottom: 1px;
+    }
+    ion-grid{
+        padding: 0px;
+        margin: 0px;
+    }
+    ion-col{
+        padding: 0px;
+        margin-bottom: 0px
+    }
+    .info{
+        margin-left: 7px;
+    }
+
+    .titulo-lanche{
+        font-size: 1.6rem;
+        margin-left: 5px;
+    }
+
+    .valign{
+        height: 100%;
+        min-height: 100%;
+
+        /* habilita o flex nos filhos diretos */
+        display: -ms-flex;
+        display: -webkit-flex;
+        display: flex;
+
+        /* centraliza na vertical */
+        -ms-align-items: center;
+        -webkit-align-items: center;
+        align-items: center;
+
+        /* centraliza na horizontal */
+        -ms-justify-content: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+    }
+
+    .descricao-lanche{
+        font-size: 90%;
+        font-weight: 400;
+    }
+    .preco-lanche{
+        color: #00695c;
+        font-weight: bold;
+    }
+    .card-md{
+        margin-bottom: 15px;
+    }
+
+    .card-content-md{
+        padding-left: 4px;
+    }
+
+    .botao-comprar{
+        height: 100%
+    }
+
     .aberto{
         background-color: #66bb6a;
         font-style: bold;

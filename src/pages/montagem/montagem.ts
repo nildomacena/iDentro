@@ -13,36 +13,41 @@ export class MontagemPage {
   ingredientes: any[];
   checkbox: any;
   ingredientesSelecionados: string[] = [];
+  categoria: any;
+  selecionouIngrediente: boolean = true;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
     public fireService: FireService
-    ) {}
+    ) {
+      this.categoria = this.navParams.get('categoria');
+    }
 
   ionViewDidLoad() {
+    this.selecionouIngrediente = false;
     this.fireService.getIngredientes()
       .subscribe(ingredientes => {
         this.isLoading = false;
         this.ingredientes = ingredientes;
-        console.log(this.ingredientes);
       })
   }
 
   filtrar(){
-    console.log(this.ingredientesSelecionados);
-    this.navCtrl.push(FiltroIngredientesPage, {'ingredientes': this.ingredientesSelecionados},{animate: false});
+    this.navCtrl.push(FiltroIngredientesPage, {'ingredientes': this.ingredientesSelecionados, 'categoria': this.categoria},{animate: false});
   }
 
-  onChange(event: Checkbox, ingrediente){
+  onChange(event: Checkbox, ingrediente: any){
     console.log(ingrediente);
-    console.log(this.ingredientesSelecionados);
-    if(event.checked)
+    if(event.checked){
       this.ingredientesSelecionados.push(ingrediente.nome);
+    }
     if(!event.checked){
       let index = this.ingredientesSelecionados.findIndex((element) => {
         return element == ingrediente.nome;
       })
       this.ingredientesSelecionados.splice(index,1);
     }
+    this.selecionouIngrediente = this.ingredientesSelecionados.length > 0;
+    console.log(this.ingredientesSelecionados, this.selecionouIngrediente);
   }
 }

@@ -1,3 +1,4 @@
+import { CategoriaPage } from './../categoria/categoria';
 import { MontagemPage } from './../montagem/montagem';
 import { DestaquesPage } from './../destaques/destaques';
 import { EstabelecimentosPage } from './../estabelecimentos/estabelecimentos';
@@ -14,7 +15,7 @@ export class HomePage {
   estabelecimentos: any[];
   estabelecimentosPage = EstabelecimentosPage;
   destaquesPage = DestaquesPage;
-  montagemPage = MontagemPage;
+  categoriaPage = CategoriaPage;
 
   constructor(
     public navCtrl: NavController,
@@ -24,11 +25,7 @@ export class HomePage {
   }
 
   ionViewDidLoad(){
-    this.fireService.getEstabelecimentos()
-      .subscribe(estabelecimentos => this.estabelecimentos = estabelecimentos);
+    
   }
 
-  console(){
-    console.log('teste asdfaasdfu');
-  }
 }

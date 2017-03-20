@@ -1,3 +1,5 @@
+import { BebidasPage } from './../pages/bebidas/bebidas';
+import { CardapioPage } from './../pages/cardapio/cardapio';
 import { CategoriaPage } from './../pages/categoria/categoria';
 import { Tab3Page } from './../pages/tab3/tab3';
 import { Tab2Page } from './../pages/tab2/tab2';
@@ -6,8 +8,6 @@ import { FavoritosPage } from './../pages/favoritos/favoritos';
 import { FechamentoPedidoPage } from './../pages/fechamento-pedido/fechamento-pedido';
 import { ContatoPage } from './../pages/contato/contato';
 import { LocalizacaoPage } from './../pages/localizacao/localizacao';
-import { CardapioPage } from './../pages/cardapio/cardapio';
-import { BebidasPage } from './../pages/bebidas/bebidas';
 import { ParallaxHeader } from './../components/parallax-header/parallax-header';
 import { CarrinhoPage } from './../pages/carrinho/carrinho';
 import { LancheDetailPage } from './../pages/lanche-detail/lanche-detail';
@@ -53,7 +53,9 @@ const config = {
     Tab2Page,
     Tab3Page,
     CategoriaPage,
-    ParallaxHeader
+    ParallaxHeader,
+    CardapioPage,
+    BebidasPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -79,7 +81,9 @@ const config = {
     Tab2Page,
     Tab3Page,
     CategoriaPage,
-    CarrinhoPage
+    CarrinhoPage,
+    CardapioPage,
+    BebidasPage
   ],
   providers: [
     FireService, 

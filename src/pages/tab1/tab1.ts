@@ -23,17 +23,14 @@ export class Tab1Page {
     }
 
   ionViewDidLoad() {
-    console.log('estabelecimento: ', this.estabelecimento);
     this.fireService.getItensByAba(this.estabelecimento.$key, 0)
       .subscribe(itens => {
         this.loading = false;
         this.itens = itens;
-        console.log(itens);
       })
   }
 
   goToItem(item){
-    console.log(item);
     this.app.getRootNav().push(LancheDetailPage, {lanche: item, estabelecimento: this.estabelecimento});
 
   }

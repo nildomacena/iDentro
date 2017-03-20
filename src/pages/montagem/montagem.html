@@ -16,7 +16,7 @@
         <ion-checkbox (ionChange)="onChange($event, ingrediente)" ></ion-checkbox>
       </ion-item>
   </ion-list>
-   <ion-fab right bottom *ngIf="ingredientesSelecionados.length > 0" >
+   <ion-fab right bottom *ngIf="selecionouIngrediente" >
     <button ion-fab color="primary" (click)="filtrar()"><ion-icon name="arrow-forward"></ion-icon></button>
    </ion-fab>
 </ion-content>  

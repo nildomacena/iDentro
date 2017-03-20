@@ -16,6 +16,7 @@ export class EstabelecimentosPage {
   isSearchEmpty: boolean = true;
   myInput: string = '';
   isLoading: boolean = true;
+  bairros: any[];
   @ViewChildren('searchbar') searchbar: QueryList<Searchbar>;
   @ViewChild(Content) content: Content;
 
@@ -44,6 +45,10 @@ export class EstabelecimentosPage {
         })
         toast.present();
       });
+      this.fireService.getBairros()
+        .subscribe(bairros => {
+          this.bairros = bairros;
+        })
   }
 
   onSelectEstabelecimento(estabelecimento){
@@ -147,7 +152,28 @@ export class EstabelecimentosPage {
       }
 
       funnel(){
-        
+        if(this.bairros){
+          let alert = this.alertCtrl.create();
+          alert.setTitle('Escolha o seu bairro');
+          alert.addButton({
+            text: 'Cancelar',
+            role: 'cancel'
+          });
+          alert.addButton({
+            text: 'OK',
+            handler: data =>{
+              console.log(data);
+            }
+          })
+          this.bairros.map(bairro => {
+            alert.addInput({
+              type: 'radio',
+              label: bairro.nome,
+              value: bairro
+            })
+          })
+        alert.present();
+        }
       }
   }
 

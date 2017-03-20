@@ -1,6 +1,8 @@
-page-tab3 {
-    .vazio{
-        margin: 10px;
+page-bebidas {
+.header-image {
+       background-image: url(https://ununsplash.imgix.net/photo-1421091242698-34f6ad7fc088?fit=crop&fm=jpg&h=650&q=75&w=950);
+       background-position: center;
+       height: 40vh;
     }
     .divisor{
         width: 100%;
@@ -54,13 +56,10 @@ page-tab3 {
     }
 
     .descricao-lanche{
-        font-size: 90%;
+        font-size: 85%;
         font-weight: 400;
     }
-    .preco-lanche{
-        color: #00695c;
-        font-weight: bold;
-    }
+
     .card-md{
         margin-bottom: 15px;
     }
@@ -71,13 +70,5 @@ page-tab3 {
 
     .botao-comprar{
         height: 100%
-    }
-
-    .aberto{
-        background-color: #66bb6a;
-        font-style: bold;
-        padding: 1px 2px 1px 2px;
-        border: 1px;
-        border-radius: 2px;
     }
 }

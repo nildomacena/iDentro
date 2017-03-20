@@ -38,8 +38,12 @@ export class FireService {
         return this.af.database.list('ingredientes');
     }
 
-    getLanchesPorIngredientes(ingredientes){
-        return this.af.database.list('lanches');
+    getLanchesPorCategoria(categoria: any){
+        console.log(categoria);
+        return this.af.database.list('lanches', {query: {
+            orderByChild: 'categoria_key',
+            equalTo: categoria.$key      
+        }});
     }
     getLanchesPorEstabelecimento(key_estabelecimento: string){
         console.log('key_estb: ',key_estabelecimento)
@@ -60,7 +64,9 @@ export class FireService {
             }
         })
     }
-
+    getCategorias(): Observable<any>{
+        return this.af.database.list('categorias');
+    }
     getUid(){
         return this.uid;
     }

@@ -4,7 +4,7 @@ import { ContatoPage } from './../pages/contato/contato';
 import { LocalizacaoPage } from './../pages/localizacao/localizacao';
 import { CarrinhoPage } from './../pages/carrinho/carrinho';
 import { Component, ViewChild } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Platform, App, ViewController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 import * as firebase from 'firebase';
 import { HomePage } from '../pages/home/home';
@@ -21,7 +21,7 @@ export class MyApp {
   public nav: any;
   user: any;
   logado = false;
-  constructor(platform: Platform, public fireService: FireService) {
+  constructor(public platform: Platform, public fireService: FireService, public app: App) {
     platform.ready().then(() => {
       firebase.auth().onAuthStateChanged(user => {
         if(user){
@@ -35,6 +35,20 @@ export class MyApp {
       })
       StatusBar.styleDefault();
       Splashscreen.hide();
+
+      this.platform.registerBackButtonAction(() => {
+        let nav = app.getActiveNav();
+        let activeView: ViewController = nav.getActive();
+        console.log('activeView: ',activeView);
+        if(activeView != null){
+          if(nav.canGoBack()) {
+            nav.pop();
+          }
+          else if (typeof activeView.instance.backButtonAction === 'function')
+            activeView.instance.backButtonAction();
+          else nav.parent.select(0); // goes to the first tab
+        }
+      }, 100)
     });
   }
 

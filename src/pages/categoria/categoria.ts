@@ -1,6 +1,6 @@
 import { MontagemPage } from './../montagem/montagem';
 import { FireService } from './../../services/fire.service';
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { NavController, NavParams, App } from 'ionic-angular';
 
 
@@ -12,6 +12,7 @@ export class CategoriaPage {
   categorias: any;
   categoriaSelecionada: any = null;
   isLoading: boolean = true;
+  radioCategoria: any;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -28,10 +29,16 @@ export class CategoriaPage {
   ionViewDidLoad() {
 
   }
-  
-  onSelect(categoria){
+  ionViewWillLeave(){
+    console.log('Vai sair');
+    this.categoriaSelecionada = null;
+    this.radioCategoria.checked = false;
+  }
+  onSelect(categoria, element){
     this.categoriaSelecionada = categoria;
-    console.log(this.categoriaSelecionada);
+    this.radioCategoria = element;
+    //this.radioCategoria.nativeElement.reset();
+    console.log('elemnt: ',element);
   }
 
   irParaIngredientes(){

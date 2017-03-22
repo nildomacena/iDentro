@@ -1,8 +1,5 @@
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
     <ion-title>Monte seu lanche</ion-title>
   </ion-navbar>
 </ion-header>
@@ -10,13 +7,15 @@
   <div class="center-spinner" *ngIf='isLoading'>
     <ion-spinner name="crescent" mode="md"></ion-spinner>
   </div>
+  <h5 style="text-align: center" *ngIf="!isLoading">Quais os ingredientes que você deseja?</h5>
+  <hr>
   <ion-list [virtualScroll]="ingredientes">
       <ion-item *virtualItem="let ingrediente" >
         <ion-label>{{ingrediente.nome}}</ion-label>
         <ion-checkbox (ionChange)="onChange($event, ingrediente)" ></ion-checkbox>
       </ion-item>
   </ion-list>
-   <ion-fab right bottom *ngIf="selecionouIngrediente" >
+   <ion-fab right bottom >
     <button ion-fab color="primary" (click)="filtrar()"><ion-icon name="arrow-forward"></ion-icon></button>
    </ion-fab>
 </ion-content>  

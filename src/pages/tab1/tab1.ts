@@ -1,8 +1,9 @@
+import { HomePage } from './../home/home';
 import { CallNumber } from 'ionic-native';
 import { LancheDetailPage } from './../lanche-detail/lanche-detail';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, App, AlertController } from 'ionic-angular';
+import { NavController, NavParams, App, AlertController, ViewController } from 'ionic-angular';
 
 @Component({
   selector: 'page-tab1',
@@ -17,16 +18,19 @@ export class Tab1Page {
     public alertCtrl: AlertController,
     public navParams: NavParams,
     public fireService: FireService,
+    public viewCtrl: ViewController,
     public app: App
     ) {
       this.estabelecimento = this.navParams.data;
     }
 
   ionViewDidLoad() {
+    console.log('Entrou na tab1');
     this.fireService.getItensByAba(this.estabelecimento.$key, 0)
       .subscribe(itens => {
         this.loading = false;
         this.itens = itens;
+        console.log(this.itens);
       })
   }
 
@@ -97,4 +101,10 @@ export class Tab1Page {
         });
         alert.present();
       }
+
+  backButtonAction(){
+    console.log('Estabelecimento backbuttonaction');
+    //this.viewCtrl._nav.popToRoot
+    this.app.getRootNav().pop();
+  }
 }

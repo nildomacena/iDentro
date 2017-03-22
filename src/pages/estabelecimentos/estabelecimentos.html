@@ -4,13 +4,15 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title *ngIf="!showToolbar" >Estabelecimentos</ion-title>
-        <ion-searchbar #searchbar *ngIf="showToolbar"
-          placeholder= "Pesquisar"
-          [(ngModel)]="myInput"
-          [showCancelButton]="true"
-          (ionInput)="filter($event)"
-          (ionCancel)="toggleSearchbar()">
-        </ion-searchbar>
+    <ion-searchbar #searchbar *ngIf="showToolbar"
+      placeholder= "Pesquisar"
+      [(ngModel)]="myInput"
+      [showCancelButton]="true"
+      (ionInput)="filter($event)"
+      (ionCancel)="toggleSearchbar()"
+      animated = "true"
+      >
+    </ion-searchbar>
 
     <ion-buttons end *ngIf="!showToolbar">
       <button ion-button icon-only (click)="toggleSearchbar()">
@@ -19,40 +21,40 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-  <ion-content>
-    <br>
-    <div class="center-spinner" *ngIf='isLoading'>
-      <ion-spinner name="crescent" mode="md"></ion-spinner>
-    </div>
-    <ion-list [virtualScroll]="filteredEstabelecimentos">
-      <ion-item-sliding *virtualItem="let estabelecimento" >
-        <ion-item>
-          <ion-avatar item-left >
-            <img *ngIf="!loaded && estabelecimento.imagemCapa" src="assets/img/loading.gif"/>
-            <img *ngIf="!estabelecimento.imagemCapa" src="assets/img/no-photo.jpg">
-            <img *ngIf="estabelecimento.imagemCapa" [hidden]="!loaded" alt="imagemCapa" (load)="loaded = true" [src]="estabelecimento.imagemCapa"/>
-          </ion-avatar>
-          <div (click)="onSelectEstabelecimento(estabelecimento)" >
-            {{ estabelecimento.nome }}<br>
-            <div class="telefone-wrapper">
-                <div *ngIf="estabelecimento.telefone1.numero">
-                  <ion-icon [name]="estabelecimento.telefone1.whatsapp? 'logo-whatsapp': 'phone-portrait'"></ion-icon>&nbsp;{{estabelecimento.telefone1.numero}}&nbsp;&nbsp;&nbsp;              
-                </div>  
-                <div *ngIf="estabelecimento.telefone2.numero">
-                  <ion-icon [name]="estabelecimento.telefone2.whatsapp? 'logo-whatsapp': 'phone-portrait'"></ion-icon>&nbsp;{{estabelecimento.telefone2.numero}}
-                </div>
-            </div>
+<ion-content>
+  <br>
+  <div class="center-spinner" *ngIf='isLoading'>
+    <ion-spinner name="crescent" mode="md"></ion-spinner>
+  </div>
+  <ion-list [virtualScroll]="filteredEstabelecimentos">
+    <ion-item-sliding *virtualItem="let estabelecimento" >
+      <ion-item>
+        <ion-avatar item-left >
+          <img *ngIf="!loaded && estabelecimento.imagemCapa" src="assets/img/loading.gif"/>
+          <img *ngIf="!estabelecimento.imagemCapa" src="assets/img/no-photo.jpg">
+          <img *ngIf="estabelecimento.imagemCapa" [hidden]="!loaded" alt="imagemCapa" (load)="loaded = true" [src]="estabelecimento.imagemCapa"/>
+        </ion-avatar>
+        <div (click)="onSelectEstabelecimento(estabelecimento)" >
+          {{ estabelecimento.nome }}<br>
+          <div class="telefone-wrapper">
+              <div *ngIf="estabelecimento.telefone1.numero">
+                <ion-icon [name]="estabelecimento.telefone1.whatsapp? 'logo-whatsapp': 'phone-portrait'"></ion-icon>&nbsp;{{estabelecimento.telefone1.numero}}&nbsp;&nbsp;&nbsp;              
+              </div>  
+              <div *ngIf="estabelecimento.telefone2.numero">
+                <ion-icon [name]="estabelecimento.telefone2.whatsapp? 'logo-whatsapp': 'phone-portrait'"></ion-icon>&nbsp;{{estabelecimento.telefone2.numero}}
+              </div>
           </div>
-        </ion-item>
-        <ion-item-options side="right">
-          <button (click)="call(estabelecimento)" ion-button color="secondary">
-            <ion-icon name="call"></ion-icon>
-            Ligar
-          </button>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ion-list>
-    <ion-fab right bottom *ngIf="estabelecimentos" >
-      <button ion-fab color="primary" (click)="funnel()"><ion-icon name="funnel"></ion-icon></button>
-    </ion-fab>
-  </ion-content>
+        </div>
+      </ion-item>
+      <ion-item-options side="right">
+        <button (click)="call(estabelecimento)" ion-button color="secondary">
+          <ion-icon name="call"></ion-icon>
+          Ligar
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+  <ion-fab right bottom *ngIf="estabelecimentos" >
+    <button ion-fab color="primary" (click)="funnel()"><ion-icon name="funnel"></ion-icon></button>
+  </ion-fab>
+</ion-content>

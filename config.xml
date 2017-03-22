@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.ionicframework.identro737668" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>iDentro</name>
-  <description>An awesome Ionic/Cordova app.</description>
+  <name>Bolts</name>
+  <description>Bolts - deu fome? Pede no Bolts.</description>
   <author email="hi@ionicframework" href="http://ionicframework.com/">Koine Development</author>
   <content src="index.html"/>
   <access origin="*"/>
@@ -10,6 +10,7 @@
   <allow-navigation href="http://192.168.43.184:8100"/>
   <allow-navigation href="http://10.0.0.104:8100"/>
   <allow-navigation href="http://172.24.1.222:8100"/>
+  <allow-navigation href="http://172.24.5.136:8100"/>
   <allow-intent href="http://*/*"/>
   <allow-intent href="https://*/*"/>
   <allow-intent href="tel:*"/>

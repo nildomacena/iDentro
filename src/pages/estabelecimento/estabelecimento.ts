@@ -6,7 +6,7 @@ import { Tab1Page } from './../tab1/tab1';
 import { CardapioPage } from './../cardapio/cardapio';
 import { BebidasPage } from './../bebidas/bebidas';
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, Platform, ViewController } from 'ionic-angular';
 
 
 
@@ -22,22 +22,31 @@ export class EstabelecimentoPage {
   favorito: boolean;
   adicionando: boolean = false;
   logado: boolean = false;
-  abas: any[];
-  tabs: any[];
+  abas: any[] = [];
+  tabs: any[] = [];
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
     public alertCtrl: AlertController,
-    public fireService: FireService
+    public fireService: FireService,
+    public platform: Platform,
+    public viewCtrl: ViewController
     ) {
 
     this.estabelecimento = this.navParams.get('estabelecimento');
     this.abas = this.estabelecimento.abas;
-    this.tabs = [
-      {titulo: this.abas[0].nome, root: Tab1Page},
-      {titulo: this.abas[1].nome, root: Tab2Page},
-      {titulo: this.abas[2].nome, root: Tab3Page}
-    ];
+    this.abas.map((aba, index) => {
+      if(index == 0){
+        this.tabs.push({titulo: aba.nome, root: Tab1Page})
+      }
+      else if(index == 1){
+        this.tabs.push({titulo: aba.nome, root: Tab2Page})
+      }
+      else if(index == 2){
+        this.tabs.push({titulo: aba.nome, root: Tab3Page})
+      }
+    });
+    
 
     this.estabelecimento.imagemCapa? this.photo = this.estabelecimento.imagemCapa : this.photo = 'assets/no-photo.png';
     console.log('user: ', this.fireService.user)

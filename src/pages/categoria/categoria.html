@@ -1,9 +1,10 @@
 <ion-header>
-
   <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
     <ion-title>Monte seu lanche</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
@@ -12,12 +13,12 @@
   <div class="center-spinner" *ngIf='isLoading'>
     <ion-spinner name="crescent" mode="md"></ion-spinner>
   </div>
-  <h5 style="text-align: center" *ngIf="!isLoading">Selecione o tipo de lanche</h5>
+  <h5 style="text-align: center" *ngIf="!isLoading">O que você quer comer?</h5>
   <hr>
   <ion-list radio-group >
-    <ion-item *ngFor="let categoria of categorias" >
+    <ion-item *ngFor="let categoria of categorias"  >
       <ion-label>{{categoria.nome}}</ion-label>
-      <ion-radio (ionSelect)="onSelect(categoria)" ></ion-radio>
+      <ion-radio (ionSelect)="onSelect(categoria, radio)" #radio></ion-radio>
     </ion-item>
   </ion-list>
   <ion-fab right bottom *ngIf="categoriaSelecionada" >

@@ -1,7 +1,7 @@
 import { EstabelecimentoPage } from './../estabelecimento/estabelecimento';
 import { FireService } from './../../services/fire.service';
-import { Component, ViewChildren, ChangeDetectorRef, ViewChild, QueryList } from '@angular/core';
-import { NavController, NavParams, App, Searchbar, Content, AlertController, ToastController } from 'ionic-angular';
+import { Component, ViewChildren, ChangeDetectorRef, ViewChild, QueryList, ElementRef, Renderer } from '@angular/core';
+import { NavController, NavParams, App, Searchbar, Content, Navbar, Header, Toolbar, AlertController, ToastController, Platform, ViewController } from 'ionic-angular';
 import { CallNumber } from 'ionic-native';
 
 @Component({
@@ -17,8 +17,15 @@ export class EstabelecimentosPage {
   myInput: string = '';
   isLoading: boolean = true;
   bairros: any[];
+  searchHeight: any;
+  newSearchHeight: any;
   @ViewChildren('searchbar') searchbar: QueryList<Searchbar>;
   @ViewChild(Content) content: Content;
+  @ViewChild(Header) header: Header;
+  @ViewChild(Navbar) navbar: Navbar;
+  @ViewChild(Toolbar) toolbar: Toolbar;
+
+  @ViewChild(Searchbar) searchbarElement: Searchbar;
 
   constructor(
     public navCtrl: NavController,
@@ -26,14 +33,23 @@ export class EstabelecimentosPage {
     public app: App,
     public changeDetectionRef: ChangeDetectorRef,
     public alertCtrl: AlertController,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
+    public platform: Platform,
+    public viewCtrl: ViewController,
+    public elementRef: ElementRef,
+    public renderer: Renderer
     ) {
-    
+      this.searchHeight = 56;
   }
 
   ionViewDidLoad(){
-
-   this.fireService.getEstabelecimentos()
+    // descomentar quando a função de redimensionar cabeçalho estiver funcionando
+    /*
+    this.content.ionScroll.subscribe(ev => {
+      this.resizeHeader(ev);
+    })
+    */
+    this.fireService.getEstabelecimentos()
       .subscribe(estabelecimentos => {
         this.isLoading = false;
         this.estabelecimentos = this.filteredEstabelecimentos = estabelecimentos;
@@ -51,6 +67,37 @@ export class EstabelecimentosPage {
         })
   }
 
+  backButtonAction(){
+    if(this.isSearch){
+      this.toggleSearchbar();
+    }
+    else{
+      let alert = this.alertCtrl.create({
+        title: 'Deseja sair?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+            handler: () => {
+            }
+          },
+          {
+            text: 'Sair',
+            handler: () => {
+              this.exitApp();
+            }
+          }
+        ]
+      })
+      alert.present();
+    }  
+  }
+
+  exitApp(){
+    console.log('Exit app');
+    this.platform.exitApp();
+  }
+
   onSelectEstabelecimento(estabelecimento){
     this.app.getRootNav().push(EstabelecimentoPage,{'estabelecimento': estabelecimento});
   }
@@ -61,6 +108,7 @@ export class EstabelecimentosPage {
 
     this.searchbar.changes.subscribe( result => {
         this.content.resize();
+        console.log('content resize toggle searchbar');
         let searchbar = <Searchbar>result.toArray()[0];
         if(searchbar){
           searchbar.setFocus();
@@ -69,23 +117,41 @@ export class EstabelecimentosPage {
     })
   }
 
-    filter(event: Event){
-      let search:string = event.srcElement['value'];
-      if(!search){
-        this.isSearchEmpty = true;
-        this.filteredEstabelecimentos = this.estabelecimentos;
-      }
-      else{
-        console.log('search: ', search);
 
-        this.isSearchEmpty = search.length > 0? false: true; //Verifica se o usuário digitou alguma coisa no searchbox para que o aplicativo não pesquise com o searchbox vazio
-        this.filteredEstabelecimentos = this.estabelecimentos.filter(estabelecimento => 
-          estabelecimento.nome.toUpperCase().includes(search.toUpperCase()));
+  //Função para redimensionar Header. Ainda não está funcionando
+  resizeHeader(ev){
+    console.log(this.content.scrollTop);
+    ev.domWrite(()=> {
+      this.newSearchHeight = this.searchHeight - ev.scrollTop;
+      if(this.newSearchHeight < 0 )
+        this.newSearchHeight = 0;
+    })
+    console.log('new search height', this.newSearchHeight);
+    this.renderer.setElementStyle(this.header.getElementRef().nativeElement, 'height', this.newSearchHeight+'px');
+    this.renderer.setElementStyle(this.navbar.getElementRef().nativeElement, 'height', this.newSearchHeight+'px');
+    if(this.toolbar)
+      this.renderer.setElementStyle(this.toolbar.getElementRef().nativeElement, 'height', this.newSearchHeight+'px');
+    if(this.searchbarElement)
+      this.renderer.setElementStyle(this.searchbarElement.getElementRef().nativeElement, 'height', this.newSearchHeight+'px');
 
-        console.log(this.filteredEstabelecimentos);
-        console.log('searchbar: ', this.searchbar);
-      }
-    } 
+  }
+  filter(event: Event){
+    let search:string = event.srcElement['value'];
+    if(!search){
+      this.isSearchEmpty = true;
+      this.filteredEstabelecimentos = this.estabelecimentos;
+    }
+    else{
+      console.log('search: ', search);
+
+      this.isSearchEmpty = search.length > 0? false: true; //Verifica se o usuário digitou alguma coisa no searchbox para que o aplicativo não pesquise com o searchbox vazio
+      this.filteredEstabelecimentos = this.estabelecimentos.filter(estabelecimento => 
+        estabelecimento.nome.toUpperCase().includes(search.toUpperCase()));
+
+      console.log(this.filteredEstabelecimentos);
+      console.log('searchbar: ', this.searchbar);
+    }
+  } 
 
     call(estabelecimento){
       let buttons;

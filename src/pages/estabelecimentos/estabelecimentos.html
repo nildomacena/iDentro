@@ -57,4 +57,7 @@
   <ion-fab right bottom *ngIf="estabelecimentos" >
     <button ion-fab color="primary" (click)="funnel()"><ion-icon name="funnel"></ion-icon></button>
   </ion-fab>
+  <ion-fab left bottom *ngIf="bairros">
+    <button ion-fab color="primary" (click)="openModal()"><ion-icon name="funnel"></ion-icon></button>
+  </ion-fab>
 </ion-content>

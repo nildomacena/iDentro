@@ -1,7 +1,8 @@
+import { ConfiguracoesPage } from './../configuracoes/configuracoes';
 import { EstabelecimentoPage } from './../estabelecimento/estabelecimento';
 import { FireService } from './../../services/fire.service';
 import { Component, ViewChildren, ChangeDetectorRef, ViewChild, QueryList, ElementRef, Renderer } from '@angular/core';
-import { NavController, NavParams, App, Searchbar, Content, Navbar, Header, Toolbar, AlertController, ToastController, Platform, ViewController } from 'ionic-angular';
+import { NavController, NavParams, App, Searchbar, Content, Navbar, Header, Toolbar, AlertController, ToastController, Platform, ViewController, ModalController } from 'ionic-angular';
 import { CallNumber } from 'ionic-native';
 
 @Component({
@@ -37,7 +38,8 @@ export class EstabelecimentosPage {
     public platform: Platform,
     public viewCtrl: ViewController,
     public elementRef: ElementRef,
-    public renderer: Renderer
+    public renderer: Renderer,
+    public modalCtrl: ModalController
     ) {
       this.searchHeight = 56;
   }
@@ -93,6 +95,10 @@ export class EstabelecimentosPage {
     }  
   }
 
+  openModal(){
+    let modal = this.modalCtrl.create(ConfiguracoesPage,{bairros: this.bairros});
+    modal.present();
+  }
   exitApp(){
     console.log('Exit app');
     this.platform.exitApp();

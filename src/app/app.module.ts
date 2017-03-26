@@ -1,3 +1,4 @@
+import { ConfiguracoesPage } from './../pages/configuracoes/configuracoes';
 import { BebidasPage } from './../pages/bebidas/bebidas';
 import { CardapioPage } from './../pages/cardapio/cardapio';
 import { CategoriaPage } from './../pages/categoria/categoria';
@@ -55,7 +56,8 @@ const config = {
     CategoriaPage,
     ParallaxHeader,
     CardapioPage,
-    BebidasPage
+    BebidasPage,
+    ConfiguracoesPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -83,7 +85,8 @@ const config = {
     CategoriaPage,
     CarrinhoPage,
     CardapioPage,
-    BebidasPage
+    BebidasPage,
+    ConfiguracoesPage
   ],
   providers: [
     FireService, 

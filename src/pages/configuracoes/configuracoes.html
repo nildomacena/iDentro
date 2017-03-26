@@ -1,0 +1,38 @@
+
+
+<ion-content>
+  <h4 style="margin: 15px">Filtros</h4>
+  <hr>
+  <div padding>
+    <ion-item>
+      <ion-label>Bairro de entrega</ion-label>
+      <ion-select [(ngModel)]="bairrosEntrega" multiple="true">
+        <ion-option *ngFor="let bairro of bairros" [value]="bairro.$key">{{bairro.nome}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Bairro do estabelecimento</ion-label>
+      <ion-select [(ngModel)]="bairrosLocalizacao" multiple="true">
+        <ion-option *ngFor="let bairro of bairros" [value]="bairro.$key">{{bairro.nome}}</ion-option>
+      </ion-select>
+    </ion-item>
+  </div>
+
+
+  <ion-footer>
+    <ion-grid no-padding>
+      <ion-row>
+        <ion-col>
+        </ion-col>
+        <ion-col>
+        </ion-col>
+        <ion-col>
+          <button ion-button [clear]="true" (click)="dismiss()" >Cancelar</button>
+        </ion-col>
+        <ion-col>
+          <button ion-button [clear]="true" (click)="onSubmit()" >Ok</button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-footer>
+</ion-content>

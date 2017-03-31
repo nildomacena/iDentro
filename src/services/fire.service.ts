@@ -346,6 +346,36 @@ export class FireService {
         else    
             return false;
     }
+
+    enviarMensagem(texto: string, estabelecimentoKey: string): firebase.Promise<any> {
+        let date = new Date().getTime();
+        let uid = 'uid';
+        return this.af.database.list(`chat/ ${estabelecimentoKey}/${uid}`).push({
+                texto: texto,
+                timestamp: date
+            })
+                .then(() => {
+                    this.af.database.list(`chats-estabelecimento/`).update(estabelecimentoKey, {
+                        uid: {
+                            lastMessage: texto,
+                            timestamp: date
+                        }
+                    })
+                })
+                    .then(() => {
+                        this.af.database.list(`chats-estabelecimento/`).update(uid, {
+                            estabelecimentoKey: {
+                                lastMessage: texto,
+                                timestamp: date
+                            }
+                        })
+                    })
+    }
+
+    getMensagem(estabelecimentoKey):Observable<any>{
+        let uid = 'uid';
+        return this.af.database.list(`chat/ ${estabelecimentoKey}/${uid}`);
+    }
     logout(): firebase.Promise<any>{
         return firebase.auth().signOut();
     }

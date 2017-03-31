@@ -1,0 +1,59 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>
+      <ion-grid no-padding>
+        <ion-row align-items-center>
+          
+          <ion-col col-2>
+            <button ion-button icon-only clear="true" (click)="dismiss()" >
+              <ion-icon name="arrow-back" style="color: white"></ion-icon>
+            </button>
+          </ion-col>
+          <ion-col col-2 style="margin-left: -10px"> 
+            <ion-avatar item-left (click)="dismiss()" >
+              <img [src]="estabelecimento.imagemCapa" class="avatar">
+            </ion-avatar>
+          </ion-col>
+          <ion-col col-8>
+            {{estabelecimento.nome}}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content style="background:#eeeeee " #myContent>
+  <div [attr.class]="i%2 == 0? 'balao-enviado': 'balao-recebido'" *ngFor="let mensagem of mensagens; let i = index" >
+    <ion-grid no-padding>
+      <ion-row>
+        <ion-col>
+          <span>{{mensagem.texto}}</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-10></ion-col>
+        <ion-col col-2>
+          <span class="data">{{mensagem.timestamp | date:'HH:mm'}}</span>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-grid no-padding>
+    <ion-row>
+      <ion-col col-10>
+        <ion-input placeholder="Mensagem" [(ngModel)]="mensagem" clearInput="true" ></ion-input>
+      </ion-col>
+      <ion-col col-2>
+        <button ion-button icon-only no-padding class="send-button" (click)="send()" ><ion-icon name="send"></ion-icon></button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

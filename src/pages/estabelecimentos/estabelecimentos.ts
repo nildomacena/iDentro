@@ -1,3 +1,4 @@
+import { ChatPage } from './../chat/chat';
 import { ConfiguracoesPage } from './../configuracoes/configuracoes';
 import { EstabelecimentoPage } from './../estabelecimento/estabelecimento';
 import { FireService } from './../../services/fire.service';
@@ -20,6 +21,9 @@ export class EstabelecimentosPage {
   bairros: any[];
   searchHeight: any;
   newSearchHeight: any;
+  filtroBairroEntrega: any[];
+  filtroBairroEstabelecimento: any[];
+
   @ViewChildren('searchbar') searchbar: QueryList<Searchbar>;
   @ViewChild(Content) content: Content;
   @ViewChild(Header) header: Header;
@@ -98,6 +102,12 @@ export class EstabelecimentosPage {
   openModal(){
     let modal = this.modalCtrl.create(ConfiguracoesPage,{bairros: this.bairros});
     modal.present();
+    modal.onDidDismiss(data => {
+      if(data){
+        this.filtroBairroEntrega = data.bairrosEntrega;
+        this.filtroBairroEstabelecimento = data.bairrosEstabelecimentos;
+      }
+    })
   }
   exitApp(){
     console.log('Exit app');
@@ -158,8 +168,12 @@ export class EstabelecimentosPage {
       console.log('searchbar: ', this.searchbar);
     }
   } 
-
-    call(estabelecimento){
+  openChat(estabelecimento){
+    console.log(estabelecimento);
+    let chatModal = this.modalCtrl.create(ChatPage, {estabelecimento: estabelecimento});
+    chatModal.present();
+  }
+  call(estabelecimento){
       let buttons;
       let subTitle;
       
@@ -247,5 +261,7 @@ export class EstabelecimentosPage {
         alert.present();
         }
       }
-  }
+  
+
+}
 

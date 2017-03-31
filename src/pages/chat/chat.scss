@@ -1,0 +1,40 @@
+page-chat {
+    .avatar{
+        border-radius: 50%;
+        width: 50px;
+    }
+    ion-grid{
+        margin-top: 7px;
+        margin-bottom: 7px;
+    }
+    ion-footer{
+        height: 56px;
+        background-color: white;
+    }
+    .send-button{
+        height: 45px;
+        border-radius: 50%;
+        margin-top: -1.7px;
+    }
+    .balao-recebido{
+        margin: 10px 15px 5px 25%;
+        padding: 10px;
+        background-color: #e65100;
+        font-size: 120%;
+        color: white;
+        border-radius: 10px;
+    }
+    .balao-enviado{
+        margin: 10px 25% 5px 15px;
+        padding: 10px;
+        background-color: #757575;
+        font-size: 120%;
+        color: white;
+        border-radius: 10px;
+    }
+
+    .data{
+        font-size: 70%;
+        
+    }
+}

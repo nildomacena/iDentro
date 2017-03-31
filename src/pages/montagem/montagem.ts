@@ -16,7 +16,7 @@ export class MontagemPage {
   categoria: any;
   selecionouIngrediente: boolean = true;
   checkboxes: Checkbox[] = [];
-  willLeave: boolean = false;
+  
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -27,23 +27,23 @@ export class MontagemPage {
     }
 
   ionViewDidLoad() {
+    console.log('Entrou na montagem');
     this.selecionouIngrediente = false;
     this.fireService.getIngredientes()
       .subscribe(ingredientes => {
         this.isLoading = false;
         this.ingredientes = ingredientes;
+        this.checkboxes = [];
+        this.selecionouIngrediente = false;
+        this.checkboxes.map(checkbox => {
+          checkbox.checked = false;
+        });
       })
   }
 
   ionViewDidLeave(){
-    this.willLeave = true; //Variável utilizada porque a função onChange está sendo chamada quando os checkboxes são zerados, o que não deveria acontecer.
-                           //willLeave checa se o usuário vai sair da página 
-    this.checkboxes.map(checkbox => {
-      checkbox.checked = false;
-    });
-
-    this.checkboxes = [];
-    this.selecionouIngrediente = false;
+    
+  
   }
 
   filtrar(){
@@ -62,7 +62,7 @@ export class MontagemPage {
   }
 
   onChange(event: Checkbox, ingrediente: any){
-    if(!this.willLeave){
+
       if(event.checked){
         this.ingredientesSelecionados.push(ingrediente.nome);
         this.checkboxes.push(event);
@@ -79,5 +79,5 @@ export class MontagemPage {
       console.log('ingredientesSelecionados: ', this.ingredientesSelecionados);
       console.log('Selecionou ingrediente: ', this.selecionouIngrediente);
       }
-    }
+    
 }

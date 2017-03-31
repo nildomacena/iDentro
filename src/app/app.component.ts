@@ -1,3 +1,4 @@
+import { HeaderColor } from '@ionic-native/header-color';
 import { FireService } from './../services/fire.service';
 import { FavoritosPage } from './../pages/favoritos/favoritos';
 import { ContatoPage } from './../pages/contato/contato';
@@ -21,8 +22,13 @@ export class MyApp {
   public nav: any;
   user: any;
   logado = false;
-  constructor(public platform: Platform, public fireService: FireService, public app: App) {
+  constructor(
+    public platform: Platform, 
+    public headerColor: HeaderColor,
+    public fireService: FireService, 
+    public app: App) {
     platform.ready().then(() => {
+      this.headerColor.tint('#e65100');
       firebase.auth().onAuthStateChanged(user => {
         if(user){
           this.logado = true;

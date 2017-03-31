@@ -1,18 +1,16 @@
-<!--
-  Generated template for the Mapa page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
-    <ion-title>mapa</ion-title>
+    <ion-title>Mapa</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
-
+<ion-content>
+  <div id="map" style="height: 100%"></div>
+  <div *ngIf="!GPSHabilitado">
+    <h3 style="text-align: center">Habilite o GPS para localizar lanchonetes perto de você</h3>
+    <button ion-button block (click)="getCurrentPosition()" >Habilitar GPS</button>
+  </div>
 </ion-content>

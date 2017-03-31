@@ -1,3 +1,4 @@
+<cabecalho></cabecalho>
 <ion-header>
   <ion-navbar>
     <button ion-button menuToggle *ngIf="!showToolbar">
@@ -47,6 +48,10 @@
         </div>
       </ion-item>
       <ion-item-options side="right">
+        <button ion-button color="blue" (click)="openChat(estabelecimento)" >
+          <ion-icon name="text"></ion-icon>
+          Chat
+        </button>   
         <button (click)="call(estabelecimento)" ion-button color="secondary">
           <ion-icon name="call"></ion-icon>
           Ligar
@@ -54,10 +59,7 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
-  <ion-fab right bottom *ngIf="estabelecimentos" >
-    <button ion-fab color="primary" (click)="funnel()"><ion-icon name="funnel"></ion-icon></button>
-  </ion-fab>
-  <ion-fab left bottom *ngIf="bairros">
+  <ion-fab right bottom *ngIf="estabelecimentos && bairros" >
     <button ion-fab color="primary" (click)="openModal()"><ion-icon name="funnel"></ion-icon></button>
   </ion-fab>
 </ion-content>

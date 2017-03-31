@@ -1,3 +1,4 @@
+import { MapaPage } from './../mapa/mapa';
 import { CategoriaPage } from './../categoria/categoria';
 import { MontagemPage } from './../montagem/montagem';
 import { DestaquesPage } from './../destaques/destaques';
@@ -16,7 +17,7 @@ export class HomePage {
   estabelecimentosPage = EstabelecimentosPage;
   destaquesPage = DestaquesPage;
   categoriaPage = CategoriaPage;
-
+  mapaPage = MapaPage;
   constructor(
     public navCtrl: NavController,
     public fireService: FireService

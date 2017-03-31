@@ -1,3 +1,6 @@
+import { ChatPage } from './../pages/chat/chat';
+import { CabecalhoComponent } from './../components/cabecalho/cabecalho';
+import { MapaPage } from './../pages/mapa/mapa';
 import { ConfiguracoesPage } from './../pages/configuracoes/configuracoes';
 import { BebidasPage } from './../pages/bebidas/bebidas';
 import { CardapioPage } from './../pages/cardapio/cardapio';
@@ -18,7 +21,10 @@ import { MontagemPage } from './../pages/montagem/montagem';
 import { DestaquesPage } from './../pages/destaques/destaques';
 import { EstabelecimentosPage } from './../pages/estabelecimentos/estabelecimentos';
 import { FireService } from './../services/fire.service';
-
+import { GoogleMaps } from '@ionic-native/google-maps';
+import { Diagnostic } from '@ionic-native/diagnostic';
+import { Geolocation } from '@ionic-native/geolocation'
+import { HeaderColor } from '@ionic-native/header-color'
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
@@ -57,7 +63,10 @@ const config = {
     ParallaxHeader,
     CardapioPage,
     BebidasPage,
-    ConfiguracoesPage
+    ConfiguracoesPage,
+    MapaPage,
+    CabecalhoComponent,
+    ChatPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -86,10 +95,16 @@ const config = {
     CarrinhoPage,
     CardapioPage,
     BebidasPage,
-    ConfiguracoesPage
+    ConfiguracoesPage,
+    MapaPage,
+    ChatPage
   ],
   providers: [
     FireService, 
+    GoogleMaps,
+    Diagnostic,
+    Geolocation,
+    HeaderColor,
     {provide: ErrorHandler, useClass: IonicErrorHandler}]
 })
 export class AppModule {}

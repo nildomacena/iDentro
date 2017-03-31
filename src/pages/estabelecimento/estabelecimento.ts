@@ -35,15 +35,16 @@ export class EstabelecimentoPage {
 
     this.estabelecimento = this.navParams.get('estabelecimento');
     this.abas = this.estabelecimento.abas;
+    console.log(this.abas, this.estabelecimento);
     this.abas.map((aba, index) => {
       if(index == 0){
-        this.tabs.push({titulo: aba.nome, root: Tab1Page})
+        this.tabs.push({titulo: aba, root: Tab1Page})
       }
       else if(index == 1){
-        this.tabs.push({titulo: aba.nome, root: Tab2Page})
+        this.tabs.push({titulo: aba, root: Tab2Page})
       }
       else if(index == 2){
-        this.tabs.push({titulo: aba.nome, root: Tab3Page})
+        this.tabs.push({titulo: aba, root: Tab3Page})
       }
     });
     

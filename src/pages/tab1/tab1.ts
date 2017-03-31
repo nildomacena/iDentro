@@ -1,9 +1,10 @@
+import { ChatPage } from './../chat/chat';
 import { HomePage } from './../home/home';
 import { CallNumber } from 'ionic-native';
 import { LancheDetailPage } from './../lanche-detail/lanche-detail';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, App, AlertController, ViewController } from 'ionic-angular';
+import { NavController, NavParams, App, AlertController, ViewController, ModalController } from 'ionic-angular';
 
 @Component({
   selector: 'page-tab1',
@@ -19,6 +20,7 @@ export class Tab1Page {
     public navParams: NavParams,
     public fireService: FireService,
     public viewCtrl: ViewController,
+    public modalCtrl: ModalController,
     public app: App
     ) {
       this.estabelecimento = this.navParams.data;
@@ -38,6 +40,13 @@ export class Tab1Page {
     this.app.getRootNav().push(LancheDetailPage, {lanche: item, estabelecimento: this.estabelecimento});
 
   }
+  goToChat(){
+    console.log('chat');
+    let modal = this.modalCtrl.create(ChatPage, {estabelecimento: this.estabelecimento});
+    modal.present();
+
+  }
+
   call(){
       let buttons;
       let subTitle;

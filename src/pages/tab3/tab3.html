@@ -61,7 +61,11 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-fab center bottom *ngIf="estabelecimento.telefone1 || estabelecimento.telefone2" >
-      <button ion-fab mini color="primary" (click)="call()"><ion-icon name="call"></ion-icon></button>
+    <ion-fab center bottom>
+      <button ion-fab mini color="primary"><ion-icon name="arrow-dropup"></ion-icon></button>
+      <ion-fab-list side="top">
+        <button ion-fab (click)="goToChat()"><ion-icon name="text"></ion-icon></button>
+        <button ion-fab (click)="call()"><ion-icon name="call"></ion-icon></button>
+      </ion-fab-list>
     </ion-fab>
 </ion-content>

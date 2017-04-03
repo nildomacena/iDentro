@@ -27,7 +27,7 @@
   <div class="center-spinner" *ngIf='isLoading'>
     <ion-spinner name="crescent" mode="md"></ion-spinner>
   </div>
-  <ion-list [virtualScroll]="filteredEstabelecimentos">
+  <ion-list [virtualScroll]="filteredEstabelecimentos" approxItemHeight="60px">
     <ion-item-sliding *virtualItem="let estabelecimento" >
       <ion-item>
         <ion-avatar item-left >
@@ -60,6 +60,6 @@
     </ion-item-sliding>
   </ion-list>
   <ion-fab right bottom *ngIf="estabelecimentos && bairros" >
-    <button ion-fab color="primary" (click)="openModal()"><ion-icon name="funnel"></ion-icon></button>
+    <button ion-fab color="primary" (click)="openModal()"><ion-icon name="options"></ion-icon></button>
   </ion-fab>
 </ion-content>

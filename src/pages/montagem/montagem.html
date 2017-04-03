@@ -9,7 +9,7 @@
   </div>
   <h5 style="text-align: center" *ngIf="!isLoading">Quais os ingredientes que você deseja?</h5>
   <hr>
-  <ion-list [virtualScroll]="ingredientes">
+  <ion-list [virtualScroll]="ingredientes" approxItemHeight="60px">
       <ion-item *virtualItem="let ingrediente" >
         <ion-label>{{ingrediente.nome}}</ion-label>
         <ion-checkbox (ionChange)="onChange($event, ingrediente)" ></ion-checkbox>

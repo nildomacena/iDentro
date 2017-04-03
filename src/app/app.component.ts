@@ -1,3 +1,4 @@
+import { SplashScreen } from '@ionic-native/splash-screen';
 import { HeaderColor } from '@ionic-native/header-color';
 import { FireService } from './../services/fire.service';
 import { FavoritosPage } from './../pages/favoritos/favoritos';
@@ -6,7 +7,7 @@ import { LocalizacaoPage } from './../pages/localizacao/localizacao';
 import { CarrinhoPage } from './../pages/carrinho/carrinho';
 import { Component, ViewChild } from '@angular/core';
 import { Platform, App, ViewController } from 'ionic-angular';
-import { StatusBar, Splashscreen } from 'ionic-native';
+import { StatusBar } from '@ionic-native/status-bar';
 import * as firebase from 'firebase';
 import { HomePage } from '../pages/home/home';
 
@@ -26,6 +27,8 @@ export class MyApp {
     public platform: Platform, 
     public headerColor: HeaderColor,
     public fireService: FireService, 
+    public statusBar: StatusBar,
+    public splashscreen: SplashScreen,
     public app: App) {
     platform.ready().then(() => {
       this.headerColor.tint('#e65100');
@@ -39,8 +42,9 @@ export class MyApp {
           this.logado = false
         }
       })
-      StatusBar.styleDefault();
-      Splashscreen.hide();
+      this.statusBar.styleDefault();
+      this.statusBar.overlaysWebView(true);
+      this.splashscreen.hide();
 
       this.platform.registerBackButtonAction(() => {
         let nav = app.getActiveNav();
@@ -50,8 +54,10 @@ export class MyApp {
           if(nav.canGoBack()) {
             nav.pop();
           }
-          else if (typeof activeView.instance.backButtonAction === 'function')
+          else if (typeof activeView.instance.backButtonAction === 'function'){
+            console.log(activeView.instance.backButtonAction );
             activeView.instance.backButtonAction();
+          }
           else nav.parent.select(0); // goes to the first tab
         }
       }, 100)

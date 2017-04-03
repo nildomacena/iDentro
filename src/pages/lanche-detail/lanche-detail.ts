@@ -1,4 +1,4 @@
-import { CallNumber } from 'ionic-native';
+import { CallNumber } from '@ionic-native/call-number';
 import { EstabelecimentoPage } from './../estabelecimento/estabelecimento';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
@@ -19,7 +19,8 @@ export class LancheDetailPage {
     public navParams: NavParams,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
-    public fireService: FireService
+    public fireService: FireService,
+    public callnumber: CallNumber
     ) {
       let key_lanche = this.navParams.get('lanche').$key;
       this.pesquisa = this.navParams.get('pesquisa');
@@ -80,7 +81,7 @@ export class LancheDetailPage {
         },
         {
           text: this.estabelecimento.celular.numero,
-          handler: () => {console.log(this.estabelecimento.celular.numero)}
+          handler: () => {this.callnumber.callNumber(this.estabelecimento.celular.numero, false)}
         },
         {
           text: 'Cancelar',
@@ -97,7 +98,7 @@ export class LancheDetailPage {
         },
         {
           text: 'Ligar',
-          handler: () => {CallNumber.callNumber(this.estabelecimento.celular, false)}
+          handler: () => {this.callnumber.callNumber(this.estabelecimento.celular, false)}
         }
       ]
     }

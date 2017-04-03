@@ -4,7 +4,7 @@ import { EstabelecimentoPage } from './../estabelecimento/estabelecimento';
 import { FireService } from './../../services/fire.service';
 import { Component, ViewChildren, ChangeDetectorRef, ViewChild, QueryList, ElementRef, Renderer } from '@angular/core';
 import { NavController, NavParams, App, Searchbar, Content, Navbar, Header, Toolbar, AlertController, ToastController, Platform, ViewController, ModalController } from 'ionic-angular';
-import { CallNumber } from 'ionic-native';
+import { CallNumber } from '@ionic-native/call-number';
 
 @Component({
   selector: 'page-estabelecimentos',
@@ -43,7 +43,8 @@ export class EstabelecimentosPage {
     public viewCtrl: ViewController,
     public elementRef: ElementRef,
     public renderer: Renderer,
-    public modalCtrl: ModalController
+    public modalCtrl: ModalController,
+    public callnumber: CallNumber
     ) {
       this.searchHeight = 56;
   }
@@ -184,13 +185,13 @@ export class EstabelecimentosPage {
           {
             text: estabelecimento.telefone1.numero,
             handler: () => {
-              CallNumber.callNumber(estabelecimento.telefone1.numero, true)
+              this.callnumber.callNumber(estabelecimento.telefone1.numero, true)
             }
           },
           {
             text: estabelecimento.telefone2.numero,
             handler: () => {
-              CallNumber.callNumber(estabelecimento.telefone2.numero, true)
+              this.callnumber.callNumber(estabelecimento.telefone2.numero, true)
             }
           },
           {
@@ -208,7 +209,7 @@ export class EstabelecimentosPage {
             {
               text: 'Ligar',
               handler: () => {
-                CallNumber.callNumber(estabelecimento.telefone2, true)
+                this.callnumber.callNumber(estabelecimento.telefone2, true)
               }
             }
           ]
@@ -223,7 +224,7 @@ export class EstabelecimentosPage {
             {
               text: 'Ligar',
               handler: () => {
-                CallNumber.callNumber(estabelecimento.telefone2.numero, true)
+                this.callnumber.callNumber(estabelecimento.telefone2.numero, true)
               }
             }
           ]

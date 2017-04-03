@@ -1,4 +1,4 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component, ElementRef} from '@angular/core';
 import { NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
 
 
@@ -10,6 +10,7 @@ export class ConfiguracoesPage {
   bairros: any[];
   bairrosEntrega: any[] = [];
   bairrosLocalizacao: any[] = [];
+  categorias: any[] = [];
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams, 
@@ -20,8 +21,8 @@ export class ConfiguracoesPage {
 
   ionViewDidLoad() {
     this.bairros = this.navParams.get('bairros');
-    console.log(this.element.nativeElement.parentElement.parentElement );
     this.element.nativeElement.parentElement.parentElement.setAttribute("class",this.element.nativeElement.parentElement.parentElement.getAttribute("class")+ " settings")
+    //this.entregaSelect.setTitle('Bairro de Entrega')
   }
 
   dismiss(){
@@ -29,6 +30,7 @@ export class ConfiguracoesPage {
   }
 
   onSubmit(){
+    console.log('onSubmit: ', this.bairrosEntrega, this.bairrosLocalizacao)
     this.viewCtrl.dismiss({
       bairrosEntrega: this.bairrosEntrega,
       bairrosEstabelecimentos: this.bairrosLocalizacao,

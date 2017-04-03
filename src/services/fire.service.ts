@@ -1,22 +1,23 @@
+import { Facebook } from '@ionic-native/facebook';
 import { lanches, estabelecimentos, lanches_por_estabelecimento } from './dados';
 import { Injectable } from '@angular/core';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { AngularFireOffline, ListObservable, ObjectObservable } from 'angularfire2-offline';
 import { Observable } from 'rxjs';
-import { Facebook } from 'ionic-native';
 import * as firebase from 'firebase';
 import 'rxjs/add/operator/toPromise';
 
 
 @Injectable()
 export class FireService {
-    uid= '';
+    uid = 'uid';
     cart: any = {};
     public auth = firebase.auth();
     public user = this.auth.currentUser;
     constructor(
         private afo: AngularFireOffline,
-        private af: AngularFire
+        private af: AngularFire,
+        private facebook: Facebook
     ) {
          firebase.auth().onAuthStateChanged(user => {
             if(user){
@@ -303,7 +304,7 @@ export class FireService {
     loginWithFacebook(): Promise<any>{
         let promise: Promise<any>;
         promise = new Promise((resolve, reject) => {
-            Facebook.login(['user_friends', 'public_profile', 'email'])
+            this.facebook.login(['user_friends', 'public_profile', 'email'])
                 .then(userFacebook => {
                     let accessToken = userFacebook.authResponse.accessToken;
                     let credential: firebase.auth.AuthCredential;
@@ -350,7 +351,7 @@ export class FireService {
     enviarMensagem(texto: string, estabelecimentoKey: string): firebase.Promise<any> {
         let date = new Date().getTime();
         let uid = 'uid';
-        return this.af.database.list(`chat/ ${estabelecimentoKey}/${uid}`).push({
+        return this.af.database.list(`chat/ ${estabelecimentoKey}/${this.uid}`).push({
                 texto: texto,
                 timestamp: date
             })
@@ -363,7 +364,7 @@ export class FireService {
                     })
                 })
                     .then(() => {
-                        this.af.database.list(`chats-estabelecimento/`).update(uid, {
+                        this.af.database.list(`chats-estabelecimento/`).update(this.uid, {
                             estabelecimentoKey: {
                                 lastMessage: texto,
                                 timestamp: date
@@ -374,7 +375,7 @@ export class FireService {
 
     getMensagem(estabelecimentoKey):Observable<any>{
         let uid = 'uid';
-        return this.af.database.list(`chat/ ${estabelecimentoKey}/${uid}`);
+        return this.af.database.list(`chat/ ${estabelecimentoKey}/${this.uid}`);
     }
     logout(): firebase.Promise<any>{
         return firebase.auth().signOut();

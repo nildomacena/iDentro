@@ -1,3 +1,4 @@
+import { CardapioVazioPage } from './../pages/cardapio-vazio/cardapio-vazio';
 import { ChatPage } from './../pages/chat/chat';
 import { CabecalhoComponent } from './../components/cabecalho/cabecalho';
 import { MapaPage } from './../pages/mapa/mapa';
@@ -31,6 +32,12 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireOfflineModule } from 'angularfire2-offline';
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { StatusBar } from '@ionic-native/status-bar';
+import { CallNumber } from '@ionic-native/call-number';
+import { Facebook } from '@ionic-native/facebook';
+import { Keyboard } from '@ionic-native/keyboard';
+
 
 
 const config = {
@@ -66,7 +73,8 @@ const config = {
     ConfiguracoesPage,
     MapaPage,
     CabecalhoComponent,
-    ChatPage
+    ChatPage,
+    CardapioVazioPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -97,7 +105,8 @@ const config = {
     BebidasPage,
     ConfiguracoesPage,
     MapaPage,
-    ChatPage
+    ChatPage,
+    CardapioVazioPage
   ],
   providers: [
     FireService, 
@@ -105,6 +114,11 @@ const config = {
     Diagnostic,
     Geolocation,
     HeaderColor,
+    StatusBar,
+    SplashScreen,
+    CallNumber,
+    Keyboard,
+    Facebook,
     {provide: ErrorHandler, useClass: IonicErrorHandler}]
 })
 export class AppModule {}

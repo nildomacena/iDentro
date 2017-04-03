@@ -1,6 +1,6 @@
 import { ChatPage } from './../chat/chat';
 import { HomePage } from './../home/home';
-import { CallNumber } from 'ionic-native';
+import { CallNumber } from '@ionic-native/call-number';
 import { LancheDetailPage } from './../lanche-detail/lanche-detail';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
@@ -21,6 +21,7 @@ export class Tab1Page {
     public fireService: FireService,
     public viewCtrl: ViewController,
     public modalCtrl: ModalController,
+    public callnumber: CallNumber,
     public app: App
     ) {
       this.estabelecimento = this.navParams.data;
@@ -41,7 +42,6 @@ export class Tab1Page {
 
   }
   goToChat(){
-    console.log('chat');
     let modal = this.modalCtrl.create(ChatPage, {estabelecimento: this.estabelecimento});
     modal.present();
 
@@ -58,13 +58,13 @@ export class Tab1Page {
           {
             text: this.estabelecimento.telefone1.numero,
             handler: () => {
-              CallNumber.callNumber(this.estabelecimento.telefone1.numero, true)
+              this.callnumber.callNumber(this.estabelecimento.telefone1.numero, true)
             }
           },
           {
             text: this.estabelecimento.telefone2.numero,
             handler: () => {
-              CallNumber.callNumber(this.estabelecimento.telefone2.numero, true)
+              this.callnumber.callNumber(this.estabelecimento.telefone2.numero, true)
             }
           },
           {
@@ -82,7 +82,7 @@ export class Tab1Page {
             {
               text: 'Ligar',
               handler: () => {
-                CallNumber.callNumber(this.estabelecimento.telefone2, true)
+                this.callnumber.callNumber(this.estabelecimento.telefone2, true)
               }
             }
           ]
@@ -97,7 +97,7 @@ export class Tab1Page {
             {
               text: 'Ligar',
               handler: () => {
-                CallNumber.callNumber(this.estabelecimento.telefone2.numero, true)
+                this.callnumber.callNumber(this.estabelecimento.telefone2.numero, true)
               }
             }
           ]

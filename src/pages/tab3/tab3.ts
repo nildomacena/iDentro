@@ -1,8 +1,9 @@
-import { CallNumber } from 'ionic-native';
+import { ChatPage } from './../chat/chat';
+import { CallNumber } from '@ionic-native/call-number';
 import { LancheDetailPage } from './../lanche-detail/lanche-detail';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, App, AlertController } from 'ionic-angular';
+import { NavController, NavParams, App, AlertController, ModalController } from 'ionic-angular';
 
 
 @Component({
@@ -18,6 +19,8 @@ export class Tab3Page {
     public alertCtrl: AlertController,
     public navParams: NavParams,
     public fireService: FireService,
+    public modalCtrl: ModalController,
+    public callnumber: CallNumber,
     public app: App
     ) {
       this.estabelecimento = this.navParams.data;
@@ -37,6 +40,12 @@ export class Tab3Page {
   goToItem(item){
     console.log(item);
     this.app.getRootNav().push(LancheDetailPage, {lanche: item, estabelecimento: this.estabelecimento});
+
+  }
+  goToChat(){
+    console.log('chat');
+    let modal = this.modalCtrl.create(ChatPage, {estabelecimento: this.estabelecimento});
+    modal.present();
 
   }
 call(){
@@ -70,7 +79,7 @@ call(){
         },
         {
           text: 'Ligar',
-          handler: () => {CallNumber.callNumber(this.estabelecimento.telefone2.numero, false)}
+          handler: () => {this.callnumber.callNumber(this.estabelecimento.telefone2.numero, false)}
         }
       ]
     }

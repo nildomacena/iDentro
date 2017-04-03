@@ -4,10 +4,12 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
-   <ion-tabs tabsHighlight="true" color="primary" class="tabs-basic">
-     <ion-tab *ngFor="let tab of tabs" [root]="tab.root" [tabTitle]="tab.titulo" [rootParams]="estabelecimento" ></ion-tab>
-   </ion-tabs>
-   <ion-fab top right edge *ngIf="logado">
-      <button ion-fab mini color="primary" [disabled]="adicionando" (click)="addToFavorito()" ><ion-icon [name]="favorito? 'heart': 'heart-outline'"></ion-icon></button>
-    </ion-fab>
+  <ion-tabs tabsHighlight="true" color="primary" class="tabs-basic" *ngIf="!cardapioVazio">
+    <ion-tab *ngFor="let tab of tabs" [root]="tab.root" [tabTitle]="tab.titulo" [rootParams]="estabelecimento" ></ion-tab>
+  </ion-tabs>
+  
+  <ion-fab top right edge *ngIf="logado">
+    <button ion-fab mini color="primary" [disabled]="adicionando" (click)="addToFavorito()" ><ion-icon [name]="favorito? 'heart': 'heart-outline'"></ion-icon></button>
+  </ion-fab>
+<page-cardapio-vazio *ngIf="cardapioVazio"></page-cardapio-vazio>
 </ion-content>

@@ -1,7 +1,7 @@
 import { FireService } from './../../services/fire.service';
 import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, ViewController, Content } from 'ionic-angular';
-
+import { Keyboard } from '@ionic-native/keyboard';
 
 @Component({
   selector: 'page-chat',
@@ -16,12 +16,18 @@ export class ChatPage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     public viewCtrl: ViewController,
-    public fireService: FireService
+    public fireService: FireService,
+    public keyboard: Keyboard
     ) {
     this.estabelecimento = this.navParams.get('estabelecimento');
   }
 
   ionViewDidLoad() {
+    this.keyboard.onKeyboardShow()
+      .subscribe(() => this.content.scrollToBottom());
+    this.keyboard.onKeyboardHide()
+      .subscribe(() => this.content.scrollToBottom());
+    
     this.fireService.getMensagem(this.estabelecimento.$key)
       .subscribe(mensagens => {
         this.mensagens = mensagens;
@@ -36,6 +42,9 @@ export class ChatPage {
     if(this.mensagem != '')
       this.fireService.enviarMensagem(this.mensagem, this.estabelecimento.$key);
     this.mensagem = '';
+  }
+  backButtonAction(){
+    this.viewCtrl.dismiss();
   }
   dismiss(){
     this.viewCtrl.dismiss();

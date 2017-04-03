@@ -3,14 +3,40 @@
 <ion-content>
   <h4 style="margin: 15px">Filtros</h4>
   <hr>
-  <div padding>
-
+  <div>
+    <ion-list>
+      <ion-item class="options">
+        <ion-label stacked>Bairro de Entrega</ion-label>
+        <ion-select [(ngModel)]="bairrosEntrega" placeholder="Selecione o bairro" multiple="true" >
+          <ion-option *ngFor="let bairro of bairros" [value]="bairro.$key" > {{bairro.nome}} </ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item class="options">
+        <ion-label stacked>Bairro do estabelecimento</ion-label>
+        <ion-select [(ngModel)]="bairrosLocalizacao" placeholder="Selecione o bairro" multiple="true" >
+          <ion-option *ngFor="let bairro of bairros" [value]="bairro.$key" > {{bairro.nome}} </ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item class="options">
+        <ion-label floating>Categoria</ion-label>
+        <ion-select [(ngModel)]="categorias" placeholder="Seleciona a categoria" multiple="true" >
+          <ion-option value="Pizzaria" > Pizzaria </ion-option>
+          <ion-option value="Lanchonete" > Lanchonete </ion-option>
+          <ion-option value="Restaurante" > Restaurante </ion-option>
+          <ion-option value="Sorveteria" > Sorveteria </ion-option>
+          <ion-option value="Açaí" > Açaí </ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+        
+    <!--
     <ion-item>
       <button ion-button full (click)="selectBairroEntrega()" >Bairro para entrega</button>
     </ion-item>
     <ion-item>
       <button ion-button full (click)="selectBairroEstabelecimento()" >Bairro do estabelecimento</button>
     </ion-item>
+    -->
     <!--
     <ion-item>
       <ion-label>Bairro de entrega</ion-label>

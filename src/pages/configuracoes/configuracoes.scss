@@ -2,4 +2,14 @@ page-configuracoes {
     ion-content{
         border-radius: 5px;
     }
+    ion-item.options{
+        ion-label{
+            min-width: 25%;
+
+        }
+        ion-select{
+            min-width: 100%;
+
+        }
+    }
 }

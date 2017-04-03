@@ -1,4 +1,4 @@
-import { CallNumber } from 'ionic-native';
+import { CallNumber } from '@ionic-native/call-number';
 import { FireService } from './../../services/fire.service';
 import { Tab3Page } from './../tab3/tab3';
 import { Tab2Page } from './../tab2/tab2';
@@ -24,29 +24,37 @@ export class EstabelecimentoPage {
   logado: boolean = false;
   abas: any[] = [];
   tabs: any[] = [];
+  cardapioVazio: boolean = false;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
     public alertCtrl: AlertController,
     public fireService: FireService,
     public platform: Platform,
-    public viewCtrl: ViewController
+    public viewCtrl: ViewController,
+    public callnumber: CallNumber
     ) {
 
     this.estabelecimento = this.navParams.get('estabelecimento');
     this.abas = this.estabelecimento.abas;
     console.log(this.abas, this.estabelecimento);
-    this.abas.map((aba, index) => {
-      if(index == 0){
-        this.tabs.push({titulo: aba, root: Tab1Page})
-      }
-      else if(index == 1){
-        this.tabs.push({titulo: aba, root: Tab2Page})
-      }
-      else if(index == 2){
-        this.tabs.push({titulo: aba, root: Tab3Page})
-      }
-    });
+    try{
+      Object.keys(this.abas).map((aba, index) => {
+        if(index == 0){
+          this.tabs.push({titulo: this.abas[aba].nome, root: Tab1Page})
+        }
+        else if(index == 1){
+          this.tabs.push({titulo: this.abas[aba].nome, root: Tab2Page})
+        }
+        else if(index == 2){
+          this.tabs.push({titulo: this.abas[aba].nome, root: Tab3Page})
+        }
+      });
+    }
+    catch(err){
+      this.cardapioVazio = true;
+      console.log(err);
+    }
     
 
     this.estabelecimento.imagemCapa? this.photo = this.estabelecimento.imagemCapa : this.photo = 'assets/no-photo.png';
@@ -78,11 +86,11 @@ export class EstabelecimentoPage {
       buttons = [
         {
           text: this.estabelecimento.telefone1,
-          handler: () => {CallNumber.callNumber(this.estabelecimento.telefone1.numero, true)}
+          handler: () => {this.callnumber.callNumber(this.estabelecimento.telefone1.numero, true)}
         },
         {
           text: this.estabelecimento.telefone2.numero,
-          handler: () => {CallNumber.callNumber(this.estabelecimento.telefone2.numero, true)}
+          handler: () => {this.callnumber.callNumber(this.estabelecimento.telefone2.numero, true)}
         },
         {
           text: 'Cancelar',
@@ -99,7 +107,7 @@ export class EstabelecimentoPage {
         },
         {
           text: 'Ligar',
-          handler: () => {CallNumber.callNumber(this.estabelecimento.telefone2.numero, false)}
+          handler: () => {this.callnumber.callNumber(this.estabelecimento.telefone2.numero, false)}
         }
       ]
     }
@@ -112,7 +120,7 @@ export class EstabelecimentoPage {
         },
         {
           text: 'Ligar',
-          handler: () => {CallNumber.callNumber(this.estabelecimento.telefone2.numero, true)}
+          handler: () => {this.callnumber.callNumber(this.estabelecimento.telefone2.numero, true)}
         }
       ]
     }

@@ -2,7 +2,7 @@ import { EstabelecimentoPage } from './../estabelecimento/estabelecimento';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
 import { NavController, NavParams, App, AlertController } from 'ionic-angular';
-import { CallNumber } from 'ionic-native';
+import { CallNumber } from '@ionic-native/call-number';
 
 
 @Component({
@@ -16,7 +16,8 @@ export class DestaquesPage {
     public navParams: NavParams,
     public app: App,
     public alertCtrl: AlertController,
-    public fireService: FireService
+    public fireService: FireService,
+    public callnumber: CallNumber
     ) {}
 
   ionViewDidLoad() {
@@ -42,13 +43,13 @@ export class DestaquesPage {
           {
             text: estabelecimento.telefone,
             handler: () => {
-              CallNumber.callNumber(estabelecimento.telefone, true)
+              this.callnumber.callNumber(estabelecimento.telefone, true)
             }
           },
           {
             text: estabelecimento.celular.numero,
             handler: () => {
-              CallNumber.callNumber(estabelecimento.celular.numero,true)
+              this.callnumber.callNumber(estabelecimento.celular.numero,true)
             }
           },
           {
@@ -66,7 +67,7 @@ export class DestaquesPage {
             {
               text: 'Ligar',
               handler: () => {
-                CallNumber.callNumber(estabelecimento.celular, true)
+                this.callnumber.callNumber(estabelecimento.celular, true)
               }
             }
           ]
@@ -81,7 +82,7 @@ export class DestaquesPage {
             {
               text: 'Ligar',
               handler: () => {
-                CallNumber.callNumber(estabelecimento.celular.numero, true)
+                this.callnumber.callNumber(estabelecimento.celular.numero, true)
               }
             }
           ]

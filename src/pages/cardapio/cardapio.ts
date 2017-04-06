@@ -39,7 +39,7 @@ export class CardapioPage {
     this.app.getRootNav().push(LancheDetailPage, {lanche: lanche, estabelecimento: this.estabelecimento});
   }
 
-  addToCart(lanche){
+  /*addToCart(lanche){
     if(this.fireService.addToCart(lanche, this.estabelecimento) == 'error'){
       let alert = this.alertCtrl.create({
         title: 'Alerta',
@@ -61,7 +61,7 @@ export class CardapioPage {
       alert.present();
 
     }
-  }
+  }*/
 
   call(){
     let buttons;

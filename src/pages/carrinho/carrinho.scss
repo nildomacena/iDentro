@@ -55,4 +55,16 @@ page-carrinho {
     .segmento{
         margin-bottom: 20px;
     }
+    .imagem-lanche{
+        min-width: 15vw;
+        min-height: 15vw;
+    }
+    .botao-comprar{
+        margin-left: 50%;
+        margin-right: 50%;
+    }
+    .valor-total{
+        font-size: 120%;
+        font-weight: 700;
+    }
 }   

@@ -14,6 +14,7 @@ export class FireService {
     cart: any = {};
     public auth = firebase.auth();
     public user = this.auth.currentUser;
+
     constructor(
         private afo: AngularFireOffline,
         private af: AngularFire,
@@ -22,9 +23,14 @@ export class FireService {
          firebase.auth().onAuthStateChanged(user => {
             if(user){
                 this.uid = user.uid;
-                console.log('onAuthState ',user);
             }
-        })
+        });
+
+        this.cart = {
+            estabelecimento: '',
+            itens: [],
+            valor: 0
+        }
     }
 
     getEstabelecimentos(){
@@ -56,8 +62,8 @@ export class FireService {
         return this.af.database.object('lanches/'+key_lanche);
     }
 
-    getItensByAba(key_estabelecimento: string, aba: number){
-        console.log(key_estabelecimento, aba);
+    getItensByAba(key_estabelecimento: string, aba: string){
+        console.log(key_estabelecimento, aba.split('|')[0]);
         return this.af.database.list('lanches_por_estabelecimento/'+key_estabelecimento, {
             query: {
                 orderByChild: 'aba_key',
@@ -72,10 +78,48 @@ export class FireService {
         return this.uid;
     }
     sendMessage(email: string, message: string): firebase.Promise<any>{
-        return firebase.database().ref('contato').push({email: email, mensagem: message});
+        return firebase.database().ref('contato').push({email: email, mensagem: message})
     }
-    addToCart(lanche, estabelecimento): string{
+    addToCart(item, estabelecimento): boolean | string{
+        console.log('item',item)
+        console.log('estabelecimento',estabelecimento);
+        let cadastrado: boolean = false;
+        if(this.cart.estabelecimento == '')
+            this.cart.estabelecimento = estabelecimento;
+
+        else if(this.cart.estabelecimento.$key != estabelecimento.$key){
+            cadastrado = true;
+            return 'estab-diferente'
+        }
+
+        this.cart.itens.map(itemCarrinho => {
+            console.log('itemCarrinho: ',itemCarrinho)
+            console.log('item: ',item);
+            if(item.$key == itemCarrinho.item.$key){
+                itemCarrinho.quantidade++;
+                itemCarrinho.valor += +item.preco;
+                this.cart.valor += +item.preco
+                console.log('entrou no else: ', this.cart);
+                cadastrado = true;
+            }
+
+        })
+
+        if(!cadastrado){
+            let obj = {
+                item: item,
+                quantidade: 1,
+                valor: +item.preco
+            }
+
+            this.cart.itens.push(obj);
+            this.cart.valor += +item.preco
+        }
+            console.log(this.cart);
+            return true;
+
         
+        /*
         let adicionado: boolean = false;
         console.log(!this.cart.estabelecimento);
         console.log(this.cart);
@@ -196,7 +240,11 @@ export class FireService {
      */
 
     limpaCarrinho(){
-        this.cart = {};
+        this.cart = {
+            estabelecimento: '',
+            itens: [],
+            valor: 0
+        }
     }
     removeItem(item): Array<any>{
         this.cart.itens.map((aux, indexItem) => {
@@ -306,6 +354,7 @@ export class FireService {
         promise = new Promise((resolve, reject) => {
             this.facebook.login(['user_friends', 'public_profile', 'email'])
                 .then(userFacebook => {
+                    console.log(userFacebook);
                     let accessToken = userFacebook.authResponse.accessToken;
                     let credential: firebase.auth.AuthCredential;
             
@@ -350,7 +399,6 @@ export class FireService {
 
     enviarMensagem(texto: string, estabelecimentoKey: string): firebase.Promise<any> {
         let date = new Date().getTime();
-        let uid = 'uid';
         return this.af.database.list(`chat/ ${estabelecimentoKey}/${this.uid}`).push({
                 texto: texto,
                 timestamp: date
@@ -374,7 +422,6 @@ export class FireService {
     }
 
     getMensagem(estabelecimentoKey):Observable<any>{
-        let uid = 'uid';
         return this.af.database.list(`chat/ ${estabelecimentoKey}/${this.uid}`);
     }
     logout(): firebase.Promise<any>{

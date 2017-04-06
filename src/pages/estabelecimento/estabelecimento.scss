@@ -60,10 +60,15 @@ page-estabelecimento {
     }
 
     .card-content-md{
-        padding-left: 4px;
+        padding: 13px 0px 13px 16px;
     }
 
     .botao-comprar{
         height: 100%
+    }
+
+    .foto-lanche{
+        min-width: 15vw;
+        min-height: 15vw;
     }
 }

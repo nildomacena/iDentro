@@ -15,35 +15,65 @@
         Visualizar ofertas
     </button>
   </div>
-  <ion-card *ngFor="let item of carrinho.itens" >    
+  <h4 style="text-align: center">{{this.carrinho.estabelecimento.nome}}</h4>
+  <ion-card *ngFor="let entrada of carrinho.itens" >    
     <ion-card-content>
       <ion-grid>
-        <ion-row>
-          <ion-col width-20>
-            <div class="valign avatar-wrapper">
-              <ion-avatar>
-                <img [src]="item.lanche.imagem"/>
-              </ion-avatar>
-            </div>
+        <ion-row justify-content-center>
+          <ion-col col-3 align-self-center>
+            <img [src]="entrada.item.imagem" class="imagem-lanche">
           </ion-col>
-          <ion-col width-80 class="titulo-lanche" >
-            <ion-row>
+          <ion-col col-6 >
+            <b><h5>{{entrada.item.nome}}</h5></b>
+            R$ {{entrada.item.preco}},00 X {{entrada.quantidade}}
+          </ion-col>
+          <ion-col col-3>
+              <button class="botao-comprar" (click)="addItem(item, index)" ion-button icon-only>
+                  <ion-icon name="add"></ion-icon>
+              </button>
+              <button class="botao-comprar" (click)="removeItem(item, index)" ion-button icon-only>
+                <ion-icon name="remove"></ion-icon>
+              </button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <ion-grid>
+    <ion-row>
+      <ion-col style="text-align: right">
+        <span class="valor-total">
+          Total da compra: {{carrinho.valor}},00
+        </span>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!--
+  <ion-card *ngFor="let entrada of carrinho.itens" >    
+    <ion-card-content>
+      <ion-grid>
+        <ion-row no-padding justify-content-center>
+          <ion-col col-2>
+            <ion-img [src]="entrada.item.imagem" class="imagem-lanche"></ion-img>
+          </ion-col>
+          <ion-col col-9 class="titulo-lanche" >
+            <ion-row justify-content-center>
               <ion-col>
-                {{item.lanche.nome}}
+                {{entrada.item.nome}}
               </ion-col>
             </ion-row>
-            <ion-row>
-              <ion-col width-67>
+            <ion-row  justify-content-center>
+              <ion-col col-9>
                 <div class="descricao-lanche">
-                  R$ {{item.lanche.preco}} X {{item.quantidade}}
+                  R$ {{entrada.item.preco}} X {{entrada.quantidade}}
                 </div>
               </ion-col>
-              <ion-col width-33> 
-                <div class="valign botoes">
-                  <button class="botao-comprar" (click)="addItem(item, index)" ion-button icon-only>
+              <ion-col col-3> 
+                <div>
+                  <button (click)="addItem(item, index)" ion-button icon-only>
                       <ion-icon name="add"></ion-icon>
                   </button>
-                  <button class="botao-comprar" (click)="removeItem(item, index)" ion-button icon-only>
+                  <button (click)="removeItem(item, index)" ion-button icon-only>
                     <ion-icon name="remove"></ion-icon>
                   </button>
                 </div>
@@ -55,6 +85,7 @@
       </ion-grid>
     </ion-card-content>
   </ion-card>
+  -->
   <button ion-button primary style="width: 100%" (click)="fecharPedido()" *ngIf="carrinho.estabelecimento && localizacaoDefinida" >Valor total: R${{carrinho.valor_total}},00. Fechar pedido</button>
   <button ion-button primary style="width: 100%" (click)="definirLocalizacao()" *ngIf="carrinho.estabelecimento && !localizacaoDefinida" >  <ion-icon name="locate"></ion-icon> &nbsp;Defina sua localização</button>
   

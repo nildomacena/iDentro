@@ -14,6 +14,7 @@ export class Tab2Page {
   itens: any[];
   estabelecimento: any;
   loading: boolean = true;
+  aba_key: string = '';
   constructor(
     public navCtrl: NavController, 
     public alertCtrl: AlertController,
@@ -24,12 +25,13 @@ export class Tab2Page {
     public app: App
 
     ) {
-      this.estabelecimento = this.navParams.data;
+      this.estabelecimento = this.navParams.data.estabelecimento;
+      this.aba_key = this.navParams.data.abas_key[1];
     }
 
   ionViewDidLoad() {
     console.log('estabelecimento: ', this.estabelecimento);
-    this.fireService.getItensByAba(this.estabelecimento.$key, 1)
+    this.fireService.getItensByAba(this.estabelecimento.$key, this.aba_key)
       .subscribe(itens => {
         this.loading = false;
         this.itens = itens;

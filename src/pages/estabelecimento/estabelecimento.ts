@@ -24,6 +24,7 @@ export class EstabelecimentoPage {
   logado: boolean = false;
   abas: any[] = [];
   tabs: any[] = [];
+  tabParams: any;
   cardapioVazio: boolean = false;
   constructor(
     public navCtrl: NavController, 
@@ -34,22 +35,31 @@ export class EstabelecimentoPage {
     public viewCtrl: ViewController,
     public callnumber: CallNumber
     ) {
-
+    this.tabParams = {
+      estabelecimento: '',
+      abas_key: []
+    }
     this.estabelecimento = this.navParams.get('estabelecimento');
+    this.tabParams.estabelecimento = this.estabelecimento;
+
     this.abas = this.estabelecimento.abas;
     console.log(this.abas, this.estabelecimento);
     try{
       Object.keys(this.abas).map((aba, index) => {
         if(index == 0){
+          this.tabParams.abas_key[0] = aba;
           this.tabs.push({titulo: this.abas[aba].nome, root: Tab1Page})
         }
         else if(index == 1){
+          this.tabParams.abas_key[1] = aba;
           this.tabs.push({titulo: this.abas[aba].nome, root: Tab2Page})
         }
         else if(index == 2){
+          this.tabParams.abas_key[2] = aba;
           this.tabs.push({titulo: this.abas[aba].nome, root: Tab3Page})
         }
       });
+      console.log(this.tabParams);
     }
     catch(err){
       this.cardapioVazio = true;

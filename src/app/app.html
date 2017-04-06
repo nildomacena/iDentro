@@ -30,6 +30,9 @@
                   <button style="background-color: #3b5997" ion-button full (click)="loginWithFacebook()" ><ion-icon name="logo-facebook"></ion-icon>&nbsp;&nbsp;Login com Facebook</button>
                 </ion-col>
               </ion-row>
+              <button class="item-menu" ion-item menuClose clear (click)="goToCarrinho()" >
+                <ion-icon item-left name="cart"></ion-icon>Carrinho
+              </button>
             </ion-grid>
             <div *ngIf="logado">
               <button class="item-menu" ion-item menuClose clear (click)="goToFavoritos()" >

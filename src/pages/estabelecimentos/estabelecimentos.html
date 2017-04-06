@@ -31,12 +31,14 @@
     <ion-item-sliding *virtualItem="let estabelecimento" >
       <ion-item>
         <ion-avatar item-left >
-          <img *ngIf="!loaded && estabelecimento.imagemCapa" src="assets/img/loading.gif"/>
+          <ion-img *ngIf="estabelecimento.imagemCapa" alt="imagemCapa" [src]="estabelecimento.imagemCapa"></ion-img>
+          <ion-img *ngIf="!estabelecimento.imagemCapa" src="assets/img/no-photo.jpg"></ion-img>
+          <!--<img *ngIf="!loaded && estabelecimento.imagemCapa" src="assets/img/loading.gif"/>
           <img *ngIf="!estabelecimento.imagemCapa" src="assets/img/no-photo.jpg">
-          <img *ngIf="estabelecimento.imagemCapa" [hidden]="!loaded" alt="imagemCapa" (load)="loaded = true" [src]="estabelecimento.imagemCapa"/>
+          <img *ngIf="estabelecimento.imagemCapa" [hidden]="!loaded" alt="imagemCapa" (load)="loaded = true" [src]="estabelecimento.imagemCapa"/> -->
         </ion-avatar>
         <div (click)="onSelectEstabelecimento(estabelecimento)" >
-          {{ estabelecimento.nome }}<br>
+          <span style="font-weight: 500">{{ estabelecimento.nome }}</span><br>
           <div class="telefone-wrapper">
               <div *ngIf="estabelecimento.telefone1.numero">
                 <ion-icon [name]="estabelecimento.telefone1.whatsapp? 'logo-whatsapp': 'phone-portrait'"></ion-icon>&nbsp;{{estabelecimento.telefone1.numero}}&nbsp;&nbsp;&nbsp;              

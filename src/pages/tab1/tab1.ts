@@ -4,7 +4,7 @@ import { CallNumber } from '@ionic-native/call-number';
 import { LancheDetailPage } from './../lanche-detail/lanche-detail';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, App, AlertController, ViewController, ModalController } from 'ionic-angular';
+import { NavController, NavParams, App, AlertController, ViewController, ModalController, ToastController, Toast } from 'ionic-angular';
 
 @Component({
   selector: 'page-tab1',
@@ -14,6 +14,8 @@ export class Tab1Page {
   itens: any[];
   estabelecimento: any;
   loading: boolean = true;
+  aba_key: string = '';
+  toast: Toast;
   constructor(
     public navCtrl: NavController, 
     public alertCtrl: AlertController,
@@ -21,20 +23,53 @@ export class Tab1Page {
     public fireService: FireService,
     public viewCtrl: ViewController,
     public modalCtrl: ModalController,
+    public toastCtrl: ToastController,
     public callnumber: CallNumber,
     public app: App
     ) {
-      this.estabelecimento = this.navParams.data;
+      this.estabelecimento = this.navParams.data.estabelecimento;
+      this.aba_key = this.navParams.data.abas_key[0];
+      this.toast = this.toastCtrl.create({
+        message: 'Item adicionado ao carrinho',
+        duration: 2000,
+        closeButtonText: 'X'
+      })
+
     }
 
   ionViewDidLoad() {
-    console.log('Entrou na tab1');
-    this.fireService.getItensByAba(this.estabelecimento.$key, 0)
+    this.fireService.getItensByAba(this.estabelecimento.$key, this.aba_key)
       .subscribe(itens => {
         this.loading = false;
         this.itens = itens;
-        console.log(this.itens);
       })
+  }
+
+  addToCart(item: any){
+    let result = this.fireService.addToCart(item, this.estabelecimento);
+    if(result != true){
+      let alert = this.alertCtrl.create({
+        title: 'Erro',
+        subTitle: 'Você possui itens de outro estabelecimento adicionados no carrinho. Deseja limpar o carrinho?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel'
+          },
+          {
+            text: 'Ok',
+            handler: () => {
+              this.fireService.limpaCarrinho()
+            }
+          }
+        ]
+      })
+      alert.present();  
+    }
+    else{
+      this.toast.dismiss();
+      this.toast.present();
+    }
   }
 
   goToItem(item){

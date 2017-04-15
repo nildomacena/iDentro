@@ -1,0 +1,47 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Perfil</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <div class="top">
+    <ion-grid>
+      <ion-row align-items-center>
+        <ion-col col-4 offset-1>
+          <ion-avatar>
+            <img [src]="user.photoURL? user.photoURL: 'https://scontent.xx.fbcdn.net/v/t1.0-1/p100x100/14502868_1084987124918577_7470163265578933225_n.jpg?oh=c5dd61932e90d52527a66e4c6b5f7f90&oe=59348019'">
+          </ion-avatar>
+        </ion-col>
+
+        <ion-col>
+          <span class="titulo">{{user.displayName? user.displayName: 'Nildo Macena'}}</span>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <ion-list>
+    <ion-item>
+      <ion-label floating>Nome</ion-label>
+      <ion-input placeholder="nome" [(ngModel)]="nome" ></ion-input>
+    </ion-item>
+  </ion-list>
+  <ion-label stacked style="margin-left: 5px" >Endereços</ion-label>
+  <ion-card *ngFor="let endereco of enderecos" (click)="onSelectEndereco()" >
+    <ion-card-content>
+      {{endereco}}
+    </ion-card-content>
+  </ion-card>
+
+  <button ion-button icon-left small outline class="adicionar_endereco" (click)="addEndereco()" >
+    <ion-icon name="add"></ion-icon>
+    Adicionar endereço
+  </button>
+</ion-content>
+
+<ion-footer>
+  <button ion-button block color="primary">Salvar</button>
+</ion-footer>

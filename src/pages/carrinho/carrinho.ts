@@ -1,7 +1,9 @@
+import { FechamentoPedidoPage } from './../fechamento-pedido/fechamento-pedido';
+import { HomePage } from './../home/home';
 import { LocalizacaoPage } from './../localizacao/localizacao';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, ModalController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, ModalController, ActionSheetController, ViewController, Platform } from 'ionic-angular';
 
 
 @Component({
@@ -15,25 +17,29 @@ export class CarrinhoPage {
     public navParams: NavParams,
     public fireService: FireService,
     public alertCtrl: AlertController,
-    public modalCtrl: ModalController
+    public modalCtrl: ModalController,
+    public actionSheet: ActionSheetController,
+    public viewCtrl: ViewController,
+    public platform: Platform
     ) {
       this.carrinho = this.fireService.getCart();
-      console.log(this.carrinho);
+      
     }
 
   ionViewDidLoad() {
-    console.log('carrinho.length: ', this.carrinho.length);
+    
   }
 
   goBack(){
     this.navCtrl.pop();
   }
 
-  removeItem(item, index){
-    if(item.quantidade == 1){
+  removeItem(entrada){
+    console.log(entrada);
+    if(entrada.quantidade == 1){
       let alert = this.alertCtrl.create({
         title: 'Confirmar',
-        subTitle: 'Deseja excluir do carrinho o item '+item.lanche.nome,
+        subTitle: 'Deseja excluir do carrinho o item '+entrada.item.nome,
         buttons: [
           {
            text:  'Cancelar',
@@ -42,7 +48,7 @@ export class CarrinhoPage {
           {
            text:  'Confirmar',
            handler: () => {
-             this.carrinho = this.fireService.removeItem(item);
+             this.carrinho = this.fireService.removeItem(entrada);
            }
           }
         ]
@@ -51,16 +57,16 @@ export class CarrinhoPage {
     }
 
     else{
-      this.carrinho = this.fireService.diminuiItem(item);
+      this.carrinho = this.fireService.diminuiItem(entrada);
     }
   }
 
-  addItem(item){
-    this.carrinho = this.fireService.addItem(item);
+  addItem(entrada){
+    this.carrinho = this.fireService.addItem(entrada);
   }
 
   fecharPedido(){
-    console.log('Fechar pedido')
+    this.navCtrl.push(FechamentoPedidoPage);
   }
 
   definirLocalizacao(){
@@ -69,5 +75,26 @@ export class CarrinhoPage {
     modal.onDidDismiss(_ => {
       console.log('Modal fechado.');
     })
+  }
+
+  openSettings(){
+    let action = this.actionSheet.create({
+      title: 'Carrinho',
+      buttons: [
+        {
+         text: 'Limpar carrinho',
+         role: 'destructive',
+         icon: 'trash',
+         handler: () => {
+           this.carrinho = this.fireService.limpaCarrinho();
+         }
+        }
+      ]
+    })
+    action.present();
+  }
+
+  backButtonAction(){
+    this.navCtrl.setRoot(HomePage);
   }
 }

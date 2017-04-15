@@ -54,3 +54,58 @@ ion-modal.settings {
     padding: 40% 15% 40% 15%;
     background: rgba(0,0,0,0.5);
 }
+
+.auth-bg {
+  background: url("../assets/img/bg.jpg") no-repeat center;
+  background-size: 100% 100%;
+
+  .scroll-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .login-content {
+      width: 86%;
+
+      .logo {
+        margin: 20px auto 0;
+        padding: 0.2em 1.35em 0.1em 0.4em;
+        width: 1.5em;
+        border-radius: 10%;
+        font-size: 3em;
+      }
+
+      .list-form {
+        padding: 0;
+        margin-bottom: 0;
+
+        ion-item {
+          background: none;
+          padding: 0;
+
+          &:first-child {
+            border-top: none;
+          }
+
+          &:after {
+            display: none;
+          }
+
+          ion-label {
+            font-size: 1em;
+            color: color($colors, light);
+          }
+
+          input {
+            color: color($colors, light);
+          }
+        }
+      }
+    }
+  }
+}
+
+.top{
+    background: url("../assets/img/bg.jpg") no-repeat center;
+    background-size: 100% 100%;
+}

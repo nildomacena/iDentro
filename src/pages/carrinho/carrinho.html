@@ -2,12 +2,16 @@
 
   <ion-navbar>
     <ion-title>Carrinho</ion-title>
+    <ion-buttons end *ngIf="carrinho.estabelecimento" >
+      <button ion-button icon-only (click)="openSettings()">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
-
 </ion-header>
 
 
-<ion-content padding>
+<ion-content no-padding>
 
   <div class="vazio" *ngIf="!carrinho.estabelecimento">
     <h4>Você ainda não adicionou itens ao carrinho. Não perca tempo, faça já seu pedido.</h4>
@@ -16,38 +20,63 @@
     </button>
   </div>
   <h4 style="text-align: center">{{this.carrinho.estabelecimento.nome}}</h4>
+<!-- <ion-list [virtualScroll]="carrinho.itens" approxItemHeight="60px">
+  <ion-item *virtualItem="let entrada" > -->
+  <ion-list>
+    <ion-item *ngFor="let entrada of carrinho.itens" >
+      <ion-thumbnail item-left>
+        <img [src]="entrada.item.imagem" *ngIf="entrada.item.imagem"  class="imagem-lanche">
+        <ion-img *ngIf="!entrada.item.imagem" src="assets/img/no-photo.jpg" class="imagem-lanche"></ion-img>
+      </ion-thumbnail>
+      <h2>{{entrada.item.nome}}</h2>
+      <p>R${{entrada.item.preco}}.00</p>
+      <div item-right style="text-align: center" >
+        <button class="botao-comprar" (click)="addItem(entrada)" block clear ion-button icon-only>
+          <ion-icon name="add"></ion-icon>
+        </button>
+        <p class="quantidade">{{entrada.quantidade}}</p>
+        <button class="botao-comprar" (click)="removeItem(entrada)" block clear ion-button icon-only>
+          <ion-icon name="remove"></ion-icon>
+        </button>
+      </div>
+    </ion-item>
+  </ion-list>
+<!--
   <ion-card *ngFor="let entrada of carrinho.itens" >    
     <ion-card-content>
       <ion-grid>
         <ion-row justify-content-center>
           <ion-col col-3 align-self-center>
-            <img [src]="entrada.item.imagem" class="imagem-lanche">
+            <img [src]="entrada.item.imagem" *ngIf="entrada.item.imagem"  class="imagem-lanche">
+            <ion-img *ngIf="!entrada.item.imagem" src="assets/img/no-photo.jpg" class="imagem-lanche"></ion-img>
           </ion-col>
-          <ion-col col-6 >
+          <ion-col col-5 >
             <b><h5>{{entrada.item.nome}}</h5></b>
-            R$ {{entrada.item.preco}},00 X {{entrada.quantidade}}
+            R$ {{entrada.item.preco}},00
           </ion-col>
-          <ion-col col-3>
-              <button class="botao-comprar" (click)="addItem(item, index)" ion-button icon-only>
-                  <ion-icon name="add"></ion-icon>
-              </button>
-              <button class="botao-comprar" (click)="removeItem(item, index)" ion-button icon-only>
-                <ion-icon name="remove"></ion-icon>
-              </button>
+          <ion-col col-4>
+            <ion-row>
+              <ion-col>
+                <button class="botao-comprar" (click)="addItem(entrada)" small clear ion-button icon-only>
+                    <ion-icon name="add"></ion-icon>
+                </button>
+              </ion-col>
+              <ion-col>
+                <span>{{entrada.quantidade}}</span>
+              </ion-col>
+              <ion-col>
+                <button class="botao-comprar" (click)="removeItem(entrada)" small clear ion-button icon-only>
+                  <ion-icon name="remove"></ion-icon>
+                </button>
+              </ion-col>
+            </ion-row>
           </ion-col>
         </ion-row>
       </ion-grid>
     </ion-card-content>
   </ion-card>
-  <ion-grid>
-    <ion-row>
-      <ion-col style="text-align: right">
-        <span class="valor-total">
-          Total da compra: {{carrinho.valor}},00
-        </span>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  -->
+
   <!--
   <ion-card *ngFor="let entrada of carrinho.itens" >    
     <ion-card-content>
@@ -86,7 +115,18 @@
     </ion-card-content>
   </ion-card>
   -->
-  <button ion-button primary style="width: 100%" (click)="fecharPedido()" *ngIf="carrinho.estabelecimento && localizacaoDefinida" >Valor total: R${{carrinho.valor_total}},00. Fechar pedido</button>
-  <button ion-button primary style="width: 100%" (click)="definirLocalizacao()" *ngIf="carrinho.estabelecimento && !localizacaoDefinida" >  <ion-icon name="locate"></ion-icon> &nbsp;Defina sua localização</button>
-  
 </ion-content>
+
+<ion-footer class="footer" *ngIf="carrinho.estabelecimento">
+  <ion-grid>
+    <ion-row align-items-center>
+      <ion-col col-7>
+        <span class="total_compra">Total da compra: R${{carrinho.valor}},00</span>
+      </ion-col>
+      <ion-col col-5>
+        <button  ion-button primary block outline (click)="fecharPedido()">Fechar pedido</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+</ion-footer>

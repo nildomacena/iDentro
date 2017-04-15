@@ -60,11 +60,23 @@ page-carrinho {
         min-height: 15vw;
     }
     .botao-comprar{
-        margin-left: 50%;
-        margin-right: 50%;
     }
     .valor-total{
         font-size: 120%;
         font-weight: 700;
     }
+    .quantidade{
+        font-weight: 700;
+        text-decoration: underline;
+        font-size: larger;
+    }
+    ion-footer{
+        height: 56px;
+        font-weight: bolder;
+        
+        .total-compra{
+            margin-top: 50%
+        }
+    }
+
 }   

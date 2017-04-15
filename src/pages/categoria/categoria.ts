@@ -1,7 +1,7 @@
 import { MontagemPage } from './../montagem/montagem';
 import { FireService } from './../../services/fire.service';
 import { Component, ElementRef } from '@angular/core';
-import { NavController, NavParams, App } from 'ionic-angular';
+import { NavController, NavParams, App, Nav } from 'ionic-angular';
 
 
 @Component({
@@ -42,6 +42,8 @@ export class CategoriaPage {
   }
 
   irParaIngredientes(){
+    console.log(this.app.getRootNav())
+    console.log(this.app.getActiveNav());
     this.app.getRootNav().push(MontagemPage, {categoria: this.categoriaSelecionada})
   }
 }

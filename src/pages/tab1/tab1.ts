@@ -46,29 +46,33 @@ export class Tab1Page {
   }
 
   addToCart(item: any){
-    let result = this.fireService.addToCart(item, this.estabelecimento);
-    if(result != true){
-      let alert = this.alertCtrl.create({
-        title: 'Erro',
-        subTitle: 'Você possui itens de outro estabelecimento adicionados no carrinho. Deseja limpar o carrinho?',
-        buttons: [
-          {
-            text: 'Cancelar',
-            role: 'cancel'
-          },
-          {
-            text: 'Ok',
-            handler: () => {
-              this.fireService.limpaCarrinho()
+    try{
+      let result = this.fireService.addToCart(item, this.estabelecimento);
+      if(result != true){
+        let alert = this.alertCtrl.create({
+          title: 'Erro',
+          subTitle: 'Você possui itens de outro estabelecimento adicionados no carrinho. Deseja limpar o carrinho?',
+          buttons: [
+            {
+              text: 'Cancelar',
+              role: 'cancel'
+            },
+            {
+              text: 'Ok',
+              handler: () => {
+                this.fireService.limpaCarrinho()
+              }
             }
-          }
-        ]
-      })
-      alert.present();  
+          ]
+        })
+        alert.present();  
+      }
+      else{
+        this.toast.present();
+      }
     }
-    else{
-      this.toast.dismiss();
-      this.toast.present();
+    catch (err) {
+      console.log(err);
     }
   }
 

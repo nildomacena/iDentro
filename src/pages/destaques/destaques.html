@@ -41,12 +41,29 @@
 -->
 
 <ion-content padding>
-  <ion-card *ngFor=" let estabelecimento of estabelecimentos">
+  <ion-card *ngFor="let estabelecimento of estabelecimentos; let i = index" (click)="onSelectEstabelecimento(estabelecimento)" >
+    <ion-card-content>
+      <ion-row no-padding>
+        <ion-col col-5 no-padding>
+          <img *ngIf="estabelecimento.imagemCapa" [src]="estabelecimento.imagemCapa" class="imagemCapa">
+          <img *ngIf="!estabelecimento.imagemCapa" src="assets/img/no-photo.jpg" class="imagemCapa">
+        </ion-col>
+        <ion-col col-7 text-wrap>
+          <h2>{{estabelecimento.nome}}</h2>
+          <p class="frase-destaque" ion-text>
+            {{estabelecimento.fraseDestaque}}
+          </p>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+<!--
+  <ion-card *ngFor="let estabelecimento of estabelecimentos; let i = index">
     <img *ngIf="estabelecimento.imagemCapa" [src]="estabelecimento.imagemCapa">
     <img *ngIf="!estabelecimento.imagemCapa" src="assets/img/no-photo.jpg">
     <ion-card-content>
       <ion-card-title>
-        {{estabelecimento.nome}}
+        {{estabelecimento.nome}} {{i}}
         </ion-card-title>
       <p>
         {{estabelecimento.fraseDestaque}}
@@ -67,4 +84,5 @@
         </ion-col>
       </ion-row>
   </ion-card>
+  -->
 </ion-content>

@@ -1,0 +1,56 @@
+<ion-content class="auth-bg">
+  <div class="login-content">
+
+    <!-- Logo -->
+    <div padding text-center style="padding: initial">
+      <div class="logo primary-bg">
+        <ion-icon name="flash" color="yellow"></ion-icon>
+      </div>
+      <h2 ion-text color="light">
+        Bolts
+      </h2>
+    </div>
+
+    <!-- Login form -->
+    <ion-list class="list-form" padding>
+
+      <ion-item>
+        <ion-label stacked>Email</ion-label>
+        <ion-input type="text"[(ngModel)]="email"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>Senha</ion-label>
+        <ion-input type="password" [(ngModel)]="senha"></ion-input>
+      </ion-item>
+
+      <ion-item>
+      </ion-item>
+
+    </ion-list>
+
+    <p ion-text text-right color="light">Esqueceu a senha?</p>
+
+    <div>
+      <button ion-button block color="primary" (click)="login()">
+        Entrar
+      </button>
+
+      <p ion-text text-center color="light">Ou</p>
+
+      <button ion-button block color="fb-color" (click)="loginWithFacebook()">
+        Entrar com Facebook
+      </button>
+      <button ion-button block color="tw-color" (click)="loginWithGoogle()">
+        Entrar com Google
+      </button>
+    </div>
+
+
+    <!-- Other links -->
+    <div text-center margin-top>
+      <span ion-text color="light" (click)="register()">Cadastre-se Aqui</span>
+    </div>
+
+  </div>
+</ion-content>

@@ -81,8 +81,6 @@ export class FireService {
         return firebase.database().ref('contato').push({email: email, mensagem: message})
     }
     addToCart(item, estabelecimento): boolean | string{
-        console.log('item',item)
-        console.log('estabelecimento',estabelecimento);
         let cadastrado: boolean = false;
         if(this.cart.estabelecimento == '')
             this.cart.estabelecimento = estabelecimento;
@@ -93,13 +91,10 @@ export class FireService {
         }
 
         this.cart.itens.map(itemCarrinho => {
-            console.log('itemCarrinho: ',itemCarrinho)
-            console.log('item: ',item);
             if(item.$key == itemCarrinho.item.$key){
                 itemCarrinho.quantidade++;
                 itemCarrinho.valor += +item.preco;
                 this.cart.valor += +item.preco
-                console.log('entrou no else: ', this.cart);
                 cadastrado = true;
             }
 
@@ -115,8 +110,7 @@ export class FireService {
             this.cart.itens.push(obj);
             this.cart.valor += +item.preco
         }
-            console.log(this.cart);
-            return true;
+        return true;
 
         
         /*
@@ -239,41 +233,46 @@ export class FireService {
     
      */
 
-    limpaCarrinho(){
+    limpaCarrinho(): any{
         this.cart = {
             estabelecimento: '',
             itens: [],
             valor: 0
         }
+        return this.cart;
     }
-    removeItem(item): Array<any>{
+    removeItem(entrada): Array<any>{
         this.cart.itens.map((aux, indexItem) => {
-            if(item.lanche.$key == aux.lanche.$key){
-                this.cart.valor_total -= item.lanche.preco;
+            if(entrada.item.$key == aux.item.$key){
+                this.cart.valor -= entrada.item.preco;
                 this.cart.itens.splice(indexItem,1); // Caso contrário, exclua apenas o do lanches.
                 if(this.cart.itens.length == 0)   //Se não houver mais itens no carrinho. Exclua o estabelecimento do carrinho.
-                    this.cart = {};
+                    this.limpaCarrinho();
             }
         })
         console.log(this.cart);
         return this.cart;
     }
 
-    diminuiItem(item): Array<any>{
+    diminuiItem(entrada): Array<any>{
+        console.log(entrada, this.cart);
+
         this.cart.itens.map(aux => {
-            if(item.lanche.$key == aux.lanche.$key){
+            if(entrada.item.$key == aux.item.$key){
                 aux.quantidade = aux.quantidade - 1;
-                this.cart.valor_total -= item.lanche.preco;
+                console.log(entrada.item.preco);
+                typeof entrada.item.preco == 'string'? this.cart.valor -= +entrada.item.preco: this.cart.valor -= entrada.item.preco
             }
         });
         return this.cart;
     }
 
-    addItem(item){
+    addItem(entrada){
+        console.log(typeof entrada.item.preco);
         this.cart.itens.map(aux => {
-            if(item.lanche.$key == aux.lanche.$key){
+            if(entrada.item.$key == aux.item.$key){
                 aux.quantidade = aux.quantidade + 1;
-                this.cart.valor_total += item.lanche.preco;
+                typeof entrada.item.preco == 'string'? this.cart.valor += +entrada.item.preco: this.cart.valor += entrada.item.preco
             }
         });
         return this.cart;
@@ -391,9 +390,12 @@ export class FireService {
 
     checkAuth(): boolean{
         console.log('User: ', firebase.auth().currentUser);
-        if(firebase.auth().currentUser)
+        if(firebase.auth().currentUser){
+            console.log('retorna true');
             return true;
+        }
         else    
+            console.log('retorna false');
             return false;
     }
 

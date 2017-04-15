@@ -1,13 +1,6 @@
-<ion-header *ngIf="!modal">
-
-  <ion-navbar>
-    <ion-title>Localização</ion-title>
-  </ion-navbar>
-
-</ion-header>
 <ion-header>
 
-  <ion-toolbar *ngIf="modal">
+  <ion-toolbar>
     <ion-title>
       Localização
     </ion-title>
@@ -22,6 +15,22 @@
 
 
 <ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-input type="text" [(ngModel)]="address.place" (focus)="showAddressModal()" placeholder="Digite e selecione seu endereço" ></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-item>
+      <ion-label floating>Número</ion-label>
+      <ion-input type="text" [(ngModel)]="numero" clearInput="true" ></ion-input>
+    </ion-item>
+    <ion-item>
+      <button ion-button block (click)="buscarEnderecoPeloNome()" >Salvar Endereço</button>
+    </ion-item>
+  </ion-list>
+  <!--
   <ion-list>
     <ion-item>
       <ion-label floating>Nome do bairro</ion-label>
@@ -43,4 +52,5 @@
     </ion-item>
   </ion-list>
   <button ion-button block (click)="onSubmitEndereco()" >Salvar</button>
+  -->
 </ion-content>

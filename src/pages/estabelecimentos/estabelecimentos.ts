@@ -50,6 +50,7 @@ export class EstabelecimentosPage {
   }
 
   ionViewDidLoad(){
+    this.filteredEstabelecimentos = this.estabelecimentos = [];
     // descomentar quando a função de redimensionar cabeçalho estiver funcionando
     /*
     this.content.ionScroll.subscribe(ev => {
@@ -60,13 +61,6 @@ export class EstabelecimentosPage {
       .subscribe(estabelecimentos => {
         this.isLoading = false;
         this.estabelecimentos = this.filteredEstabelecimentos = estabelecimentos;
-        let toast = this.toastCtrl.create({
-          message: '← Deslize para a esquerda para ligar.',
-          showCloseButton: true,
-          closeButtonText: 'x',
-          duration: 4500
-        })
-        toast.present();
       });
       this.fireService.getBairros()
         .subscribe(bairros => {
@@ -120,6 +114,8 @@ export class EstabelecimentosPage {
   }
 
   toggleSearchbar(){
+    if(this.isSearch)
+      this.filteredEstabelecimentos = this.estabelecimentos;
     this.showToolbar = !this.showToolbar;
     this.isSearch = !this.isSearch;
 
@@ -161,7 +157,7 @@ export class EstabelecimentosPage {
     else{
       console.log('search: ', search);
 
-      this.isSearchEmpty = search.length > 0? false: true; //Verifica se o usuário digitou alguma coisa no searchbox para que o aplicativo não pesquise com o searchbox vazio
+      this.isSearchEmpty = true;//search.length > 0? false: true; //Verifica se o usuário digitou alguma coisa no searchbox para que o aplicativo não pesquise com o searchbox vazio
       this.filteredEstabelecimentos = this.estabelecimentos.filter(estabelecimento => 
         estabelecimento.nome.toUpperCase().includes(search.toUpperCase()));
 

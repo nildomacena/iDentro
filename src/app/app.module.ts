@@ -1,4 +1,7 @@
+import { AutocompletePage } from './../pages/autocomplete/autocomplete';
+import { PerfilPage } from './../pages/perfil/perfil';
 import { CardapioVazioPage } from './../pages/cardapio-vazio/cardapio-vazio';
+import { LoginPage } from './../pages/login/login';
 import { ChatPage } from './../pages/chat/chat';
 import { CabecalhoComponent } from './../components/cabecalho/cabecalho';
 import { MapaPage } from './../pages/mapa/mapa';
@@ -24,8 +27,9 @@ import { EstabelecimentosPage } from './../pages/estabelecimentos/estabeleciment
 import { FireService } from './../services/fire.service';
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { Diagnostic } from '@ionic-native/diagnostic';
-import { Geolocation } from '@ionic-native/geolocation'
-import { HeaderColor } from '@ionic-native/header-color'
+import { Geolocation } from '@ionic-native/geolocation';
+import { HeaderColor } from '@ionic-native/header-color';
+import { NativeGeocoder} from '@ionic-native/native-geocoder';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
@@ -37,7 +41,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { CallNumber } from '@ionic-native/call-number';
 import { Facebook } from '@ionic-native/facebook';
 import { Keyboard } from '@ionic-native/keyboard';
-
+import { BrowserModule } from '@angular/platform-browser';
 
 
 const config = {
@@ -74,9 +78,13 @@ const config = {
     MapaPage,
     CabecalhoComponent,
     ChatPage,
-    CardapioVazioPage
+    CardapioVazioPage,
+    LoginPage,
+    PerfilPage,
+    AutocompletePage
   ],
   imports: [
+    BrowserModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(config),
     AngularFireOfflineModule,
@@ -106,7 +114,10 @@ const config = {
     ConfiguracoesPage,
     MapaPage,
     ChatPage,
-    CardapioVazioPage
+    CardapioVazioPage,
+    LoginPage,
+    PerfilPage,
+    AutocompletePage
   ],
   providers: [
     FireService, 
@@ -119,6 +130,7 @@ const config = {
     CallNumber,
     Keyboard,
     Facebook,
+    NativeGeocoder,
     {provide: ErrorHandler, useClass: IonicErrorHandler}]
 })
 export class AppModule {}

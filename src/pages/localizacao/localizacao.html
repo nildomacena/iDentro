@@ -17,17 +17,22 @@
 <ion-content padding>
   <ion-list>
     <ion-item>
-      <ion-input type="text" [(ngModel)]="address.place" (focus)="showAddressModal()" placeholder="Digite e selecione seu endereço" ></ion-input>
+      <ion-label floating>Digite e selecione o endereço</ion-label>
+      <ion-input type="text" [(ngModel)]="endereco" (focus)="showAddressModal()" ></ion-input>
     </ion-item>
-  </ion-list>
 
-  <ion-list>
     <ion-item>
       <ion-label floating>Número</ion-label>
       <ion-input type="text" [(ngModel)]="numero" clearInput="true" ></ion-input>
     </ion-item>
+
     <ion-item>
-      <button ion-button block (click)="buscarEnderecoPeloNome()" >Salvar Endereço</button>
+      <ion-label floating>Ponto de referência</ion-label>
+      <ion-textarea [(ngModel)]="referencia"></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button block [disabled]="!fullAddress.descricao" (click)="salvarEndereco()" >Salvar Endereço</button>
     </ion-item>
   </ion-list>
   <!--

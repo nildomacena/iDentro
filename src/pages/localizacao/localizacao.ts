@@ -2,7 +2,7 @@ import { AutocompletePage } from './../autocomplete/autocomplete';
 import { GoogleMap, GoogleMaps, Geocoder, GeocoderResult, GeocoderRequest } from '@ionic-native/google-maps';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, LoadingController, ModalController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, LoadingController, ModalController, ToastController } from 'ionic-angular';
 import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
 //import { GoogleMaps } from '@types/googlemaps';
 
@@ -25,7 +25,9 @@ export class LocalizacaoPage {
   autocomplete: any;
   address: any;
   numero: string = '';
+  referencia: string = '';
   geocoder: Geocoder = new Geocoder();
+  fullAddress: any;
 
   constructor(
     public navCtrl: NavController, 
@@ -33,15 +35,24 @@ export class LocalizacaoPage {
     public fireService: FireService,
     public alertCtrl: AlertController,
     public modalCtrl: ModalController,
+    public toastCtrl: ToastController,
     public nativeGeocoder: NativeGeocoder,
     public loadingCtrl: LoadingController,
     public googleMaps: GoogleMaps,
 
     ) {
-      this.address = {
-        place: ''
-      };
       this.alert = this.alertCtrl.create();
+      this.fullAddress = {
+        logradouro: '',
+        numero: '',
+        referencia: '',
+        descricao: '',
+        latitude: '',
+        longitude: '',
+        place_id: '',
+        bairro: '',
+        cidade: ''
+      }
     }
 
   ionViewDidLoad() {
@@ -63,51 +74,49 @@ export class LocalizacaoPage {
       })
   }
 
-  buscarEnderecoPorCEP(){
-    let loading = this.loadingCtrl.create({
-      content: 'Carregando...'
-    });
-    loading.present();
-    let request: GeocoderRequest;
-    request.address = this.cep;
-    console.log('request: ', request);
-    this.geocoder.geocode(request)
-      .then(result => {
-        loading.dismiss();
-        console.log('result buscar pelo endereco: ', result)
-      })
-    /*
-    this.nativeGeocoder.forwardGeocode(this.cep)
-      .then(result => {
-        console.log(result);
-        this.nativeGeocoder.reverseGeocode(+result.latitude, +result.longitude)
-          .then(reverseResult => {
-            loading.dismiss();
-            console.log(reverseResult);
-          })
-      })*/
-  }
-
   showAddressModal(){
     console.log('show address modal');
-    let modal = this.modalCtrl.create(AutocompletePage,{data: this.address.place});
+    let modal = this.modalCtrl.create(AutocompletePage,{data: this.endereco});
     modal.onDidDismiss(data => {
       if(data){
+        this.fullAddress.place_id = data.place_id;
+
         let request: google.maps.GeocoderRequest = {
-          address: data
+          placeId: data.place_id
         };
         let geocoder: google.maps.Geocoder = new google.maps.Geocoder();
         geocoder.geocode(request, (value) => {
-          let result = value[0]
+          let result = value[0];
+          this.fullAddress.descricao = result.formatted_address;
+          this.fullAddress.logradouro = result.address_components[0].short_name;
+          this.fullAddress.bairro = result.address_components[1].short_name;
+          this.fullAddress.cidade = result.address_components[2].short_name;
+          this.fullAddress.latitude = result.geometry.location.lat();
+          this.fullAddress.longitude = result.geometry.location.lng();
+
           console.log(result);
-          this.address.place = `${result['address_components'][0].short_name}, ${result['address_components'][1].short_name}, ${result['address_components'][2].short_name}`
-          console.log('address data = ', this.address.place);
+          this.endereco = `${result['address_components'][0].short_name}, ${result['address_components'][1].short_name}, ${result['address_components'][2].short_name}`
+          console.log('address data = ', this.endereco);
           console.log('geocoder result: ', result);
         })
       }
     })
     modal.present();
   }
+
+  salvarEndereco(){
+    this.fullAddress.numero = this.numero;
+    this.fullAddress.referencia = this.referencia;
+    this.fireService.salvarEndereco(this.fullAddress)
+      .then(_ => {
+        let toast = this.toastCtrl.create({
+          message: 'Endereco salvo',
+          duration: 2500
+        })
+        toast.present();
+      })
+  }
+
   buscarEnderecoPeloNome(){
     let loading = this.loadingCtrl.create({
       content: 'Carregando...'

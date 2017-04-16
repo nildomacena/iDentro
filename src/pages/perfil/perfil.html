@@ -32,7 +32,7 @@
   <ion-label stacked style="margin-left: 5px" >Endereços</ion-label>
   <ion-card *ngFor="let endereco of enderecos" (click)="onSelectEndereco()" >
     <ion-card-content>
-      {{endereco}}
+      {{endereco.descricao}}
     </ion-card-content>
   </ion-card>
 

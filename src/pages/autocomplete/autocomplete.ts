@@ -58,7 +58,7 @@ export class AutocompletePage {
         console.log('predictions: ', predictions);
         predictions.forEach(function (prediction){
           if(prediction.description.toUpperCase().includes('Maceió'.toUpperCase()))
-            me.autocompleteItems.push(prediction.description);
+            me.autocompleteItems.push(prediction);
         });
       });
     });

@@ -19,9 +19,16 @@ export class PerfilPage {
     public modalCtrl: ModalController
     ) {
       this.user = this.navParams.get('user');
+      console.log(this.user);
       this.nome = this.user.displayName;
+      this.fireService.getEnderecos()
+        .subscribe(enderecos => {
+          console.log('get enderecos ',enderecos);
+          this.enderecos = enderecos;
+        })
+      /*
       this.enderecos.push('Rua B47, quadra 1. Número 211. Benedito Bentes. Maceió-Al');
-      this.enderecos.push('Avenida barros, número 20. Santa Lúcia. Maceió-Al');
+      this.enderecos.push('Avenida barros, número 20. Santa Lúcia. Maceió-Al');*/
       console.log(this.enderecos);
   }
 

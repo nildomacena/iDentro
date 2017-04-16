@@ -423,8 +423,16 @@ export class FireService {
                     })
     }
 
+    getEnderecos(): Observable<any>{
+        return this.af.database.list(`usuarios_app/${this.uid}/enderecos`);
+    }
+
+    salvarEndereco(endereco: any): firebase.Promise<any>{
+        return this.af.database.list(`usuarios_app/${this.uid}/enderecos`).push(endereco);
+
+    }
     getMensagem(estabelecimentoKey):Observable<any>{
-        return this.af.database.list(`chat/ ${estabelecimentoKey}/${this.uid}`);
+        return this.af.database.list(`chat/${estabelecimentoKey}/${this.uid}`);
     }
     logout(): firebase.Promise<any>{
         return firebase.auth().signOut();

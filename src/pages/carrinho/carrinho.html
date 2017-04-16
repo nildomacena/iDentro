@@ -19,7 +19,6 @@
         Visualizar ofertas
     </button>
   </div>
-  <h4 style="text-align: center">{{this.carrinho.estabelecimento.nome}}</h4>
 <!-- <ion-list [virtualScroll]="carrinho.itens" approxItemHeight="60px">
   <ion-item *virtualItem="let entrada" > -->
   <ion-list>
@@ -124,7 +123,7 @@
         <span class="total_compra">Total da compra: R${{carrinho.valor}},00</span>
       </ion-col>
       <ion-col col-5>
-        <button  ion-button primary block outline (click)="fecharPedido()">Fechar pedido</button>
+        <button  ion-button primary block outline (click)="fecharPedido()">Continuar</button>
       </ion-col>
     </ion-row>
   </ion-grid>

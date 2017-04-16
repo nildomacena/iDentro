@@ -2,7 +2,7 @@ import { AutocompletePage } from './../autocomplete/autocomplete';
 import { GoogleMap, GoogleMaps, Geocoder, GeocoderResult, GeocoderRequest } from '@ionic-native/google-maps';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, LoadingController, ModalController, ToastController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, LoadingController, ModalController, ToastController, ViewController } from 'ionic-angular';
 import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
 //import { GoogleMaps } from '@types/googlemaps';
 
@@ -28,9 +28,11 @@ export class LocalizacaoPage {
   referencia: string = '';
   geocoder: Geocoder = new Geocoder();
   fullAddress: any;
+  enderecoAdicional: boolean = false;  //Serve para verificar se o usuário deseja adicionar mais um endereço à sua lista ou se quer um endereço exporádico
 
   constructor(
     public navCtrl: NavController, 
+    public viewCtrl: ViewController,
     public navParams: NavParams,
     public fireService: FireService,
     public alertCtrl: AlertController,
@@ -41,6 +43,7 @@ export class LocalizacaoPage {
     public googleMaps: GoogleMaps,
 
     ) {
+      this.enderecoAdicional = this.navParams.get('adicional');
       this.alert = this.alertCtrl.create();
       this.fullAddress = {
         logradouro: '',
@@ -107,14 +110,20 @@ export class LocalizacaoPage {
   salvarEndereco(){
     this.fullAddress.numero = this.numero;
     this.fullAddress.referencia = this.referencia;
-    this.fireService.salvarEndereco(this.fullAddress)
-      .then(_ => {
-        let toast = this.toastCtrl.create({
-          message: 'Endereco salvo',
-          duration: 2500
+    if(this.enderecoAdicional){
+      this.viewCtrl.dismiss({endereco: this.fullAddress});
+    }
+    else{
+      this.fireService.salvarEndereco(this.fullAddress)
+        .then(_ => {
+          let toast = this.toastCtrl.create({
+            message: 'Endereco salvo',
+            duration: 2500
+          })
+          toast.present();
+          this.dismiss();
         })
-        toast.present();
-      })
+    }
   }
 
   buscarEnderecoPeloNome(){

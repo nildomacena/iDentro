@@ -41,8 +41,10 @@ export class MyApp {
           this.logado = false;
           this.nav.setRoot(LoginPage);
         }
-        else 
+        else{
           this.user = user;
+          this.logado = true;
+        } 
       })
       this.statusBar.styleDefault();
       this.statusBar.overlaysWebView(true);

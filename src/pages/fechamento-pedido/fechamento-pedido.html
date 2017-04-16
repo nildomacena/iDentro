@@ -3,7 +3,7 @@
   <ion-navbar>
     <ion-title>Fechar pedido</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)="openSettings()">
+      <button ion-button icon-only (click)="addEndereco()">
         <ion-icon name="add"></ion-icon>
       </button>
     </ion-buttons>
@@ -13,5 +13,28 @@
 
 
 <ion-content padding>
-
+  <h4 style="text-align: center">Selecione o endereço de entrega</h4>
+  <ion-card *ngFor="let endereco of enderecos; let i = index" [class.selecionado]="endereco == enderecoSelecionado" (click)="onSelectEndereco(endereco)" >
+    <ion-card-content>
+      {{endereco.descricao}}
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="enderecoAdicional" [class.selecionado]="enderecoAdicional == enderecoSelecionado" (click)="onSelectEndereco(enderecoAdicional)" >
+    <ion-card-content>
+      {{enderecoAdicional.descricao}}
+    </ion-card-content>
+  </ion-card>
 </ion-content>
+<ion-footer class="footer">
+  <ion-grid>
+    <ion-row align-items-center>
+      <ion-col col-7>
+        <span class="total_compra">Total da compra: R${{carrinho.valor}},00</span>
+      </ion-col>
+      <ion-col col-5>
+        <button  ion-button primary block outline (click)="fecharPedido()">Fechar pedido</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+</ion-footer>

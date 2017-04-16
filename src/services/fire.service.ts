@@ -385,7 +385,14 @@ export class FireService {
                 imagem: user.photoURL,
                 email: user.email 
             }
-        return firebase.database().ref('usuarios_app/'+user.uid).set(obj_user)
+        return firebase.database().ref('usuarios_app/'+user.uid).once('value')
+                    .then(snap => {
+                        if(snap.val())
+                            return Promise.resolve(snap.val());
+                        else{
+                            return firebase.database().ref('usuarios_app/'+user.uid).set(obj_user);
+                        }
+                    })
     }
 
     checkAuth(): boolean{
@@ -429,8 +436,11 @@ export class FireService {
 
     salvarEndereco(endereco: any): firebase.Promise<any>{
         return this.af.database.list(`usuarios_app/${this.uid}/enderecos`).push(endereco);
-
     }
+    excluirEndereco(endereco):firebase.Promise<any>{
+        return this.af.database.list(`usuarios_app/${this.uid}/enderecos/${endereco.$key}`).remove();
+    }
+
     getMensagem(estabelecimentoKey):Observable<any>{
         return this.af.database.list(`chat/${estabelecimentoKey}/${this.uid}`);
     }

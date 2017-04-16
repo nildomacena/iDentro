@@ -30,13 +30,16 @@
     </ion-item>
   </ion-list>
   <ion-label stacked style="margin-left: 5px" >Endereços</ion-label>
-  <ion-card *ngFor="let endereco of enderecos" (click)="onSelectEndereco()" >
+  <ion-card *ngFor="let endereco of enderecos">
+    <ion-card-header>
+      <button ion-button clear small class="excluir-endereco" (click)="excluirEndereco(endereco)" >x</button>
+    </ion-card-header>
     <ion-card-content>
       {{endereco.descricao}}
     </ion-card-content>
   </ion-card>
 
-  <button ion-button icon-left small outline class="adicionar_endereco" (click)="addEndereco()" >
+  <button ion-button icon-left small outline class="adicionar_endereco" *ngIf="enderecos.length < 3" (click)="addEndereco()" >
     <ion-icon name="add"></ion-icon>
     Adicionar endereço
   </button>

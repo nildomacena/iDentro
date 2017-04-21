@@ -62,7 +62,6 @@ export class MapaPage {
     }
     geocoder.geocode(geocoderRequest, result => {
       this.latLngMaceio = result[0].geometry.location;
-      this.setMapJavascript(this.latLngMaceio);
       let radius: number = 1000;
       /*
       let targetNorthEast:google.maps.LatLng = google.maps.geometry.spherical.computeOffset(this.latLngMaceio, radius * Math.sqrt(2), 45);

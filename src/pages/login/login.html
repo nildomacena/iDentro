@@ -29,7 +29,7 @@
 
     </ion-list>
 
-    <p ion-text text-right color="light">Esqueceu a senha?</p>
+    <p ion-text text-right color="light" (click)="recuperarSenha()" >Esqueceu a senha?</p>
 
     <div>
       <button ion-button block color="primary" (click)="login()">
@@ -41,9 +41,11 @@
       <button ion-button block color="fb-color" (click)="loginWithFacebook()">
         Entrar com Facebook
       </button>
+      <!--
       <button ion-button block color="tw-color" (click)="loginWithGoogle()">
         Entrar com Google
       </button>
+      -->
     </div>
 
 

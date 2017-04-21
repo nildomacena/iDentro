@@ -1,7 +1,9 @@
+import { Marker, LatLng } from '@ionic-native/google-maps';
+import { AlertController } from 'ionic-angular';
 import { Facebook } from '@ionic-native/facebook';
 import { lanches, estabelecimentos, lanches_por_estabelecimento } from './dados';
 import { Injectable } from '@angular/core';
-import { AngularFire, FirebaseListObservable } from 'angularfire2';
+import { AngularFire, FirebaseListObservable, AuthMethods, AuthProviders, FirebaseAuthState } from 'angularfire2';
 import { AngularFireOffline, ListObservable, ObjectObservable } from 'angularfire2-offline';
 import { Observable } from 'rxjs';
 import * as firebase from 'firebase';
@@ -12,13 +14,16 @@ import 'rxjs/add/operator/toPromise';
 export class FireService {
     uid = 'uid';
     cart: any = {};
+    public auth$ = this.af.auth;
     public auth = firebase.auth();
     public user = this.auth.currentUser;
+    public marcador:google.maps.LatLng;
 
     constructor(
         private afo: AngularFireOffline,
         private af: AngularFire,
-        private facebook: Facebook
+        private facebook: Facebook,
+        public alertCtrl: AlertController
     ) {
          firebase.auth().onAuthStateChanged(user => {
             if(user){
@@ -46,7 +51,6 @@ export class FireService {
     }
 
     getLanchesPorCategoria(categoria: any){
-        console.log(categoria);
         return this.af.database.list('lanches', {query: {
             orderByChild: 'categoria_key',
             equalTo: categoria.$key      
@@ -60,6 +64,13 @@ export class FireService {
     getLancheByKey(key_lanche: string){
         console.log('key_lanche: ', key_lanche)
         return this.af.database.object('lanches/'+key_lanche);
+    }
+    getLanchePorEstabelecimentoByLancheKey(key_lanche:string, key_estabelecimento:string){
+        return firebase.database().ref(`lanches_por_estabelecimento/${key_estabelecimento}/${key_lanche}`).once('value')
+            .then(snap => {
+                console.log(snap.val());
+                return Promise.resolve(snap.val());
+            })
     }
 
     getItensByAba(key_estabelecimento: string, aba: string){
@@ -302,6 +313,7 @@ export class FireService {
 
     addToFavorito(estabelecimento:any, jaFavorito:boolean):firebase.Promise<any>{
         let user = firebase.auth().currentUser;
+        console.log(estabelecimento);
         if(user){
             if(jaFavorito){
                 return firebase.database().ref('usuarios_favoritos/'+this.uid+'/favoritos/'+estabelecimento.$key).remove()
@@ -314,8 +326,8 @@ export class FireService {
                     nome: estabelecimento.nome,
                     key: estabelecimento.$key,
                     imagemCapa: estabelecimento.imagemCapa,
-                    telefone: estabelecimento.telefone,
-                    celular: estabelecimento.celular
+                    telefone1: estabelecimento.telefone1,
+                    telefone2: estabelecimento.telefone2
                 }).then(_ => {
                     return firebase.database().ref('estabelecimentos_favoritos/'+estabelecimento.$key+'/'+this.uid).set({
                         nome: user.displayName,
@@ -348,7 +360,18 @@ export class FireService {
         return this.af.database.list('usuarios_favoritos/'+this.uid+'/favoritos');
     }
 
-    loginWithFacebook(): Promise<any>{
+    loginWithEmailAndPassword(email:string, password:string, credentialFacebook?: firebase.auth.AuthCredential): firebase.Promise<any>{
+        if(!credentialFacebook){
+            return firebase.auth().signInWithEmailAndPassword(email,password);
+        }
+        else{
+            return firebase.auth().signInWithEmailAndPassword(email,password)
+                .then(_ => {
+                    return this.linkPasswordWithFacebook(credentialFacebook);
+                })
+        }
+    }
+    loginWithFacebookNative(): Promise<any>{
         let promise: Promise<any>;
         promise = new Promise((resolve, reject) => {
             this.facebook.login(['user_friends', 'public_profile', 'email'])
@@ -377,20 +400,50 @@ export class FireService {
         return promise;
     }
 
+    loginWithFacebookWeb(): firebase.Promise<any>{
+        console.log('Login with facebook');
+        return this.auth$.login({
+                provider: AuthProviders.Facebook,
+                method: AuthMethods.Popup
+                })
+                .then(userFacebook => {
+                    this.saveUserInfoCurrent();
+                    return Promise.resolve(userFacebook);
+                })
+                .catch(err => {
+                    console.log(err);
+                    if(err['code'] == "auth/email-already-in-use" || err['code'] == "auth/account-exists-with-different-credential")
+                        return Promise.resolve(err);
+                })
+                
+    }
+
     saveUserInfoCurrent():firebase.Promise<any>{
+        console.log('saveuser info');
         let user = this.auth.currentUser;
+        try {
+            user.updateProfile({
+                displayName: user.providerData[0].displayName,
+                photoURL: user.providerData[0].photoURL
+            })
+        } 
+        
+        catch (err) {
+            console.error(err);
+        }
         let obj_user = {
                 uid: user.uid,
                 nome: user.displayName,
                 imagem: user.photoURL,
                 email: user.email 
             }
+            console.log('user: ', user);
         return firebase.database().ref('usuarios_app/'+user.uid).once('value')
                     .then(snap => {
                         if(snap.val())
                             return Promise.resolve(snap.val());
                         else{
-                            return firebase.database().ref('usuarios_app/'+user.uid).set(obj_user);
+                            return firebase.database().ref('usuarios_app/'+user.uid).update(obj_user);
                         }
                     })
     }
@@ -405,10 +458,86 @@ export class FireService {
             console.log('retorna false');
             return false;
     }
+    registerUser(email: string, password: string){
 
+        firebase.auth().createUserWithEmailAndPassword(email,password)
+            .then(result_create => {
+                console.log('result create user: ', result_create);
+            })
+            .catch(err => {
+                console.error(err);
+                firebase.auth().fetchProvidersForEmail(email)
+                    .then(result_fetch => {
+                        console.log('Result fetch: ', result_fetch)
+                        if(result_fetch[0] == 'facebook.com'){
+                            let credential = firebase.auth.EmailAuthProvider.credential(email, password);
+                            console.log('credential: ',credential);
+                            let alert = this.alertCtrl.create({
+                                title: 'Erro',
+                                subTitle: 'Você já tem um usuário cadastrado com o Facebook, pressione ok para juntar as duas contas',
+                                buttons: [ 
+                                    {
+                                        text:'Cancelar',
+                                        role: 'cancel'
+                                    },
+                                    {
+                                        text: 'Ok',
+                                        handler: () => {
+                                            this.loginWithFacebookWeb()
+                                                .then(_ => {
+                                                    this.linkFacebookWithPassword(credential);
+                                                })
+                                        }
+                                    }
+                                ]
+                            })
+                            alert.present();
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    })
+            })
+            /*
+        this.af.auth.createUser({email: email, password: password})
+            .then(result => {
+                console.log('result create user: ', result);
+            })
+            .catch(err => {
+                console.error(err);
+            }) */
+        
+    }
+
+    linkFacebookWithPassword(credentialPassword: firebase.auth.AuthCredential){ //essa Função linka um login com email e senha com um usuário já criado com facebook
+        let credentialFacebook = firebase.auth.FacebookAuthProvider.credential
+        firebase.auth().currentUser.link(credentialPassword)
+            .then(result_link => {
+                this.saveUserInfoCurrent();
+                console.log('result link: ',result_link);
+            })
+            .catch(err => {
+                console.error(err);
+            })
+    }
+
+    recuperarSenha(email: string): firebase.Promise<any>{
+        return firebase.auth().sendPasswordResetEmail(email);
+    }
+
+    linkPasswordWithFacebook(credentialFacebook: firebase.auth.AuthCredential){
+        firebase.auth().currentUser.link(credentialFacebook)
+            .then(result_link => {
+                console.log('result link: ',result_link);
+                this.saveUserInfoCurrent();
+            })
+            .catch(err => {
+                console.error(err);
+            })
+    }
     enviarMensagem(texto: string, estabelecimentoKey: string): firebase.Promise<any> {
         let date = new Date().getTime();
-        return this.af.database.list(`chat/ ${estabelecimentoKey}/${this.uid}`).push({
+        return this.af.database.list(`chat/${estabelecimentoKey}/${this.uid}`).push({
                 texto: texto,
                 timestamp: date
             })

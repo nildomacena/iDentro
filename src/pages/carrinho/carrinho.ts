@@ -95,6 +95,6 @@ export class CarrinhoPage {
   }
 
   backButtonAction(){
-    this.navCtrl.setRoot(HomePage);
+    this.navCtrl.setRoot('HomePage');
   }
 }

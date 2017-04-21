@@ -2,9 +2,9 @@ import { CallNumber } from '@ionic-native/call-number';
 import { EstabelecimentoPage } from './../estabelecimento/estabelecimento';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, ToastController, AlertController } from 'ionic-angular';
+import { NavController, NavParams, ToastController, AlertController, IonicPage, Toast } from 'ionic-angular';
 
-
+@IonicPage()
 @Component({
   selector: 'page-lanche-detail',
   templateUrl: 'lanche-detail.html'
@@ -12,8 +12,9 @@ import { NavController, NavParams, ToastController, AlertController } from 'ioni
 export class LancheDetailPage {
   lanche: any;
   justAddedToCart: boolean = false;
-  estabelecimento: any;
+  estabelecimento: any = null;
   pesquisa: boolean; //Variável testa se a página anterior foi a página de pesquisa
+  toast: Toast;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -25,6 +26,12 @@ export class LancheDetailPage {
       let key_lanche = this.navParams.get('lanche').$key;
       this.pesquisa = this.navParams.get('pesquisa');
       this.estabelecimento = this.navParams.get('estabelecimento');
+      console.log('this.estabelecimento = this.navParams.get(estabelecimento);', this.estabelecimento);
+      this.toast = this.toastCtrl.create({
+        message: 'Item adicionado ao carrinho',
+        duration: 2000,
+        closeButtonText: 'X'
+      });
       this.fireService.getLancheByKey(key_lanche)
         .subscribe(lanche => {
           this.lanche = lanche;
@@ -32,9 +39,10 @@ export class LancheDetailPage {
         })
 
         if(!this.estabelecimento){
-          this.fireService.getEstabelecimentoByKey(this.lanche.key_estabelecimento)
+          this.fireService.getEstabelecimentoByKey(this.lanche.estabelecimento_key)
             .subscribe(estabelecimento => {
               this.estabelecimento = estabelecimento;
+              console.log('estabelecimento: ',this.estabelecimento);
             })
         }
       
@@ -48,10 +56,65 @@ export class LancheDetailPage {
     this.navCtrl.pop();
   }
   goToEstabelecimento(){
-    this.navCtrl.push(EstabelecimentoPage, {estabelecimento: this.estabelecimento});
+    if(this.pesquisa)
+      this.navCtrl.push('EstabelecimentoPage', {estabelecimento: this.estabelecimento});
+    else{
+      this.navCtrl.pop();
+    }
+  }
+  addToCart(){
+    let item: any;
+      this.fireService.getLanchePorEstabelecimentoByLancheKey(this.lanche.$key, this.estabelecimento.$key)
+        .then(lanche_por_estabelecimento => {
+          item = lanche_por_estabelecimento;
+          console.log(item);
+          try{
+            let result = this.fireService.addToCart(item, this.estabelecimento);
+            if(result != true){
+              let alert = this.alertCtrl.create({
+                title: 'Erro',
+                subTitle: 'Você possui itens de outro estabelecimento adicionados no carrinho. Deseja limpar o carrinho?',
+                buttons: [
+                  {
+                    text: 'Cancelar',
+                    role: 'cancel'
+                  },
+                  {
+                    text: 'Ok',
+                    handler: () => {
+                      this.fireService.limpaCarrinho()
+                    }
+                  }
+                ]
+              })
+              alert.present();  
+            }
+            else{
+              this.toast.present();
+            }
+        }  
+        catch (err) {
+          // Import the AlertController from ionic package 
+          // Consume it in the constructor as 'alertCtrl' 
+          let alert = this.alertCtrl.create({
+            title: 'Erro',
+            message: 'Ocorreu um erro ao adicionar o item ao carrinho. Tente adicionar na tela anterior',
+            buttons: [
+              {
+                text: 'Ok',
+                handler: () => {
+                  this.navCtrl.pop();
+                }
+              }
+            ]
+          });
+          alert.present();
+          console.log(err);
+        }
+      })
   }
 
-  addToCart(){
+  addToCartantigo(){
     this.justAddedToCart = true;
     this.fireService.addToCart(this.lanche, this.estabelecimento);
     let toast = this.toastCtrl.create({

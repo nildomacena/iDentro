@@ -42,8 +42,6 @@ export class CategoriaPage {
   }
 
   irParaIngredientes(){
-    console.log(this.app.getRootNav())
-    console.log(this.app.getActiveNav());
     this.app.getRootNav().push(MontagemPage, {categoria: this.categoriaSelecionada})
   }
 }

@@ -3,7 +3,8 @@
     <div text-center padding-top padding-bottom class="primary-bg menu-left">
       <a menuClose>
         <div>
-          <img *ngIf="user" class="profile-picture" [src]="user.photoURL" (click)="goToPerfil()" />
+          <img class="profile-picture" *ngIf="user?.photoURL" alt="imagemCapa" [src]="user?.photoURL" (click)="goToPerfil()" />
+          <img class="profile-picture" *ngIf="!user?.photoURL" alt="imagemCapa" src="assets/img/no-photo.jpg" (click)="goToPerfil()" />
           <h4 light (click)="goToPerfil()" >{{user? user.displayName: 'Bolts'}}</h4>
           <hr>
           <ion-list class="list-full-border">
@@ -23,7 +24,7 @@
             <button class="item-menu" ion-item menuClose clear (click)="goToCarrinho()" >
               <ion-icon item-left name="checkmark"></ion-icon>Pedidos realizados
             </button>
-            -->
+            
             <ion-grid *ngIf="!logado">
               <ion-row>
                 <ion-col>
@@ -34,7 +35,11 @@
                 <ion-icon item-left name="cart"></ion-icon>Carrinho
               </button>
             </ion-grid>
+            -->
             <div *ngIf="logado">
+              <button class="item-menu" ion-item menuClose clear (click)="goToHome()" >
+                <ion-icon item-left name="home"></ion-icon>Home
+              </button>
               <button class="item-menu" ion-item menuClose clear (click)="goToFavoritos()" >
                 <ion-icon item-left name="heart"></ion-icon>Favoritos
               </button>

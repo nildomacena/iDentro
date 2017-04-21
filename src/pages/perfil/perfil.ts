@@ -3,7 +3,7 @@ import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, AlertController } from 'ionic-angular';
 
-
+@IonicPage()
 @Component({
   selector: 'page-perfil',
   templateUrl: 'perfil.html',
@@ -60,6 +60,9 @@ export class PerfilPage {
   onSelectEndereco(){
     console.log('Select endereco');
   }
+  backButtonAction(){
+    this.navCtrl.setRoot('HomePage');
+  }
 
   addEndereco(){
     if(this.enderecos.length >= 3){
@@ -74,8 +77,10 @@ export class PerfilPage {
       alert.present();
     }
     else{
-      let modal = this.modalCtrl.create(LocalizacaoPage);
+      this.navCtrl.push('LocalizacaoPage');
+      /*let modal = this.modalCtrl.create(LocalizacaoPage);
       modal.present();
+    }*/
     }
   }
 }

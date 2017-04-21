@@ -6,10 +6,10 @@ import { Tab1Page } from './../tab1/tab1';
 import { CardapioPage } from './../cardapio/cardapio';
 import { BebidasPage } from './../bebidas/bebidas';
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, Platform, ViewController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, Platform, ViewController, IonicPage } from 'ionic-angular';
 
 
-
+@IonicPage()
 @Component({
   selector: 'page-estabelecimento',
   templateUrl: 'estabelecimento.html'
@@ -40,6 +40,7 @@ export class EstabelecimentoPage {
       abas_key: []
     }
     this.estabelecimento = this.navParams.get('estabelecimento');
+    console.log(this.estabelecimento);
     this.tabParams.estabelecimento = this.estabelecimento;
 
     this.abas = this.estabelecimento.abas;

@@ -40,7 +40,7 @@ export class Tab2Page {
   }
 
   goToItem(item){
-    this.app.getRootNav().push(LancheDetailPage, {lanche: item, estabelecimento: this.estabelecimento});
+    this.app.getRootNav().push('LancheDetailPage', {lanche: item, estabelecimento: this.estabelecimento});
   }
   
   goToChat(){

@@ -9,7 +9,7 @@ import { NavController, NavParams, AlertController } from 'ionic-angular';
   templateUrl: 'favoritos.html'
 })
 export class FavoritosPage {
-  favoritos: any[]
+  favoritos: any[] = [];
   vazio:boolean = false;
   isLoading: boolean = true;
   constructor(
@@ -107,4 +107,7 @@ export class FavoritosPage {
         });
         alert.present();
       }
+  backButtonAction(){
+    this.navCtrl.setRoot('HomePage');
+  }
 }

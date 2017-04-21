@@ -1,26 +1,20 @@
 <ion-header>
 
-  <ion-toolbar>
+  <ion-navbar>
     <ion-title>
       Localização
     </ion-title>
-    <ion-buttons start>
-      <button ion-button (click)="dismiss()">
-        <span ion-text color="primary" showWhen="ios">Cancel</span>
-        <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
-      </button>
-    </ion-buttons>
-  </ion-toolbar>
+    
+  </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
-  <ion-list>
+  <ion-list *ngIf="!localizado">
     <ion-item>
       <ion-label floating>Digite e selecione o endereço</ion-label>
       <ion-input type="text" [(ngModel)]="endereco" (focus)="showAddressModal()" ></ion-input>
     </ion-item>
-
     <ion-item>
       <ion-label floating>Número</ion-label>
       <ion-input type="text" [(ngModel)]="numero" clearInput="true" ></ion-input>
@@ -30,32 +24,39 @@
       <ion-label floating>Ponto de referência</ion-label>
       <ion-textarea [(ngModel)]="referencia"></ion-textarea>
     </ion-item>
-
+  </ion-list>
+  <button ion-button block [disabled]="!fullAddress.descricao" (click)="salvarEndereco()" *ngIf="!localizado">Salvar Endereço</button>
+  
+  <ion-list *ngIf="!localizado">
     <ion-item>
-      <button ion-button block [disabled]="!fullAddress.descricao" (click)="salvarEndereco()" >Salvar Endereço</button>
+      <ion-label floating>Digite e selecione o cep</ion-label>
+      <ion-input type="text" [(ngModel)]="cep" ></ion-input>
     </ion-item>
   </ion-list>
-  <!--
-  <ion-list>
-    <ion-item>
-      <ion-label floating>Nome do bairro</ion-label>
-      <ion-input disabled type="text" #inputBairro [(ngModel)]="bairro" clearInput="true" ></ion-input>
-    </ion-item>
+  <button ion-button block (click)="buscarPeloCep()" *ngIf="!localizado">Buscar pelo CEP</button>
 
-    <ion-item *ngIf="bairro == ''">
-      <button ion-button block [disabled]="loadingBairros" (click)="selectBairro()" >Selecionar Bairro</button>
-    </ion-item>
-
+  <ion-list *ngIf="localizado">
     <ion-item>
       <ion-label floating>Endereço</ion-label>
-      <ion-textarea [(ngModel)]="endereco" ></ion-textarea>
+      <ion-textarea disabled [(ngModel)]="this.fullAddress.logradouro" ></ion-textarea>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label floating>Número e complemento</ion-label>
+      <ion-input required type="text" #inputBairro [(ngModel)]="this.fullAddress.numero" ></ion-input>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label floating>Nome do bairro</ion-label>
+      <ion-input disabled type="text" #inputBairro [(ngModel)]="this.fullAddress.bairro" ></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label floating>Ponto de referência</ion-label>
-      <ion-input type="text" #inputBairro [(ngModel)]="pontoRef" ></ion-input>
+      <ion-textarea required [(ngModel)]="this.fullAddress.referencia" ></ion-textarea>
     </ion-item>
   </ion-list>
-  <button ion-button block (click)="onSubmitEndereco()" >Salvar</button>
-  -->
+  
+  <button ion-button block [disabled]="this.fullAddress.numero == '' || this.fullAddress.referencia == ''" (click)="onSubmitEndereco()" >Salvar</button>
+
 </ion-content>

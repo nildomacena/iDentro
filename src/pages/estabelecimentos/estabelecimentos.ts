@@ -3,15 +3,16 @@ import { ConfiguracoesPage } from './../configuracoes/configuracoes';
 import { EstabelecimentoPage } from './../estabelecimento/estabelecimento';
 import { FireService } from './../../services/fire.service';
 import { Component, ViewChildren, ChangeDetectorRef, ViewChild, QueryList, ElementRef, Renderer } from '@angular/core';
-import { NavController, NavParams, App, Searchbar, Content, Navbar, Header, Toolbar, AlertController, ToastController, Platform, ViewController, ModalController } from 'ionic-angular';
+import { NavController, NavParams, App, Searchbar, Content, Navbar, Header, Toolbar, AlertController, ToastController, Platform, ViewController, ModalController, IonicPage } from 'ionic-angular';
 import { CallNumber } from '@ionic-native/call-number';
 
+//@IonicPage()
 @Component({
   selector: 'page-estabelecimentos',
   templateUrl: 'estabelecimentos.html'
 })
 export class EstabelecimentosPage {
-  estabelecimentos: any[];
+  estabelecimentos: any[] =[];
   filteredEstabelecimentos: any[];
   showToolbar:boolean = false;
   isSearch: boolean = false;
@@ -44,7 +45,7 @@ export class EstabelecimentosPage {
     public elementRef: ElementRef,
     public renderer: Renderer,
     public modalCtrl: ModalController,
-    public callnumber: CallNumber
+    public callnumber: CallNumber,
     ) {
       this.searchHeight = 56;
   }
@@ -57,6 +58,7 @@ export class EstabelecimentosPage {
       this.resizeHeader(ev);
     })
     */
+
     this.fireService.getEstabelecimentos()
       .subscribe(estabelecimentos => {
         this.isLoading = false;
@@ -68,7 +70,9 @@ export class EstabelecimentosPage {
         })
   }
 
+  
   backButtonAction(){
+    console.log(this.viewCtrl);
     if(this.isSearch){
       this.toggleSearchbar();
     }
@@ -110,7 +114,7 @@ export class EstabelecimentosPage {
   }
 
   onSelectEstabelecimento(estabelecimento){
-    this.app.getRootNav().push(EstabelecimentoPage,{'estabelecimento': estabelecimento});
+    this.app.getRootNav().push('EstabelecimentoPage',{'estabelecimento': estabelecimento});
   }
 
   toggleSearchbar(){

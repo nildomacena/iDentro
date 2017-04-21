@@ -41,7 +41,7 @@ export class Tab3Page {
 
   goToItem(item){
     console.log(item);
-    this.app.getRootNav().push(LancheDetailPage, {lanche: item, estabelecimento: this.estabelecimento});
+    this.app.getRootNav().push('LancheDetailPage', {lanche: item, estabelecimento: this.estabelecimento});
 
   }
   goToChat(){

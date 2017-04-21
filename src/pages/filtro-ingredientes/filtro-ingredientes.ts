@@ -21,6 +21,7 @@ export class FiltroIngredientesPage {
     ) {
     this.ingredientes = this.navParams.get('ingredientes');
     this.categoria = this.navParams.get('categoria');
+    console.log(this.ingredientes, this.categoria);
   }
 
   ionViewDidLoad() {
@@ -48,7 +49,23 @@ export class FiltroIngredientesPage {
     console.log('ingredientes truncados: ', ingredientes_truncados);
     lanches.map(lanche => {
       if(lanche.ingredientes){
-        console.log(lanche.ingredientes);
+        console.log('lanche: ', lanche);
+        let ingredientes = lanche.ingredientes;
+        console.log('let ingredientes: ', ingredientes);
+        Object.keys(lanche.ingredientes).map((key, index) => {
+          let repetido = false;
+          if(ingredientes_truncados.toUpperCase().includes(ingredientes[key].nome.toUpperCase())){
+            aux_filtro.map(aux => {
+              if(lanche == aux)
+                repetido = true;
+            })
+            if(!repetido){
+              aux_filtro.push(lanche);
+            }
+          }
+        })
+
+        /*
         lanche.ingredientes.map(ingrediente => {
           console.log(ingrediente);
           let repetido = false;
@@ -61,7 +78,7 @@ export class FiltroIngredientesPage {
               aux_filtro.push(lanche);
             }
           }
-        });
+        });*/
       }
     })
     console.log(aux_filtro);
@@ -118,9 +135,9 @@ export class FiltroIngredientesPage {
 
   goToLanche(lanche){
     console.log(lanche);
-    this.app.getRootNav().push(LancheDetailPage,{
+    this.app.getRootNav().push('LancheDetailPage',{
       'lanche': lanche, 
-      'pesquisa': true
+      'pesquisa': true,
     });
   }
 }

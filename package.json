@@ -27,6 +27,7 @@
     "@ionic-native/google-maps": "^3.4.4",
     "@ionic-native/header-color": "^3.2.4",
     "@ionic-native/keyboard": "^3.4.4",
+    "@ionic-native/location-accuracy": "^3.4.4",
     "@ionic-native/native-geocoder": "^3.4.4",
     "@ionic-native/splash-screen": "^3.4.4",
     "@ionic-native/status-bar": "^3.4.4",

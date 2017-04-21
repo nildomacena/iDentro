@@ -1,0 +1,23 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Login</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <h5>Você já tem um usuário cadastrado com esse email. Insira email e senha abaixo para linkar com a conta do Facebook</h5>
+  <ion-list>
+    <ion-item>
+      <ion-label floating >Email</ion-label>
+      <ion-input [(ngModel)]="email"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating >Senha</ion-label>
+      <ion-input [(ngModel)]="password"></ion-input>
+    </ion-item>
+  </ion-list>
+  <button color="primary" ion-button (click)="login()" block >Entrar</button>
+</ion-content>

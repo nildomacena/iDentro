@@ -25,7 +25,6 @@ export class AutocompletePage {
   }
 
   ionViewDidLoad() {
-    console.log('Maceió inclui maceio ?', 'Maceió'.toUpperCase().includes('maceio'.toUpperCase()));
     this.searchbar.setFocus();
   }
 
@@ -46,7 +45,7 @@ export class AutocompletePage {
     }
     let me = this
     let resquest: google.maps.places.AutocompletionRequest = { 
-      input: me.autocomplete,
+      input: me.autocomplete + 'Maceió Alagoas',
       componentRestrictions: {
         country: 'BR',
         

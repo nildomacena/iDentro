@@ -37,5 +37,7 @@ export class ContatoPage {
         toast.present();
       });
   }
-
+  backButtonAction(){
+    this.navCtrl.setRoot('HomePage');
+  }
 }

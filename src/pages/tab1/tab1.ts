@@ -77,7 +77,7 @@ export class Tab1Page {
   }
 
   goToItem(item){
-    this.app.getRootNav().push(LancheDetailPage, {lanche: item, estabelecimento: this.estabelecimento});
+    this.app.getRootNav().push('LancheDetailPage', {lanche: item, estabelecimento: this.estabelecimento});
 
   }
   goToChat(){

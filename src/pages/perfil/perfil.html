@@ -1,6 +1,9 @@
 <ion-header>
 
   <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
     <ion-title>Perfil</ion-title>
   </ion-navbar>
 
@@ -13,12 +16,12 @@
       <ion-row align-items-center>
         <ion-col col-4 offset-1>
           <ion-avatar>
-            <img [src]="user.photoURL? user.photoURL: 'https://scontent.xx.fbcdn.net/v/t1.0-1/p100x100/14502868_1084987124918577_7470163265578933225_n.jpg?oh=c5dd61932e90d52527a66e4c6b5f7f90&oe=59348019'">
+            <img [src]="user.photoURL? user.photoURL: 'assets/img/no-photo.jpg'">
           </ion-avatar>
         </ion-col>
 
         <ion-col>
-          <span class="titulo">{{user.displayName? user.displayName: 'Nildo Macena'}}</span>
+          <span class="titulo">{{user.displayName? user.displayName: 'Cadastre seu nome'}}</span>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -26,10 +29,10 @@
   <ion-list>
     <ion-item>
       <ion-label floating>Nome</ion-label>
-      <ion-input placeholder="nome" [(ngModel)]="nome" ></ion-input>
+      <ion-input [(ngModel)]="nome" ></ion-input>
     </ion-item>
   </ion-list>
-  <ion-label stacked style="margin-left: 5px" >Endereços</ion-label>
+  <ion-label stacked style="margin-left: 5px" >{{enderecos.length > 0? 'Endereços':'Nenhum endereço cadastrado'}}</ion-label>
   <ion-card *ngFor="let endereco of enderecos">
     <ion-card-header>
       <button ion-button clear small class="excluir-endereco" (click)="excluirEndereco(endereco)" >x</button>

@@ -37,8 +37,11 @@
     <ion-fab left bottom >
       <button [disabled]="justAddedToCart" ion-fab color="primary" (click)="call()"><ion-icon name="call"></ion-icon></button>
     </ion-fab>
+    <ion-fab right bottom *ngIf="!pesquisa" >
+      <button [disabled]="justAddedToCart" ion-fab color="primary" (click)="addToCart()"><ion-icon name="cart"></ion-icon></button>
+    </ion-fab>
     <ion-fab right bottom *ngIf="pesquisa" >
-      <button [disabled]="justAddedToCart" ion-fab color="primary" (click)="goToEstabelecimento()"><ion-icon name="open"></ion-icon></button>
+      <button [disabled]="justAddedToCart || !estabelecimento" ion-fab color="primary" (click)="goToEstabelecimento()"><ion-icon name="open"></ion-icon></button>
     </ion-fab>
   </div>
 </ion-content>

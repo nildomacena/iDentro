@@ -1,9 +1,12 @@
+import { FireService } from './../../services/fire.service';
+import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
-import { GoogleMaps, LatLng, GoogleMap, GoogleMapsEvent, CameraPosition } from '@ionic-native/google-maps';
-import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, Alert } from 'ionic-angular';
+import { GoogleMaps, LatLng, GoogleMap, GoogleMapsEvent, CameraPosition, MarkerOptions, Marker, GeocoderRequest } from '@ionic-native/google-maps';
+import { Component, ViewChild, ViewChildren } from '@angular/core';
+import { NavController, NavParams, AlertController, Alert, ViewController, TextInput, Platform, IonicPage, LoadingController } from 'ionic-angular';
 
+@IonicPage()
 @Component({
   selector: 'page-mapa',
   templateUrl: 'mapa.html'
@@ -11,42 +14,87 @@ import { NavController, NavParams, AlertController, Alert } from 'ionic-angular'
 export class MapaPage {
   alertGPS: Alert;
   GPSHabilitado: boolean = false;
+  coords: any;
+  loading: any;
+  marcadorAdicionado: boolean = false;
+  marcador: LatLng;
+  markers: google.maps.Marker[] = [];
+  map: google.maps.Map;
+  autocompleteSearchbox: HTMLInputElement;
+  autocomplete: google.maps.places.Autocomplete;
+  latLngMaceio: google.maps.LatLng; // latitude e longitude de maceió pra delimitar uma área menor de buscar no autocomplete
+  @ViewChild('search') autocompleteInput: TextInput;
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
     public googleMaps: GoogleMaps,
     public diagnostic: Diagnostic,
     public alertCtrl: AlertController,
-    public geolocation: Geolocation
+    public geolocation: Geolocation,
+    public viewCtrl: ViewController,
+    public loadingCtrl: LoadingController,
+    public locationAccuracy: LocationAccuracy,
+    public platform: Platform,
+    public fireService: FireService
     ) {
-      this.alertGPS = this.alertCtrl.create({
-        title: 'Localização desativada',
-        subTitle: 'O seu sinal de GPS está desabilitado. Aperte Ok para habilitar o sinal',
-        buttons: [
-          {
-            text: 'Ok',
-            handler: () => {
-              this.diagnostic.switchToLocationSettings();
-              console.log('saiu da tela');
-            },
-          },
-          {
-            text: 'Cancelar',
-            role: 'cancel',
-            handler: () => {
-              this.GPSHabilitado = false;
-            }
-          }
-        ]
+      this.coords = this.navParams.get('position');
+      this.fireService.marcador = null;
+      this.loading = this.loadingCtrl.create({
+        content: 'Carregando localização'
       });
-      this.alertGPS.dismiss()
-        .then(() => this.getCurrentPosition());
+
     }
 
   ionViewDidLoad() {
-    console.log(this.diagnostic.locationMode.LOCATION_OFF);
-    this.getCurrentPosition();
+    this.autocompleteSearchbox = <HTMLInputElement>document.getElementById('search');
+    let autocompleteOptions: google.maps.places.AutocompleteOptions = {
+      types: ['address'],
+      componentRestrictions: {
+        country: 'BR'
+      },
+    }
+    let geocoder = new google.maps.Geocoder();
+    let geocoderRequest: google.maps.GeocoderRequest = {
+      address: 'maceió',
+      componentRestrictions: {
+        administrativeArea: 'maceió alagoas',
+
+      }
+    }
+    geocoder.geocode(geocoderRequest, result => {
+      this.latLngMaceio = result[0].geometry.location;
+      this.setMapJavascript(this.latLngMaceio);
+      let radius: number = 1000;
+      /*
+      let targetNorthEast:google.maps.LatLng = google.maps.geometry.spherical.computeOffset(this.latLngMaceio, radius * Math.sqrt(2), 45);
+      let targetSouthWest:google.maps.LatLng = google.maps.geometry.spherical.computeOffset(this.latLngMaceio, radius * Math.sqrt(2), 225);
+      */    
+      let targetNorthEast = new google.maps.LatLng(-9.714525,-35.797325);
+      let targetSouthWest = new google.maps.LatLng(-9.429315,-35.782216);
+      let lngLatBounds = new google.maps.LatLngBounds(targetSouthWest,targetNorthEast);
+      console.log('Nordeste: ', targetNorthEast.toString());
+      console.log('Sudoeste: ', targetSouthWest.toString())
+      this.autocomplete.setBounds(lngLatBounds);
+    })
+    this.autocomplete = new google.maps.places.Autocomplete(this.autocompleteSearchbox, autocompleteOptions);
+    this.autocomplete.addListener('place_changed', () => {
+      let latLng = this.autocomplete.getPlace().geometry.location;
+      this.setMapJavascript(latLng);
+      this.addMarkerJavascript(this.map,latLng);
+    })
+    if(this.coords){
+      this.setMap(new LatLng(this.coords.latitude, this.coords.longitude));
+    }
+    else{
+      this.getCurrentPosition();
+    }
   }
 
+  ionViewWillLeave(){
+    this.loading.dismiss();
+  }
+  clearAutocomplete(){
+    this.autocompleteSearchbox.value = '';
+  }
   checkLocation(){
     this.diagnostic.isGpsLocationEnabled()
       .then(result => {
@@ -62,23 +110,77 @@ export class MapaPage {
   } 
 
   getCurrentPosition(){
-    this.diagnostic.isGpsLocationEnabled()  
-      .then(result => {
-        if(!result){
-          this.alertGPS.present();
-        }
-        else{
-          this.geolocation.getCurrentPosition()
-            .then(result => {
-              this.GPSHabilitado = true;
-              let latLng: LatLng = new LatLng(result.coords.latitude, result.coords.longitude);
-              this.setMap(latLng);
-            })
-            .catch(err => {
-              console.log(err);
-            })
+    console.log('getcurrentposition');
+    if(this.platform.is('cordova')){
+      this.locationAccuracy.canRequest()
+        .then(canRequest => {
+        if(canRequest){
+            this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
+              .then(resultRequest => {
+                console.log('resultRequest: ', resultRequest);
+                this.loading.present();
+                this.geolocation.getCurrentPosition({
+                  enableHighAccuracy: false,
+                  maximumAge: 3000
+                })
+                  .then(resultPosition => {
+                    console.log('result Position: ',resultPosition);
+                    this.loading.dismiss();
+                    this.setMapJavascript(new LatLng(resultPosition.coords.latitude, resultPosition.coords.longitude));
+                  })
+                  .catch(errPosition => {
+                    this.loading.dismiss();
+                    console.log('Error Position: ', errPosition);
+                  })
+              })
+              .catch(errRequest => {
+                console.error(errRequest);
+              })
         }
       })
+    }
+    else{
+      this.loading.present();
+      this.geolocation.getCurrentPosition({
+        enableHighAccuracy: false,
+        maximumAge: 3000
+      })
+        .then(result => {
+          this.loading.dismiss();
+          this.setMapJavascript(new LatLng(result.coords.latitude, result.coords.longitude));
+        })
+        .catch(err => {
+          this.loading.dismiss();
+          console.error(err);
+        })
+
+    }
+    /*
+    if(this.platform.is('cordova')){
+      this.diagnostic.isGpsLocationEnabled()  
+        .then(result => {
+          if(!result){
+            this.alertGPS.present();
+          }
+          else{
+            this.geolocation.getCurrentPosition()
+              .then(result => {
+                this.GPSHabilitado = true;
+                let latLng: LatLng = new LatLng(result.coords.latitude, result.coords.longitude);
+                this.setMap(latLng);
+              })
+              .catch(err => {
+                console.log(err);
+              })
+          }
+        })
+    }
+    else{
+      this.geolocation.getCurrentPosition()
+        .then(result => {
+          this.setMap(new LatLng(result.coords.latitude, result.coords.longitude));
+        })
+    }
     
     /*this.diagnostic.isGpsLocationEnabled()
       .then(result => {
@@ -92,14 +194,35 @@ export class MapaPage {
         }
       })*/
   }
+  setMapJavascript(latLng: LatLng|google.maps.LatLng){
+    let element: HTMLElement = document.getElementById('map');
+    let mapOptions: google.maps.MapOptions = {
+      center: latLng,
+      zoom: 18,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      fullscreenControl: false,
+      streetViewControl: false,
+      zoomControl: false,
+      mapTypeControl: false
+    }
+    this.map = new google.maps.Map(element, mapOptions);
+    
+    this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(this.autocompleteSearchbox);
+    
+    
+    this.map.addListener('click', (resultClick) => {
+      let markerLatLng = new google.maps.LatLng(resultClick.latLng.lat(),resultClick.latLng.lng());
+      this.addMarkerJavascript(this.map,markerLatLng)
+    })
+  }
+
   setMap(latLng: LatLng){
     let element: HTMLElement = document.getElementById('map');
     let map: GoogleMap = this.googleMaps.create(element,{
       'controls': {
           'compass': true,
           'myLocationButton': true,
-          'indoorPicker': true,
-          'zoom': true
+          'indoorPicker': false
         },
         'gestures': {
           'scroll': true,
@@ -110,13 +233,14 @@ export class MapaPage {
         'camera': {
           'latLng': latLng,
           'tilt': 30,
-          'zoom': 15,
+          'zoom': 18,
           'bearing': 50
         }
     });
+
     let position = {
       target: latLng,
-      zoom: 13,
+      zoom: 18,
       tilt: 30
     }
     map.one(GoogleMapsEvent.MAP_READY).then(() => {
@@ -126,7 +250,48 @@ export class MapaPage {
           console.log('move camera: ',result);
         })
     });
-
+    map.addEventListener(GoogleMapsEvent.MAP_CLICK)
+      .subscribe(result => {
+        console.log(result);
+        this.addMarker(map, result);
+      })
     console.log(latLng);
+  }
+
+  addMarker(map: GoogleMap,latLng: LatLng){
+    let markerOptions: MarkerOptions = {
+      position: latLng
+    }
+    map.clear();
+    map.addMarker(markerOptions)
+      .then(marker => {
+        this.marcadorAdicionado = true;
+        this.marcador = latLng;
+      })
+  }
+
+  addMarkerJavascript(map: google.maps.Map, latLng: google.maps.LatLng){
+    let markerOptions: google.maps.MarkerOptions = {
+      position: latLng,
+      map: map
+    }
+    if(this.markers[0]){
+      this.markers[0].setMap(null);
+      this.markers = [];
+    }
+    this.markers.push(new google.maps.Marker(markerOptions));
+    this.marcadorAdicionado = true;
+
+    
+  }
+
+  selecionaEndereco(){
+    console.log('marcador: ', this.markers[0].getPosition())
+    this.fireService.marcador = this.markers[0].getPosition();
+    this.dismiss();
+  }
+
+  dismiss(){
+    this.viewCtrl.dismiss({marcador: this.markers[0].getPosition()});
   }
 }

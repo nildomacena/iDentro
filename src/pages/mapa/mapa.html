@@ -1,16 +1,22 @@
-<ion-header>
+<!--<ion-header>
 
   <ion-navbar>
-    <ion-title>Mapa</ion-title>
+    <ion-title>
+      Mapa
+    </ion-title>
   </ion-navbar>
-
 </ion-header>
-
+-->
 
 <ion-content>
+  <ion-fab right bottom *ngIf="map"> 
+    <button [disabled]="!marcadorAdicionado" ion-fab color="primary" (click)="selecionaEndereco()"><ion-icon name="checkmark"></ion-icon></button>
+  </ion-fab>
+
+    <input class="autocomplete" (focus)="clearAutocomplete()" id="search" placeholder="Pesquise seu endereço" [(ngModel)]="Date"/>
   <div id="map" style="height: 100%"></div>
-  <div *ngIf="!GPSHabilitado">
+  <!--<div *ngIf="!GPSHabilitado">
     <h3 style="text-align: center">Habilite o GPS para localizar lanchonetes perto de você</h3>
     <button ion-button block (click)="getCurrentPosition()" >Habilitar GPS</button>
-  </div>
+  </div>-->
 </ion-content>

@@ -1,6 +1,9 @@
 <ion-header>
 
   <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
     <ion-title>Favoritos</ion-title>
   </ion-navbar>
 
@@ -27,9 +30,18 @@
         <div (click)="onSelectEstabelecimento(estabelecimento)" >
           {{ estabelecimento.nome }}<br>
           <div class="telefone-wrapper">
+              <div *ngIf="estabelecimento.telefone1.numero">
+                <ion-icon [name]="estabelecimento.telefone1.whatsapp? 'logo-whatsapp': 'phone-portrait'"></ion-icon>&nbsp;{{estabelecimento.telefone1.numero}}&nbsp;&nbsp;&nbsp;              
+              </div>  
+              <div *ngIf="estabelecimento.telefone2.numero">
+                <ion-icon [name]="estabelecimento.telefone2.whatsapp? 'logo-whatsapp': 'phone-portrait'"></ion-icon>&nbsp;{{estabelecimento.telefone2.numero}}
+              </div>
+          </div>
+          <!--
+          <div class="telefone-wrapper">
               <ion-icon name="call"></ion-icon>&nbsp;{{estabelecimento.telefone}}&nbsp;&nbsp;&nbsp;
               <ion-icon name="phone-portrait"></ion-icon>&nbsp;{{estabelecimento.telefone}}
-          </div>
+          </div> -->
         </div>
       </ion-item>
       <ion-item-options side="right">

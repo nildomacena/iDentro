@@ -1,3 +1,4 @@
+import { HomePage } from './../pages/home/home';
 import { PerfilPage } from './../pages/perfil/perfil';
 import { LoginPage } from './../pages/login/login';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -11,7 +12,6 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, App, ViewController, NavController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import * as firebase from 'firebase';
-import { HomePage } from '../pages/home/home';
 
 
 @Component({
@@ -21,7 +21,6 @@ import { HomePage } from '../pages/home/home';
   }
 })
 export class MyApp {
-  rootPage = HomePage;
   public nav: any;
   user: any;
   logado = true;
@@ -42,6 +41,7 @@ export class MyApp {
           this.nav.setRoot(LoginPage);
         }
         else{
+          this.nav.setRoot('HomePage');
           this.user = user;
           this.logado = true;
         } 
@@ -49,54 +49,49 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.statusBar.overlaysWebView(true);
       this.splashscreen.hide();
-
       this.platform.registerBackButtonAction(() => {
           let nav = app.getActiveNav();
           let activeView: ViewController = nav.getActive();
           console.log('activeView: ',activeView);
           console.log('nav: ', nav);
           console.log('this.nav.getActive(): ',this.nav.getActive());
+          console.log('this.nav.getActive().component: ',this.nav.getActive().component);
           if(activeView != null){
             if(nav.canGoBack()) {
               nav.pop();
             }
             else if (typeof activeView.instance.backButtonAction === 'function'){
-              console.log(activeView.instance);
+              console.log('activeviewInstance: ', activeView.instance);
               activeView.instance.backButtonAction();
             }
             else nav.parent.select(0); // goes to the first tab
           }  
       }, 100)
-    });
+    }); 
   }
 
+
   goToPerfil(){
-    this.app.getRootNav().push(PerfilPage, {user: this.user });
+    this.nav.setRoot('PerfilPage', {user: this.user });
+  }
+  goToHome(){
+    this.nav.setRoot('HomePage');
   }
 
   goToCarrinho(){
-    this.app.getRootNav().push(CarrinhoPage);
+    this.nav.setRoot(CarrinhoPage);
   }
   goToLocalizacao(){
     this.nav.push(LocalizacaoPage);
   }
 
   goToContato(){
-    this.app.getRootNav().push(ContatoPage);
+    this.nav.setRoot(ContatoPage);
   }
   goToFavoritos(){
-    this.nav.push(FavoritosPage)
+    this.nav.setRoot(FavoritosPage);
   }
 
-  loginWithFacebook(){
-    this.fireService.loginWithFacebook()
-      .then(_ => {
-
-      })
-      .catch(err => {
-        console.log(err);
-      })
-  }
   login(){
     this.nav.setRoot(HomePage);
   }

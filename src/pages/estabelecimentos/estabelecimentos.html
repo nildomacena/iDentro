@@ -27,38 +27,29 @@
     <ion-spinner name="crescent" mode="md"></ion-spinner>
   </div>
   <ion-list [virtualScroll]="filteredEstabelecimentos" approxItemHeight="60px">
-    <ion-item-sliding *virtualItem="let estabelecimento" >
-      <ion-item>
-        <ion-avatar item-left >
-          <ion-img *ngIf="estabelecimento.imagemCapa" alt="imagemCapa" [src]="estabelecimento.imagemCapa"></ion-img>
-          <ion-img *ngIf="!estabelecimento.imagemCapa" src="assets/img/no-photo.jpg"></ion-img>
-          <!--<img *ngIf="!loaded && estabelecimento.imagemCapa" src="assets/img/loading.gif"/>
-          <img *ngIf="!estabelecimento.imagemCapa" src="assets/img/no-photo.jpg">
-          <img *ngIf="estabelecimento.imagemCapa" [hidden]="!loaded" alt="imagemCapa" (load)="loaded = true" [src]="estabelecimento.imagemCapa"/> -->
-        </ion-avatar>
-        <div (click)="onSelectEstabelecimento(estabelecimento)" >
-          <span style="font-weight: 500">{{ estabelecimento.nome }}</span><br>
-          <div class="telefone-wrapper">
-              <div *ngIf="estabelecimento.telefone1.numero">
-                <ion-icon [name]="estabelecimento.telefone1.whatsapp? 'logo-whatsapp': 'phone-portrait'"></ion-icon>&nbsp;{{estabelecimento.telefone1.numero}}&nbsp;&nbsp;&nbsp;              
-              </div>  
-              <div *ngIf="estabelecimento.telefone2.numero">
-                <ion-icon [name]="estabelecimento.telefone2.whatsapp? 'logo-whatsapp': 'phone-portrait'"></ion-icon>&nbsp;{{estabelecimento.telefone2.numero}}
-              </div>
-          </div>
+    <ion-item *virtualItem="let estabelecimento" >
+      <ion-avatar item-left >
+        <ion-img *ngIf="estabelecimento.imagemCapa" alt="imagemCapa" [src]="estabelecimento.imagemCapa"></ion-img>
+        <ion-img *ngIf="!estabelecimento.imagemCapa" src="assets/img/no-photo.jpg"></ion-img>
+        <!--<img *ngIf="!loaded && estabelecimento.imagemCapa" src="assets/img/loading.gif"/>
+        <img *ngIf="!estabelecimento.imagemCapa" src="assets/img/no-photo.jpg">
+        <img *ngIf="estabelecimento.imagemCapa" [hidden]="!loaded" alt="imagemCapa" (load)="loaded = true" [src]="estabelecimento.imagemCapa"/> -->
+      </ion-avatar>
+      <div (click)="onSelectEstabelecimento(estabelecimento)" >
+        <span style="font-weight: 500">{{ estabelecimento.nome }}</span><br>
+        <div class="telefone-wrapper">
+            <div *ngIf="estabelecimento.telefone1.numero">
+              <ion-icon [name]="estabelecimento.telefone1.whatsapp? 'logo-whatsapp': 'phone-portrait'"></ion-icon>&nbsp;{{estabelecimento.telefone1.numero}}&nbsp;&nbsp;&nbsp;              
+            </div>  
+            <div *ngIf="estabelecimento.telefone2.numero">
+              <ion-icon [name]="estabelecimento.telefone2.whatsapp? 'logo-whatsapp': 'phone-portrait'"></ion-icon>&nbsp;{{estabelecimento.telefone2.numero}}
+            </div>
         </div>
-      </ion-item>
-      <ion-item-options side="right">
-        <button ion-button color="blue" (click)="openChat(estabelecimento)" >
-          <ion-icon name="text"></ion-icon>
-          Chat
-        </button>   
-        <button (click)="call(estabelecimento)" ion-button color="secondary">
-          <ion-icon name="call"></ion-icon>
-          Ligar
-        </button>
-      </ion-item-options>
-    </ion-item-sliding>
+      </div>
+      <button ion-button item-right small clear icon-only (click)="opcoes(estabelecimento)" >
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-item>
   </ion-list>
   <ion-fab right bottom *ngIf="estabelecimentos && bairros" >
     <button ion-fab color="primary" (click)="openModal()"><ion-icon name="options"></ion-icon></button>

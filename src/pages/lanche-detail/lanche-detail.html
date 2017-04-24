@@ -26,11 +26,11 @@
     <div class="nome center-align">{{lanche?.nome}}</div>
     <div class="preco center-align"><br>R$ {{lanche?.preco}}.00</div>
     <br><br>
-    <ion-grid>
+    <ion-grid *ngIf="ingredientes_truncados">
       <ion-row>
         <ion-col>
           <div style="margin-bottom: 2px">Ingredientes:</div>
-          <div class="ingredientes">{{lanche?.ingredientes_truncados}}</div>
+          <div class="ingredientes">{{ingredientes_truncados}}</div>
         </ion-col>
       </ion-row>
     </ion-grid>

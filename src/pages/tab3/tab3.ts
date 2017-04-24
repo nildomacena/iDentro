@@ -3,8 +3,7 @@ import { CallNumber } from '@ionic-native/call-number';
 import { LancheDetailPage } from './../lanche-detail/lanche-detail';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, App, AlertController, ModalController } from 'ionic-angular';
-
+import { NavController, NavParams, App, AlertController, ModalController, IonicPage } from 'ionic-angular';
 
 @Component({
   selector: 'page-tab3',

@@ -3,9 +3,9 @@ import { HomePage } from './../home/home';
 import { LocalizacaoPage } from './../localizacao/localizacao';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, ModalController, ActionSheetController, ViewController, Platform } from 'ionic-angular';
+import { NavController, NavParams, AlertController, ModalController, ActionSheetController, ViewController, Platform, IonicPage } from 'ionic-angular';
 
-
+@IonicPage()
 @Component({
   selector: 'page-carrinho',
   templateUrl: 'carrinho.html'
@@ -31,7 +31,7 @@ export class CarrinhoPage {
   }
 
   goBack(){
-    this.navCtrl.pop();
+    this.navCtrl.setRoot('HomePage')
   }
 
   removeItem(entrada){
@@ -66,7 +66,7 @@ export class CarrinhoPage {
   }
 
   fecharPedido(){
-    this.navCtrl.push(FechamentoPedidoPage);
+    this.navCtrl.push('FechamentoPedidoPage');
   }
 
   definirLocalizacao(){

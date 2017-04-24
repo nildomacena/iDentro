@@ -79,7 +79,7 @@ export class MyApp {
   }
 
   goToCarrinho(){
-    this.nav.setRoot(CarrinhoPage);
+    this.nav.setRoot('CarrinhoPage');
   }
   goToLocalizacao(){
     this.nav.push(LocalizacaoPage);

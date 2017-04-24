@@ -1,3 +1,4 @@
+import { LocalizacaoService } from './../../services/localizacao.service';
 import { FireService } from './../../services/fire.service';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { Geolocation } from '@ionic-native/geolocation';
@@ -34,10 +35,11 @@ export class MapaPage {
     public loadingCtrl: LoadingController,
     public locationAccuracy: LocationAccuracy,
     public platform: Platform,
-    public fireService: FireService
+    public fireService: FireService,
+    public localizacaoService: LocalizacaoService
     ) {
       this.coords = this.navParams.get('position');
-      this.fireService.marcador = null;
+      this.localizacaoService.marcador = null;
       this.loading = this.loadingCtrl.create({
         content: 'Carregando localização'
       });
@@ -109,18 +111,18 @@ export class MapaPage {
   } 
 
   getCurrentPosition(){
-    console.log('getcurrentposition');
     if(this.platform.is('cordova')){
       this.locationAccuracy.canRequest()
         .then(canRequest => {
         if(canRequest){
-            this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
+            this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_LOW_POWER)
               .then(resultRequest => {
                 console.log('resultRequest: ', resultRequest);
                 this.loading.present();
                 this.geolocation.getCurrentPosition({
                   enableHighAccuracy: false,
-                  maximumAge: 3000
+                  maximumAge: Infinity,
+                  timeout: 20000
                 })
                   .then(resultPosition => {
                     console.log('result Position: ',resultPosition);
@@ -141,8 +143,9 @@ export class MapaPage {
     else{
       this.loading.present();
       this.geolocation.getCurrentPosition({
-        enableHighAccuracy: false,
-        maximumAge: 3000
+        enableHighAccuracy: true,
+        maximumAge: Infinity,
+        timeout: 15000
       })
         .then(result => {
           this.loading.dismiss();
@@ -286,7 +289,7 @@ export class MapaPage {
 
   selecionaEndereco(){
     console.log('marcador: ', this.markers[0].getPosition())
-    this.fireService.marcador = this.markers[0].getPosition();
+    this.localizacaoService.marcador = this.markers[0].getPosition();
     this.dismiss();
   }
 

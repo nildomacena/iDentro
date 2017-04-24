@@ -15,6 +15,7 @@ export class LancheDetailPage {
   estabelecimento: any = null;
   pesquisa: boolean; //Variável testa se a página anterior foi a página de pesquisa
   toast: Toast;
+  ingredientes_truncados: string = '';
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -26,7 +27,6 @@ export class LancheDetailPage {
       let key_lanche = this.navParams.get('lanche').$key;
       this.pesquisa = this.navParams.get('pesquisa');
       this.estabelecimento = this.navParams.get('estabelecimento');
-      console.log('this.estabelecimento = this.navParams.get(estabelecimento);', this.estabelecimento);
       this.toast = this.toastCtrl.create({
         message: 'Item adicionado ao carrinho',
         duration: 2000,
@@ -35,7 +35,7 @@ export class LancheDetailPage {
       this.fireService.getLancheByKey(key_lanche)
         .subscribe(lanche => {
           this.lanche = lanche;
-          console.log(this.lanche);
+          this.truncarIngredientes();
         })
 
         if(!this.estabelecimento){
@@ -50,6 +50,28 @@ export class LancheDetailPage {
 
   ionViewDidLoad() {
     console.log(this.estabelecimento);
+  }
+  truncarIngredientes(){
+    try {
+      let tamanho = Object.keys(this.lanche.ingredientes).length
+      Object.keys(this.lanche.ingredientes).map((key, index) => {
+        console.log(tamanho);
+        console.log(index);
+        console.log(this.lanche.ingredientes[key]);
+        if(index == 0 )
+          this.ingredientes_truncados = this.lanche.ingredientes[key].nome; 
+        
+        else if(index + 1 < tamanho)
+          this.ingredientes_truncados += ', '+this.lanche.ingredientes[key].nome;
+        else
+          this.ingredientes_truncados += ' e '+this.lanche.ingredientes[key].nome;
+      })
+    } 
+    
+    catch (err) {
+      console.log(err)
+    }
+    console.log(this.ingredientes_truncados);
   }
 
   goBack(){

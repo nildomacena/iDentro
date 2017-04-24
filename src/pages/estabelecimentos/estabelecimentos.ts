@@ -3,7 +3,7 @@ import { ConfiguracoesPage } from './../configuracoes/configuracoes';
 import { EstabelecimentoPage } from './../estabelecimento/estabelecimento';
 import { FireService } from './../../services/fire.service';
 import { Component, ViewChildren, ChangeDetectorRef, ViewChild, QueryList, ElementRef, Renderer } from '@angular/core';
-import { NavController, NavParams, App, Searchbar, Content, Navbar, Header, Toolbar, AlertController, ToastController, Platform, ViewController, ModalController, IonicPage } from 'ionic-angular';
+import { NavController, NavParams, App, Searchbar, Content, Navbar, Header, Toolbar, AlertController, ToastController, Platform, ViewController, ModalController, IonicPage, ActionSheetController } from 'ionic-angular';
 import { CallNumber } from '@ionic-native/call-number';
 
 //@IonicPage()
@@ -46,6 +46,7 @@ export class EstabelecimentosPage {
     public renderer: Renderer,
     public modalCtrl: ModalController,
     public callnumber: CallNumber,
+    public actionSheet: ActionSheetController
     ) {
       this.searchHeight = 56;
   }
@@ -70,7 +71,6 @@ export class EstabelecimentosPage {
         })
   }
 
-  
   backButtonAction(){
     console.log(this.viewCtrl);
     if(this.isSearch){
@@ -185,13 +185,13 @@ export class EstabelecimentosPage {
           {
             text: estabelecimento.telefone1.numero,
             handler: () => {
-              this.callnumber.callNumber(estabelecimento.telefone1.numero, true)
+              this.callnumber.callNumber(estabelecimento.telefone1.numero.replace(/[^\d]/g, ''), true)
             }
           },
           {
             text: estabelecimento.telefone2.numero,
             handler: () => {
-              this.callnumber.callNumber(estabelecimento.telefone2.numero, true)
+              this.callnumber.callNumber(estabelecimento.telefone2.numero.replace(/[^\d]/g, ''), true)
             }
           },
           {
@@ -209,7 +209,7 @@ export class EstabelecimentosPage {
             {
               text: 'Ligar',
               handler: () => {
-                this.callnumber.callNumber(estabelecimento.telefone2, true)
+                this.callnumber.callNumber(estabelecimento.telefone2.replace(/[^\d]/g, ''), true)
               }
             }
           ]
@@ -224,7 +224,7 @@ export class EstabelecimentosPage {
             {
               text: 'Ligar',
               handler: () => {
-                this.callnumber.callNumber(estabelecimento.telefone2.numero, true)
+                this.callnumber.callNumber(estabelecimento.telefone2.numero.replace(/[^\d]/g, ''), true)
               }
             }
           ]
@@ -263,6 +263,31 @@ export class EstabelecimentosPage {
         }
       }
   
-
+  opcoes(estabelecimento){
+    let action = this.actionSheet.create({
+      title: 'Opções',
+      buttons: [
+        {
+        text: `Abrir chat com ${estabelecimento.nome}`,
+        role: 'destructive',
+        icon: 'text',
+        handler: () => {
+            this.openChat(estabelecimento);
+          }
+        }
+      ]
+    })
+    if(estabelecimento.telefone1 || estabelecimento.telefone2){
+      action.addButton({
+        text: `Ligar para ${estabelecimento.nome}`,
+        role: 'destructive',
+        icon: 'call',
+        handler: () => {
+            this.call(estabelecimento);
+          }
+        })
+    }
+    action.present();
+  }
 }
 

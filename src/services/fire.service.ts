@@ -558,6 +558,22 @@ export class FireService {
                         })
                     })
     }
+    getCadastroUsuarioById(uid: string): Observable<any>{
+        return this.af.database.object(`usuarios_app/${this.uid}`);
+    }
+    updateCadastroUsuario(nome:string, telefone:string): firebase.Promise<any>{
+        let user = firebase.auth().currentUser;
+        return user.updateProfile({
+            displayName: nome,
+            photoURL: user.photoURL
+        })
+            .then(_ => {
+                return firebase.database().ref(`usuarios_app/${this.uid}`).update({
+                    telefone: telefone,
+                    nome: nome
+                })
+            })
+    }
 
     getEnderecos(): Observable<any>{
         return this.af.database.list(`usuarios_app/${this.uid}/enderecos`);
@@ -567,6 +583,7 @@ export class FireService {
         return this.af.database.list(`usuarios_app/${this.uid}/enderecos`).push(endereco);
     }
     excluirEndereco(endereco):firebase.Promise<any>{
+        console.log(endereco);
         return this.af.database.list(`usuarios_app/${this.uid}/enderecos/${endereco.$key}`).remove();
     }
 

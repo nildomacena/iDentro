@@ -2,8 +2,9 @@ import { LocalizacaoPage } from './../localizacao/localizacao';
 import { HomePage } from './../home/home';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, Card, AlertController, ToastController, ModalController } from 'ionic-angular';
+import { NavController, NavParams, Card, AlertController, ToastController, ModalController, IonicPage } from 'ionic-angular';
 
+@IonicPage()
 @Component({
   selector: 'page-fechamento-pedido',
   templateUrl: 'fechamento-pedido.html'
@@ -63,11 +64,14 @@ export class FechamentoPedidoPage {
   }
 
   addEndereco(){
-    let modal = this.modalCtrl.create(LocalizacaoPage, {adicional: true});
+    let modal = this.modalCtrl.create('LocalizacaoPage', {adicional: true});
     modal.present();
     modal.onDidDismiss(data => {
+      console.log('data dismiss modal', data);
+      if(data){
       this.enderecoAdicional = data.endereco;
       this.onSelectEndereco(this.enderecoAdicional);
+      }
     })
   }
 }

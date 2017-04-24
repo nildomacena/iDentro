@@ -14,7 +14,7 @@ import { IonicPageModule } from 'ionic-angular';
   exports: [
     EstabelecimentoPage
   ],
-  entryComponents: [ 
+  entryComponents: [
     CardapioVazioPage
   ]
 })

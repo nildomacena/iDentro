@@ -1,3 +1,8 @@
+import { LocalizacaoService } from './../services/localizacao.service';
+import { CardapioVazioPage } from './../pages/cardapio-vazio/cardapio-vazio';
+import { Tab3Page } from './../pages/tab3/tab3';
+import { Tab2Page } from './../pages/tab2/tab2';
+import { Tab1Page } from './../pages/tab1/tab1';
 import { AutocompletePage } from './../pages/autocomplete/autocomplete';
 import { LoginPage } from './../pages/login/login';
 import { ChatPage } from './../pages/chat/chat';
@@ -6,14 +11,9 @@ import { ConfiguracoesPage } from './../pages/configuracoes/configuracoes';
 import { BebidasPage } from './../pages/bebidas/bebidas';
 import { CardapioPage } from './../pages/cardapio/cardapio';
 import { CategoriaPage } from './../pages/categoria/categoria';
-import { Tab3Page } from './../pages/tab3/tab3';
-import { Tab2Page } from './../pages/tab2/tab2';
-import { Tab1Page } from './../pages/tab1/tab1';
 import { FavoritosPage } from './../pages/favoritos/favoritos';
-import { FechamentoPedidoPage } from './../pages/fechamento-pedido/fechamento-pedido';
 import { ContatoPage } from './../pages/contato/contato';
 import { ParallaxHeader } from './../components/parallax-header/parallax-header';
-import { CarrinhoPage } from './../pages/carrinho/carrinho';
 import { FiltroIngredientesPage } from './../pages/filtro-ingredientes/filtro-ingredientes';
 import { MontagemPage } from './../pages/montagem/montagem';
 import { DestaquesPage } from './../pages/destaques/destaques';
@@ -36,7 +36,8 @@ import { CallNumber } from '@ionic-native/call-number';
 import { Facebook } from '@ionic-native/facebook';
 import { Keyboard } from '@ionic-native/keyboard';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { HttpModule } from '@angular/http'
+import { ReactiveFormsModule } from '@angular/forms';
 
 const config = {
     apiKey: "AIzaSyCZHJ2ywN6nMq8I_KvGlI6jjh1kcZmZC50",
@@ -53,13 +54,8 @@ const config = {
     DestaquesPage,
     MontagemPage,
     FiltroIngredientesPage,
-    CarrinhoPage,
     ContatoPage,
-    FechamentoPedidoPage,
     FavoritosPage,
-    Tab1Page,
-    Tab2Page,
-    Tab3Page,
     CategoriaPage,
     ParallaxHeader,
     CardapioPage,
@@ -68,6 +64,9 @@ const config = {
     CabecalhoComponent,
     ChatPage,
     LoginPage,
+    Tab1Page,
+    Tab2Page,
+    Tab3Page,
     AutocompletePage
   ],
   imports: [
@@ -78,6 +77,8 @@ const config = {
     }),
     AngularFireModule.initializeApp(config),
     AngularFireOfflineModule,
+    HttpModule,
+    ReactiveFormsModule
 
   ],
   bootstrap: [IonicApp],
@@ -88,22 +89,21 @@ const config = {
     MontagemPage,
     FiltroIngredientesPage,
     ContatoPage,
-    FechamentoPedidoPage,
     FavoritosPage,
-    Tab1Page,
-    Tab2Page,
-    Tab3Page,
     CategoriaPage,
-    CarrinhoPage,
     CardapioPage,
     BebidasPage,
     ConfiguracoesPage,
     ChatPage,
     LoginPage,
+    Tab1Page,
+    Tab2Page,
+    Tab3Page,
     AutocompletePage
   ],
   providers: [
     FireService, 
+    LocalizacaoService,
     GoogleMaps,
     Diagnostic,
     Geolocation,

@@ -1,9 +1,12 @@
+import { LocalizacaoService } from './../../services/localizacao.service';
+import { Http } from '@angular/http';
 import { MapaPage } from './../mapa/mapa';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { AutocompletePage } from './../autocomplete/autocomplete';
 import { GoogleMap, GoogleMaps, Geocoder, GeocoderResult, GeocoderRequest, Marker, LatLng } from '@ionic-native/google-maps';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { NavController, NavParams, AlertController, LoadingController, ModalController, ToastController, ViewController, Platform, IonicPage } from 'ionic-angular';
 import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
 import { Geolocation } from '@ionic-native/geolocation'
@@ -15,6 +18,10 @@ import { Geolocation } from '@ionic-native/geolocation'
   templateUrl: 'localizacao.html'
 })
 export class LocalizacaoPage {
+  buscaPelaLocalizacao: boolean;
+  buscaPeloCEP: boolean;
+  formCep: FormGroup;
+  formEndereco: FormGroup;
   bairro: string = '';
   endereco: string = '';
   pontoRef: string = '';
@@ -49,15 +56,24 @@ export class LocalizacaoPage {
     public googleMaps: GoogleMaps,
     public geolocation: Geolocation,
     public locationAccuracy: LocationAccuracy,
-    public platform: Platform
+    public platform: Platform,
+    public http: Http,
+    public localizacaoService: LocalizacaoService,
+    public formBuilder: FormBuilder
 
 
     ) {
-      this.localizacao = {
-
-      }
-
+      this.formCep = this.formBuilder.group({
+        cep: ['', [Validators.required, Validators.pattern('[0-9]{5}[0-9]{3}')]]
+      })
+      this.formEndereco = this.formBuilder.group({
+        endereco: ['', Validators.required],
+        numero: ['', Validators.required],
+        bairro: ['', Validators.required],
+        referencia: ['', Validators.required],
+      })
       this.enderecoAdicional = this.navParams.get('adicional');
+      
       this.alert = this.alertCtrl.create({
         title: 'Localização',
         subTitle: 'Escolha a forma de buscar seu endereço',
@@ -66,22 +82,17 @@ export class LocalizacaoPage {
             text: 'Buscar pelo CEP',
             handler: () => {
               console.log('Buscar pelo CEP');
+              this.buscaPeloCEP = true;
             }
           },
           {
             text: 'Localizar no mapa',
             handler: () => {
+              this.buscaPelaLocalizacao = true;
               this.navCtrl.push('MapaPage')
                 .then(result => {
                   console.log('resultado dismiss:',result);
                 })
-            }
-          },
-          {
-          text: 'Buscar pela localização',
-          handler: () => {
-              console.log('Buscar pela localização');
-              this.getLocation();
             }
           }
         ]
@@ -103,15 +114,17 @@ export class LocalizacaoPage {
     
   }
   ionViewWillLeave() {
-    this.fireService.marcador = null;
+    this.localizacaoService.marcador = null;
+    this.localizacaoService.cep = '';
   }
   ionViewWillEnter(){
-    if(!this.fireService.marcador){
+    if(!this.localizacaoService.marcador){ //Se o usuário não selecionou nenhum endereço no mapa, apresenta o alert
       this.alert.present();
     }
     else{
+      console.log(this.localizacaoService.marcador);
       this.localizado = true;  //Se o usuário estiver selecionado uma localização no mapa.
-      this.getLocationByMarker(this.fireService.marcador)
+      this.getLocationByMarker(this.localizacaoService.marcador)
     }
     this.fireService.getBairros()
       .subscribe(bairros => {
@@ -133,6 +146,7 @@ export class LocalizacaoPage {
     alert.present();
   }
   getLocationByMarker(marker: google.maps.LatLng){
+    console.log('get location by marker')
     let geocoder: google.maps.Geocoder = new google.maps.Geocoder(); 
     
     let request: google.maps.GeocoderRequest = {
@@ -158,10 +172,12 @@ export class LocalizacaoPage {
         resultGeocode[0].address_components.map(component => {
           component.types.map(type => {
             if(type.toLowerCase().includes('route')){
-              this.fullAddress.logradouro = component.short_name
+              this.fullAddress.logradouro = component.short_name;
+              this.formEndereco.controls['endereco'].setValue(component.short_name);
             }
             else if(type.toLowerCase().includes('sublocality_level_')){
               this.fullAddress.bairro = component.short_name
+              this.formEndereco.controls['bairro'].setValue(component.short_name);
             }
             else if(type.toLowerCase().includes('administrative_area_level_2')){
               this.fullAddress.cidade = component.short_name
@@ -180,80 +196,11 @@ export class LocalizacaoPage {
           
         }, 500);
       }
-      
     })
 
   }
 
-  getLocation(){
-    if(this.platform.is('cordova')){
-      this.locationAccuracy.canRequest()
-        .then(result => {
-          if(result){
-            let loading = this.loadingCtrl.create({
-              content: 'Carregando localização'
-            });
-            loading.present();
-            
-            this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
-              .then(value => {
-                console.log(value);
-                this.geolocation.getCurrentPosition()
-                  .then(data => {
-                    this.nativeGeocoder.reverseGeocode(data.coords.latitude, data.coords.longitude)
-                      .then(value => {
-                        loading.dismiss();
-                        this.navCtrl.push('MapaPage', {position: data.coords})
-                        /*
-                        let mapModal = this.modalCtrl.create(MapaPage,{position: data.coords});
-                        mapModal.present();*/
-                        console.log(value);
-                      })
-                      .catch(err => {
-                        loading.dismiss();
-                        console.error(err);
-                      })
-                    console.log('geolocation: ', data);
-                  })
-                  .catch(err => {
-                    loading.dismiss();
-                    this.criarAlertaSimples('Ocorreu um erro ao gerar localização');
-                    console.error(err);
-                  });
-              })
-              .catch(err => {
-                loading.dismiss();
-                this.criarAlertaSimples('É necessário permitir acesso à localização');
-                console.log(err)
-              })
-          }
-        })
-    }
-    else{
-      console.log('Não é cordova');
-      this.geolocation.getCurrentPosition()
-        .then(resultGeolocation => {
-          console.log('result Geolocation', resultGeolocation);
-          let latLng = new google.maps.LatLng(resultGeolocation.coords.latitude,resultGeolocation.coords.longitude)
-          new google.maps.Geocoder().geocode({location: latLng}, 
-            resultGeocoder => {
-              console.log('resultGeocoder: ', resultGeocoder);
-            })
-        })
-    }
-  }
-
-  addBairro(inputBairro){
-    this.loading = true;
-    this.fireService.addBairro(this.bairro)
-      .then(_ => {
-        this.loading = false;
-        this.bairro = '';
-        inputBairro.setFocus();
-
-      })
-  }
-
+  
   showAddressModal(){
     console.log('show address modal');
     let modal = this.modalCtrl.create(AutocompletePage,{data: this.endereco});
@@ -264,29 +211,106 @@ export class LocalizacaoPage {
         let request: google.maps.GeocoderRequest = {
           placeId: data.place_id
         };
-        let geocoder: google.maps.Geocoder = new google.maps.Geocoder();
-        geocoder.geocode(request, (value) => {
-          let result = value[0];
-          this.fullAddress.descricao = result.formatted_address;
+        this.geocodificar(request);
+      }
+    })
+    modal.present();
+  }
+  buscarPeloCep(){
+    let endereco: any;
+    console.log(this.formCep.controls['cep'].value);
+    this.localizacaoService.buscarPeloCEP(this.formCep.controls['cep'].value)
+      .subscribe(result => {
+        endereco = result.json();
+        console.log('result buscar pelo cep: ', endereco)
+        if(endereco.erro){
+          let alert = this.alertCtrl.create({
+            title: 'Erro',
+            message: 'Erro ao tentar localizar o endereço. Verifique as informações digitadas e tente novamente.',
+            buttons: [{
+                text: 'Ok',
+                handler: () => {
+                  console.log('Ok clicked');
+                  this.cep = '';
+                }
+              }
+            ]
+          });
+          alert.present();
+        }
+        else{
+          let request: google.maps.GeocoderRequest = {
+            address: endereco.logradouro,
+            componentRestrictions: {
+              postalCode: endereco.cep
+            }
+          };
+          this.geocodificar(request);
+        }
+      })
+  }
+
+  geocodificar(request: google.maps.GeocoderRequest){
+    console.log('geocodificar');
+    let loading = this.loadingCtrl.create({
+      content: 'Carregando informações'
+    })
+    loading.present();
+
+    let geocoder: google.maps.Geocoder = new google.maps.Geocoder();  
+      geocoder.geocode(request, (value) => {
+        let result = value[0];
+        console.log('resultado geocode: ', value);
+        if(result){
           this.fullAddress.logradouro = result.address_components[0].short_name;
           this.fullAddress.bairro = result.address_components[1].short_name;
           this.fullAddress.cidade = result.address_components[2].short_name;
           this.fullAddress.latitude = result.geometry.location.lat();
           this.fullAddress.longitude = result.geometry.location.lng();
+          let enderecoControl = <FormControl>this.formEndereco.controls['endereco']
+          let bairroControl = <FormControl>this.formEndereco.controls['bairro']
+          console.log('this.bairroControl: ', bairroControl);
+          console.log('this.formcontrolsendereco: ', enderecoControl);
+          this.formEndereco.controls['endereco'].setValue(this.fullAddress.logradouro);
+          this.formEndereco.controls['bairro'].setValue(this.fullAddress.bairro);
 
           console.log(result);
           this.endereco = `${result['address_components'][0].short_name}, ${result['address_components'][1].short_name}, ${result['address_components'][2].short_name}`
           console.log('address data = ', this.endereco);
           console.log('geocoder result: ', result);
-        })
-      }
-    })
-    modal.present();
+          this.localizado = true;
+          loading.dismiss();
+        }
+        else{
+          loading.dismiss();
+          let alert = this.alertCtrl.create({
+            title: 'Erro',
+            message: 'Erro ao carregar as informações. Tente inserir a localização através do mapa.',
+            buttons: [
+              {
+                text: 'Cancelar',
+                role: 'cancel',
+                handler: () => {
+                  console.log('Cancel clicked');
+                }
+              },
+              {
+                text: 'Ir para o mapa',
+                handler: () => {
+                  console.log('Mapa clicked');
+                  this.navCtrl.push('MapaPage');
+                }
+              }
+            ]
+          });
+          alert.present();
+        }
+      });
   }
-
   salvarEndereco(){
     this.fullAddress.numero = this.numero;
     this.fullAddress.referencia = this.referencia;
+    this.fullAddress.descricao = `${this.fullAddress.logradouro}, ${this.fullAddress.numero}. ${this.fullAddress.bairro}`
     if(this.enderecoAdicional){
       this.viewCtrl.dismiss({endereco: this.fullAddress});
     }
@@ -303,119 +327,15 @@ export class LocalizacaoPage {
     }
   }
 
-  buscarEnderecoPeloNome(){
-    let loading = this.loadingCtrl.create({
-      content: 'Carregando...'
-    });
-    loading.present();
-    let request: GeocoderRequest = {
-      address: this.logradouro
-    }
-    let request2: google.maps.GeocoderRequest = {
-      address: this.logradouro,
-      componentRestrictions: {
-        country: 'BR'
-      }
-    }
-    let geocoder = new google.maps.Geocoder();
-    geocoder.geocode(request2, (result, status) => {
-      
-      console.log('result google.maps: ', result);
-      console.log('status: ', status);
-    })
-    this.nativeGeocoder.forwardGeocode(this.logradouro)
-      .then(value => {
-        console.log('Resultado nativegeocoder: ', value);
-        this.nativeGeocoder.reverseGeocode(+value.latitude, +value.longitude)
-          .then(value2 => {
-            console.log('reverse result: ', value2);
-          })
-      })
-      .catch(err => {
-        loading.dismiss();
-        let alert = this.alertCtrl.create({
-          title: 'Erro',
-          subTitle: 'Ocorreu um erro, tente novamente mais tarde.',
-          buttons: [{
-            text: 'Ok',
-            role: 'cancel'
-          }]
-        })
-        alert.present();
-        console.log(err);
-      })
-      
-    this.geocoder.geocode(request)
-      .then(result => {
-        loading.dismiss();
-        console.log('result buscar pelo endereco: ', result)
-      })
-      
-      .catch(err => {
-        loading.dismiss();
-        let alert = this.alertCtrl.create({
-          title: 'Erro',
-          subTitle: 'Ocorreu um erro, tente novamente mais tarde.',
-          buttons: [{
-            text: 'Ok',
-            role: 'cancel'
-          }]
-        })
-        alert.present();
-        console.log(err);
-      })
-    
-    /*
-    this.nativeGeocoder.forwardGeocode(this.logradouro)
-      .then(result => {
-        console.log(result);
-        loading.dismiss();
-        this.nativeGeocoder.reverseGeocode(+result.latitude, +result.longitude)
-          .then(resultReverse => {
-            console.log(resultReverse);
-          })
-      })
-      */
-  }
+  
   dismiss(){
     this.navCtrl.pop();
   }
-
-  selectBairro(){
-    let alert = this.alertCtrl.create();
-    alert.setTitle('Selecione seu bairro');
-    this.bairros.map(bairro => {
-      alert.addInput({
-        type: 'radio',
-        label: bairro.nome,
-        value: bairro.$key
-      });
-    })
-    alert.addButton('Cancelar');
-    alert.addButton({
-      text: 'Ok',
-      handler: data => {
-        this.bairroSelecionado = data;
-        console.log(this.bairroSelecionado);
-        this.fireService.getBairroByKey(this.bairroSelecionado)
-          .subscribe(bairro => {
-            console.log(bairro);
-            this.bairro = bairro.nome;
-          })
-      }
-    })
-    alert.present();
-  }
-
-  buscarPeloCep(){
-    let geocoder = new google.maps.Geocoder();
-    geocoder.geocode({address: this.cep+'maceió alagoas santa lúcia'},
-    result => {
-      console.log('Result pelo cep', result);
-    })
-  }
-
+  
   onSubmitEndereco(){
+    this.fullAddress.numero = this.formEndereco.value.numero;
+    this.fullAddress.referencia = this.formEndereco.value.referencia;
+    this.fullAddress.descricao = `${this.fullAddress.logradouro}, ${this.fullAddress.numero}. ${this.fullAddress.bairro}`
     this.fireService.salvarEndereco(this.fullAddress)
       .then(_ => {
         let toast = this.toastCtrl.create({
@@ -423,7 +343,7 @@ export class LocalizacaoPage {
           duration: 2000
         });
         toast.present();
-        this.viewCtrl.dismiss();
+        this.viewCtrl.dismiss({endereco: this.fullAddress});
       })
     console.log( 'full Address',this.fullAddress);
   }
@@ -432,3 +352,5 @@ export class LocalizacaoPage {
     this.dismiss();
   }
 }
+
+

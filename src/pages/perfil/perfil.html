@@ -26,10 +26,17 @@
       </ion-row>
     </ion-grid>
   </div>
-  <ion-list>
+  <div class="center-spinner" *ngIf='isLoading'>
+    <ion-spinner name="crescent" mode="md"></ion-spinner>
+  </div>
+  <ion-list *ngIf="!isLoading">
     <ion-item>
       <ion-label floating>Nome</ion-label>
       <ion-input [(ngModel)]="nome" ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Telefone</ion-label>
+      <ion-input [(ngModel)]="telefone" ></ion-input>
     </ion-item>
   </ion-list>
   <ion-label stacked style="margin-left: 5px" >{{enderecos.length > 0? 'Endereços':'Nenhum endereço cadastrado'}}</ion-label>
@@ -49,5 +56,5 @@
 </ion-content>
 
 <ion-footer>
-  <button ion-button block color="primary">Salvar</button>
+  <button ion-button block color="primary" (click)="onSubmit()" >Salvar</button>
 </ion-footer>

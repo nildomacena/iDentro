@@ -29,7 +29,8 @@ export class FiltroIngredientesPage {
     this.isLoading = true;
     this.fireService.getLanchesPorCategoria(this.categoria)
       .subscribe(lanches => {
-        console.log(lanches);
+        console.log('lanches por categoria: ', lanches);
+        lanches = this.truncarIngredientes(lanches);
         this.filtrarLanches(lanches);
         this.isLoading = false;
       });
@@ -38,7 +39,32 @@ export class FiltroIngredientesPage {
   goBack(){
     this.navCtrl.pop();
   }
-
+  truncarIngredientes(itens: any[]): any[]{
+    itens.map(item => {
+      try {
+        let tamanho = Object.keys(item.ingredientes).length
+        if(item.ingredientes){
+          Object.keys(item.ingredientes).map((key, index) => {
+            console.log(tamanho);
+            console.log(index);
+            console.log(item.ingredientes[key]);
+            if(index == 0 )
+              item.ingredientes_truncados = item.ingredientes[key].nome; 
+            
+            else if(index + 1 < tamanho)
+              item.ingredientes_truncados += ', '+item.ingredientes[key].nome;
+            else
+              item.ingredientes_truncados += ' e '+item.ingredientes[key].nome;
+          })
+        }
+      } 
+      
+      catch (err) {
+        console.log(err)
+      }
+    })
+    return itens;
+  }
   filtrarLanches(lanches: any[]){
 
     let ingredientes_truncados:string = '';

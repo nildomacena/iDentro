@@ -4,7 +4,8 @@ import { CallNumber } from '@ionic-native/call-number';
 import { LancheDetailPage } from './../lanche-detail/lanche-detail';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, App, AlertController, ViewController, ModalController, ToastController, Toast } from 'ionic-angular';
+import { NavController, NavParams, App, AlertController, ViewController, ModalController, ToastController, Toast, IonicPage } from 'ionic-angular';
+
 
 @Component({
   selector: 'page-tab1',
@@ -42,6 +43,7 @@ export class Tab1Page {
       .subscribe(itens => {
         this.loading = false;
         this.itens = itens;
+        this.truncarIngredientes();
       })
   }
 
@@ -85,7 +87,31 @@ export class Tab1Page {
     modal.present();
 
   }
-
+  truncarIngredientes(){
+    this.itens.map(item => {
+      try {
+        let tamanho = Object.keys(item.ingredientes).length
+        if(item.ingredientes){
+          Object.keys(item.ingredientes).map((key, index) => {
+            console.log(tamanho);
+            console.log(index);
+            console.log(item.ingredientes[key]);
+            if(index == 0 )
+              item.ingredientes_truncados = item.ingredientes[key].nome; 
+            
+            else if(index + 1 < tamanho)
+              item.ingredientes_truncados += ', '+item.ingredientes[key].nome;
+            else
+              item.ingredientes_truncados += ' e '+item.ingredientes[key].nome;
+          })
+        }
+      } 
+      
+      catch (err) {
+        console.log(err)
+      }
+    })
+  }
   call(){
       let buttons;
       let subTitle;

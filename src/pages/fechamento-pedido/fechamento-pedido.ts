@@ -14,6 +14,11 @@ export class FechamentoPedidoPage {
   enderecoSelecionado: any;
   carrinho: any;
   enderecoAdicional: any;
+  observacao: string = ''
+  dinheiro: boolean = false;
+  cartao: boolean = false;
+  troco:string = '';
+  bandeiraCartao: string = '';
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -31,12 +36,20 @@ export class FechamentoPedidoPage {
     }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad FechamentoPedidoPage');
+
   }
   onSelectEndereco(endereco){
     this.enderecoSelecionado = endereco;
   }
+  onSelectDinheiro(){
+    this.dinheiro = true;
+    this.cartao = false;
+  }
+  onSelectCartao(){
+    this.dinheiro = false;
+    this.cartao = true;
 
+  }
   fecharPedido(){
     let alert = this.alertCtrl.create({
       title: 'Confirme',
@@ -50,12 +63,38 @@ export class FechamentoPedidoPage {
           text: 'Confirmar',
           handler: () => {
             this.navCtrl.setRoot(HomePage);
-            this.fireService.limpaCarrinho();
-            let toast = this.toastCtrl.create({
-              message: 'Pedido realizado. Aguarde alguns minutos.',
-              duration: 2500
-            });
-            toast.present();
+            this.fireService.fecharPedido(this.observacao, this.enderecoSelecionado,this.dinheiro,this.cartao,+this.troco,this.bandeiraCartao)
+              .then(_ => {
+                  let toast = this.toastCtrl.create({
+                    message: 'Pedido realizado. Aguarde alguns minutos.',
+                    duration: 2500
+                  });
+                  toast.present();
+                  this.fireService.limpaCarrinho();
+              })
+              .catch(err => {
+                console.log(err);
+                // Import the AlertController from ionic package 
+                // Consume it in the constructor as 'alertCtrl' 
+                let alert = this.alertCtrl.create({
+                  title: 'Erro',
+                  message: 'Ocorreu um erro ao gerar seu pedido. Confirme se ele foi realizado no meu Pedidos, caso contrário tente realizar o pedido novamente',
+                  buttons: [
+                    {
+                    text: 'Cancel', role: 'cancel',
+                    handler: () => {
+                      console.log('Cancel clicked');
+                    }
+                    }, {
+                      text: 'Ok',
+                      handler: () => {
+                      console.log('Ok clicked');
+                    }
+                    }
+                  ]
+                });
+                alert.present();
+              })
           }
         }
       ]

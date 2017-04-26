@@ -91,7 +91,9 @@ export class MyApp {
   goToFavoritos(){
     this.nav.setRoot(FavoritosPage);
   }
-
+  goToPedidos(){
+    this.nav.setRoot('Pedidos');
+  }
   login(){
     this.nav.setRoot(HomePage);
   }

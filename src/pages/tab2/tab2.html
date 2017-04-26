@@ -10,7 +10,7 @@
       <ion-col col-8 style="padding-left: 6px">
         <h4>{{estabelecimento.nome}}</h4>
         <div class="endereco">
-          <ion-label>{{estabelecimento.endereco}}</ion-label>
+          <ion-label>{{estabelecimento.endereco}} <a style="text-decoration: none" [href]="linkLocalizacao"><b>Ver no mapa</b></a> </ion-label> 
           <ion-label>Telefone: {{estabelecimento.telefone}}</ion-label>
           <ion-label *ngIf="estabelecimento.celular">Celular: {{estabelecimento.celular.numero}} &nbsp;<ion-icon *ngIf="estabelecimento.celular.whatsapp" name="logo-whatsapp"></ion-icon></ion-label>
           <label class="aberto">Aberto</label>
@@ -61,7 +61,16 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-fab center bottom *ngIf="estabelecimento.telefone1 || estabelecimento.telefone2" >
-      <button ion-fab mini color="primary" (click)="call()"><ion-icon name="call"></ion-icon></button>
-    </ion-fab>
+    <ion-fab left bottom>
+    <button ion-fab color="primary"><ion-icon name="call"></ion-icon></button>
+    <ion-fab-list side="top">
+      <button ion-fab (click)="goToChat()"><ion-icon name="text"></ion-icon></button>
+      <button ion-fab (click)="call()"><ion-icon name="call"></ion-icon></button>
+    </ion-fab-list>
+  </ion-fab>
+  <ion-fab right bottom *ngIf="qtdeCarrinho > 0">
+    <button ion-fab color="primary" (click)="goToCarrinho()">
+      <ion-icon name="cart"><ion-badge id="notifications-badge" color="danger">{{qtdeCarrinho}}</ion-badge></ion-icon>
+    </button>
+  </ion-fab>
 </ion-content>

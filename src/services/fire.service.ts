@@ -1,5 +1,5 @@
 import { Marker, LatLng } from '@ionic-native/google-maps';
-import { AlertController } from 'ionic-angular';
+import { AlertController, Events } from 'ionic-angular';
 import { Facebook } from '@ionic-native/facebook';
 import { lanches, estabelecimentos, lanches_por_estabelecimento } from './dados';
 import { Injectable } from '@angular/core';
@@ -23,7 +23,8 @@ export class FireService {
         private afo: AngularFireOffline,
         private af: AngularFire,
         private facebook: Facebook,
-        public alertCtrl: AlertController
+        public alertCtrl: AlertController,
+        public events: Events
     ) {
          firebase.auth().onAuthStateChanged(user => {
             if(user){
@@ -121,97 +122,78 @@ export class FireService {
             this.cart.itens.push(obj);
             this.cart.valor += +item.preco
         }
-        return true;
-
-        
-        /*
-        let adicionado: boolean = false;
-        console.log(!this.cart.estabelecimento);
-        console.log(this.cart);
-        if(!this.cart.estabelecimento){     //Se o carrinho está vazio, insere uma entrada no carrinho
-            this.cart = {
-                estabelecimento: estabelecimento,
-                valor_total: lanche.preco,
-                itens: [{quantidade: 1, lanche: lanche}]
-            }
-
-            adicionado = true;
-            return 'success';
-        }
-
-        else{
-
-            if(estabelecimento.$key != this.cart.estabelecimento.$key){    //Verifica se o item adicionado é de um estabelecimento diferente do que já foi adicionado ao carrinho
-                return 'error'  
-            }
-            else{
-                this.cart.itens.map(item => {               //Percorre o array de itens para ver se já existe um item igual no carrinho
-                    if(lanche.$key == item.lanche.$key){
-                        item.quantidade++;
-                        this.cart.valor_total += lanche.preco;
-                        adicionado = true;
-                    }
-                })
-
-                if(!adicionado){   //Caso não haja um item igual, insere uma nova entrada.
-                    this.cart.itens.push({quantidade: 1, lanche: lanche});
-                    this.cart.valor_total += lanche.preco;
-                }
-            }
-        }
-        console.log(this.cart);
-        return 'sucess';
-        /*
-        let adicionado: boolean = false;
-
-        console.log('carrinho: ', this.cart);
-
-        if(this.cart.length == 0){
-
-            this.cart.push({
-                estabelecimento: estabelecimento,
-                valor_total: lanche.preco,
-                itens: [{quantidade: 1, lanche: lanche}]
-            })
-            adicionado = true;
-        }
-        else{
-            console.log('Adicionado: ', adicionado);
-            let achouEstabelecimento = false;
-            this.cart.map(aux => {
-                if(aux.estabelecimento.$key == estabelecimento.$key){
-                    achouEstabelecimento = true;
-
-                    aux.itens.map(item => {
-                        if(lanche.$key == item.lanche.$key){
-                            item.quantidade++;
-                            aux.valor_total += lanche.preco;
-                            adicionado = true;
-                        }
-                    })
-
-                    if(!adicionado){
-                        aux.itens.push({quantidade: 1, lanche: lanche});
-                        aux.valor_total += lanche.preco;
-                    }
-                }
-            })
-            if(!achouEstabelecimento){
-                this.cart.push({
-                    estabelecimento: estabelecimento,
-                    valor_total: lanche.preco,
-                    itens: [{quantidade: 1, lanche: lanche}]
-                })
-            }
-        }
-        
-
-        console.log(this.cart); */
-    
+        this.events.publish('quantidade:carrinho', this.getQuantidadeItensCarrinho());
+        return true;    
 }
 
-    fecharPedido(index: number){
-        console.log(this.cart[index]);
+    fecharPedido(observacao: string, endereco: any, dinheiro:boolean, cartao:boolean, troco: number, bandeira:string){
+        let itens = [];
+        let itens_estabelecimento = [];
+        let itens_usuario = [];
+        let aux = [];
+        this.cart.itens.map(entrada => {
+            itens.push(entrada);
+        })
+
+        let currentUser = firebase.auth().currentUser;
+        let pedidos_por_estabelecimento = {
+            uid: currentUser.uid,
+            nome_usuario: currentUser.displayName,
+            endereco: endereco,
+            itens: itens,
+            valor_total: this.cart.valor
+        };
+        let pedidos_por_clientes = {
+            idEstabelecimento: this.cart.estabelecimento.$key,
+            itens: itens,
+            valor_total: this.cart.valor,
+            pagamento: dinheiro? 'Dinheiro': bandeira
+        }
+        console.log(this.cart);
+        this.cart.itens.map(entrada =>{
+            itens_estabelecimento.push({
+                item: {
+                    categoria: entrada.item.categoria,
+                    nome: entrada.item.nome,
+                    preco: entrada.item.preco
+                },
+                quantidade: entrada.quantidade,
+                valor_total: entrada.valor
+            })
+        })
+        this.cart.itens.map(entrada =>{
+            itens_usuario.push({
+                item: {
+                    categoria: entrada.item.categoria,
+                    nome: entrada.item.nome,
+                    preco: entrada.item.preco,
+                    imagem: entrada.item.imagem? entrada.item.imagem:'',
+
+                },
+                quantidade: entrada.quantidade,
+                valor_total: entrada.valor
+            })
+        })
+        
+        return this.af.database.list(`pedidos_estabelecimento/${this.cart.estabelecimento.$key}`).push({
+            uid: currentUser.uid,
+            usuario_nome: currentUser.displayName,
+            itens: itens_estabelecimento,
+            valor_total: this.cart.valor,
+            endereco: endereco,
+            pagamento: dinheiro? 'Dinheiro': bandeira,
+            troco: troco,
+            observacao: observacao,
+            confirmado: false
+        }).then( _ => {
+            this.af.database.list(`pedidos_usuarios/${currentUser.uid}`).push({
+                estabelecimento_id: this.cart.estabelecimento.$key,
+                estabelecimento_nome: this.cart.estabelecimento.nome,
+                itens: itens_usuario,
+                endereco: endereco.descricao,
+                valor_total: this.cart.valor
+            })
+        })
     }
 
     /*
@@ -250,6 +232,7 @@ export class FireService {
             itens: [],
             valor: 0
         }
+        this.events.publish('quantidade:carrinho',this.cart.itens.length)
         return this.cart;
     }
     removeItem(entrada): Array<any>{
@@ -262,6 +245,7 @@ export class FireService {
             }
         })
         console.log(this.cart);
+        this.events.publish('quantidade:carrinho', this.getQuantidadeItensCarrinho());
         return this.cart;
     }
 
@@ -275,17 +259,19 @@ export class FireService {
                 typeof entrada.item.preco == 'string'? this.cart.valor -= +entrada.item.preco: this.cart.valor -= entrada.item.preco
             }
         });
+        this.events.publish('quantidade:carrinho', this.cart.itens.length)
         return this.cart;
     }
 
     addItem(entrada){
-        console.log(typeof entrada.item.preco);
+        console.log('addItem');
         this.cart.itens.map(aux => {
             if(entrada.item.$key == aux.item.$key){
                 aux.quantidade = aux.quantidade + 1;
                 typeof entrada.item.preco == 'string'? this.cart.valor += +entrada.item.preco: this.cart.valor += entrada.item.preco
             }
         });
+        this.events.publish('quantidade:carrinho', this.getQuantidadeItensCarrinho());
         return this.cart;
     }
 
@@ -293,6 +279,14 @@ export class FireService {
         return this.cart;
     }
 
+    getQuantidadeItensCarrinho():number{
+        let totalItens = 0;
+        this.cart.itens.map(item => {
+            console.log(item);
+            totalItens += item.quantidade;
+        })
+        return totalItens;
+    }
 
     addBairro(nomeBairro: string):firebase.Promise<any>{
         return this.af.database.list('bairros').push({nome: nomeBairro});
@@ -587,10 +581,15 @@ export class FireService {
         return this.af.database.list(`usuarios_app/${this.uid}/enderecos/${endereco.$key}`).remove();
     }
 
+    getPedidosPorUid(){
+        return this.af.database.list(`pedidos_usuarios/${firebase.auth().currentUser.uid}`);
+    }
     getMensagem(estabelecimentoKey):Observable<any>{
         return this.af.database.list(`chat/${estabelecimentoKey}/${this.uid}`);
     }
     logout(): firebase.Promise<any>{
         return firebase.auth().signOut();
     }
+
+
 }

@@ -3,7 +3,7 @@ import { CallNumber } from '@ionic-native/call-number';
 import { FireService } from './../../services/fire.service';
 import { LancheDetailPage } from './../lanche-detail/lanche-detail';
 import { Component } from '@angular/core';
-import { NavController, NavParams, App, AlertController, ModalController, IonicPage } from 'ionic-angular';
+import { NavController, NavParams, App, AlertController, ModalController, IonicPage, Events } from 'ionic-angular';
 
 @Component({
   selector: 'page-tab2',
@@ -14,6 +14,8 @@ export class Tab2Page {
   estabelecimento: any;
   loading: boolean = true;
   aba_key: string = '';
+  qtdeCarrinho: number = 0;
+  linkLocalizacao: string = '';
   constructor(
     public navCtrl: NavController, 
     public alertCtrl: AlertController,
@@ -21,11 +23,19 @@ export class Tab2Page {
     public fireService: FireService,
     public modalCtrl: ModalController,
     public callnumber: CallNumber,
-    public app: App
+    public app: App,
+    public events: Events
 
     ) {
       this.estabelecimento = this.navParams.data.estabelecimento;
       this.aba_key = this.navParams.data.abas_key[1];
+      this.events.subscribe('quantidade:carrinho', qtde => {
+        console.log('quantidade:carrinho: ', qtde);
+        this.qtdeCarrinho = qtde;
+      });
+      if(this.estabelecimento.localizacao.lat && this.estabelecimento.localizacao.lng){
+        this.linkLocalizacao = "http://maps.google.com/maps?q=" + this.estabelecimento.localizacao.lat + ',' + this.estabelecimento.localizacao.lng + "("+ this.estabelecimento.nome +")&z=15";
+      }
     }
 
   ionViewDidLoad() {
@@ -104,4 +114,7 @@ export class Tab2Page {
     alert.present();
   }
 
+  goToCarrinho(){
+    this.navCtrl.setRoot('CarrinhoPage');
+  }
 }

@@ -37,6 +37,9 @@ export class ConfiguracoesPage {
     })
   }
 
+  limparFiltro(){
+    this.viewCtrl.dismiss();
+  }
   selectBairroEntrega(){
     if(this.bairros){
       let alert = this.alertCtrl.create();

@@ -80,4 +80,12 @@ page-tab2 {
         border: 1px;
         border-radius: 2px;
     }
+
+    #notifications-badge {
+        background-color: red;
+        position: absolute;
+        top: 0px;
+        right: 27%;
+        border-radius: 100%;
+    }
 }

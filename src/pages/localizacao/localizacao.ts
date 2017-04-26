@@ -1,5 +1,4 @@
 import { LocalizacaoService } from './../../services/localizacao.service';
-import { Http } from '@angular/http';
 import { MapaPage } from './../mapa/mapa';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { AutocompletePage } from './../autocomplete/autocomplete';
@@ -18,30 +17,16 @@ import { Geolocation } from '@ionic-native/geolocation'
   templateUrl: 'localizacao.html'
 })
 export class LocalizacaoPage {
-  buscaPelaLocalizacao: boolean;
-  buscaPeloCEP: boolean;
-  formCep: FormGroup;
-  formEndereco: FormGroup;
-  bairro: string = '';
-  endereco: string = '';
-  pontoRef: string = '';
-  modal = false;
-  loading: boolean = false;
-  bairros: any[];
-  alert: any;
-  cep: string = '';
-  logradouro: string = '';
-  loadingBairros:boolean = true;
-  bairroSelecionado: string = '';
-  autocomplete: any;
-  address: any;
-  numero: string = '';
-  referencia: string = '';
-  geocoder: Geocoder = new Geocoder();
-  fullAddress: any;
-  localizado: boolean = false;
-  localizacao: any;
+  buscaPelaLocalizacao: boolean; //Indica se a busca será pela geolocalizacao
+  buscaPeloCEP: boolean; //Indica se a busca será pelo CEP
+  formCep: FormGroup; // Formulário do CEP
+  formEndereco: FormGroup; //Formulário do endereço já depois da busca (pelo CEP ou pelo mapa)
+  alert: any; //Alerta inicial
+  geocoder: Geocoder = new Geocoder();  //Geocoder que obtem localizacao
+  fullAddress: any;  //Endereco completo após a geocodificação
+  localizado: boolean = false; //Indica se o endereço foi localizado ou não
   enderecoAdicional: boolean = false;  //Serve para verificar se o usuário deseja adicionar mais um endereço à sua lista ou se quer um endereço exporádico
+  salvarAdicional: boolean = false;
 
   constructor(
     public navCtrl: NavController, 
@@ -57,7 +42,6 @@ export class LocalizacaoPage {
     public geolocation: Geolocation,
     public locationAccuracy: LocationAccuracy,
     public platform: Platform,
-    public http: Http,
     public localizacaoService: LocalizacaoService,
     public formBuilder: FormBuilder
 
@@ -89,10 +73,7 @@ export class LocalizacaoPage {
             text: 'Localizar no mapa',
             handler: () => {
               this.buscaPelaLocalizacao = true;
-              this.navCtrl.push('MapaPage')
-                .then(result => {
-                  console.log('resultado dismiss:',result);
-                })
+              this.navCtrl.push('MapaPage');
             }
           }
         ]
@@ -119,32 +100,41 @@ export class LocalizacaoPage {
   }
   ionViewWillEnter(){
     if(!this.localizacaoService.marcador){ //Se o usuário não selecionou nenhum endereço no mapa, apresenta o alert
-      this.alert.present();
+      if(this.enderecoAdicional){
+        // Import the AlertController from ionic package 
+        // Consume it in the constructor as 'alertCtrl' 
+        let alert = this.alertCtrl.create({
+          title: 'Confirmação',
+          message: 'Deseja salvar esse endereço em seu cadastro?',
+          buttons: [
+            {
+            text: 'Não', role: 'cancel',
+            handler: () => {
+              this.alert.present();
+            }
+            }, {
+              text: 'Sim',
+              handler: () => {
+                this.salvarAdicional = true;
+                this.alert.present();
+              }
+            }
+          ]
+        });
+        alert.present();
+      }
+      else{
+        this.alert.present();
+
+      }
     }
     else{
       console.log(this.localizacaoService.marcador);
       this.localizado = true;  //Se o usuário estiver selecionado uma localização no mapa.
       this.getLocationByMarker(this.localizacaoService.marcador)
     }
-    this.fireService.getBairros()
-      .subscribe(bairros => {
-        this.loadingBairros = false;
-        this.bairros = bairros;
-      })
   }
-  criarAlertaSimples(text: string){
-    let alert = this.alertCtrl.create({
-      title: 'Alerta',
-      subTitle: text,
-      buttons: [
-        {
-          text: 'OK',
-          role: 'cancel'
-        }
-      ]
-    });
-    alert.present();
-  }
+  
   getLocationByMarker(marker: google.maps.LatLng){
     console.log('get location by marker')
     let geocoder: google.maps.Geocoder = new google.maps.Geocoder(); 
@@ -156,6 +146,7 @@ export class LocalizacaoPage {
       content: 'Carregando informações'
     });
     loading.present();
+
     geocoder.geocode(request, resultGeocode => {
       console.log('resultGeocode: ', resultGeocode);
       let objeto = {
@@ -200,22 +191,7 @@ export class LocalizacaoPage {
 
   }
 
-  
-  showAddressModal(){
-    console.log('show address modal');
-    let modal = this.modalCtrl.create(AutocompletePage,{data: this.endereco});
-    modal.onDidDismiss(data => {
-      if(data){
-        this.fullAddress.place_id = data.place_id;
 
-        let request: google.maps.GeocoderRequest = {
-          placeId: data.place_id
-        };
-        this.geocodificar(request);
-      }
-    })
-    modal.present();
-  }
   buscarPeloCep(){
     let endereco: any;
     console.log(this.formCep.controls['cep'].value);
@@ -231,7 +207,7 @@ export class LocalizacaoPage {
                 text: 'Ok',
                 handler: () => {
                   console.log('Ok clicked');
-                  this.cep = '';
+                  this.formCep.controls['cep'].reset();
                 }
               }
             ]
@@ -275,8 +251,8 @@ export class LocalizacaoPage {
           this.formEndereco.controls['bairro'].setValue(this.fullAddress.bairro);
 
           console.log(result);
-          this.endereco = `${result['address_components'][0].short_name}, ${result['address_components'][1].short_name}, ${result['address_components'][2].short_name}`
-          console.log('address data = ', this.endereco);
+          //this.endereco = `${result['address_components'][0].short_name}, ${result['address_components'][1].short_name}, ${result['address_components'][2].short_name}`
+          //console.log('address data = ', this.endereco);
           console.log('geocoder result: ', result);
           this.localizado = true;
           loading.dismiss();
@@ -307,26 +283,6 @@ export class LocalizacaoPage {
         }
       });
   }
-  salvarEndereco(){
-    this.fullAddress.numero = this.numero;
-    this.fullAddress.referencia = this.referencia;
-    this.fullAddress.descricao = `${this.fullAddress.logradouro}, ${this.fullAddress.numero}. ${this.fullAddress.bairro}`
-    if(this.enderecoAdicional){
-      this.viewCtrl.dismiss({endereco: this.fullAddress});
-    }
-    else{
-      this.fireService.salvarEndereco(this.fullAddress)
-        .then(_ => {
-          let toast = this.toastCtrl.create({
-            message: 'Endereco salvo',
-            duration: 2500
-          })
-          toast.present();
-          this.dismiss();
-        })
-    }
-  }
-
   
   dismiss(){
     this.navCtrl.pop();
@@ -354,3 +310,44 @@ export class LocalizacaoPage {
 }
 
 
+
+
+/*
+  L I M B O
+
+  salvarEndereco(){
+    this.fullAddress.numero = this.numero;
+    this.fullAddress.referencia = this.referencia;
+    this.fullAddress.descricao = `${this.fullAddress.logradouro}, ${this.fullAddress.numero}. ${this.fullAddress.bairro}`
+    if(this.enderecoAdicional){
+      this.viewCtrl.dismiss({endereco: this.fullAddress});
+    }
+    else{
+      this.fireService.salvarEndereco(this.fullAddress)
+        .then(_ => {
+          let toast = this.toastCtrl.create({
+            message: 'Endereco salvo',
+            duration: 2500
+          })
+          toast.present();
+          this.dismiss();
+        })
+    }
+  }
+
+  showAddressModal(){
+    console.log('show address modal');
+    let modal = this.modalCtrl.create(AutocompletePage,{data: this.endereco});
+    modal.onDidDismiss(data => {
+      if(data){
+        this.fullAddress.place_id = data.place_id;
+
+        let request: google.maps.GeocoderRequest = {
+          placeId: data.place_id
+        };
+        this.geocodificar(request);
+      }
+    })
+    modal.present();
+  }
+ */

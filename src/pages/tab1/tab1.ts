@@ -4,7 +4,7 @@ import { CallNumber } from '@ionic-native/call-number';
 import { LancheDetailPage } from './../lanche-detail/lanche-detail';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, App, AlertController, ViewController, ModalController, ToastController, Toast, IonicPage } from 'ionic-angular';
+import { NavController, NavParams, App, AlertController, ViewController, ModalController, ToastController, Toast, IonicPage, Events } from 'ionic-angular';
 
 
 @Component({
@@ -17,6 +17,8 @@ export class Tab1Page {
   loading: boolean = true;
   aba_key: string = '';
   toast: Toast;
+  qtdeCarrinho: number = 0;
+  linkLocalizacao: string = '';
   constructor(
     public navCtrl: NavController, 
     public alertCtrl: AlertController,
@@ -26,16 +28,23 @@ export class Tab1Page {
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
     public callnumber: CallNumber,
-    public app: App
+    public app: App,
+    public events: Events
     ) {
       this.estabelecimento = this.navParams.data.estabelecimento;
+      if(this.estabelecimento.localizacao.lat && this.estabelecimento.localizacao.lng){
+        this.linkLocalizacao = "http://maps.google.com/maps?q=" + this.estabelecimento.localizacao.lat + ',' + this.estabelecimento.localizacao.lng + "("+ this.estabelecimento.nome +")&z=15";
+      }
       this.aba_key = this.navParams.data.abas_key[0];
       this.toast = this.toastCtrl.create({
         message: 'Item adicionado ao carrinho',
         duration: 2000,
         closeButtonText: 'X'
       })
-
+      this.events.subscribe('quantidade:carrinho', qtde => {
+        console.log('quantidade:carrinho: ', qtde);
+        this.qtdeCarrinho = qtde;
+      });
     }
 
   ionViewDidLoad() {
@@ -93,9 +102,6 @@ export class Tab1Page {
         let tamanho = Object.keys(item.ingredientes).length
         if(item.ingredientes){
           Object.keys(item.ingredientes).map((key, index) => {
-            console.log(tamanho);
-            console.log(index);
-            console.log(item.ingredientes[key]);
             if(index == 0 )
               item.ingredientes_truncados = item.ingredientes[key].nome; 
             
@@ -180,5 +186,9 @@ export class Tab1Page {
     console.log('Estabelecimento backbuttonaction');
     //this.viewCtrl._nav.popToRoot
     this.app.getRootNav().pop();
+  }
+
+  goToCarrinho(){
+    this.navCtrl.setRoot('CarrinhoPage');
   }
 }

@@ -17,6 +17,10 @@
           <ion-option *ngFor="let bairro of bairros" [value]="bairro.$key" > {{bairro.nome}} </ion-option>
         </ion-select>
       </ion-item>
+      <ion-item>
+        <button ion-button clear (click)="limparFiltro()" block >Limpar filtros</button>
+      </ion-item>
+      <!--
       <ion-item class="options">
         <ion-label floating>Categoria</ion-label>
         <ion-select [(ngModel)]="categorias" multiple="true" >
@@ -26,7 +30,7 @@
           <ion-option value="Sorveteria" > Sorveteria </ion-option>
           <ion-option value="Açaí" > Açaí </ion-option>
         </ion-select>
-      </ion-item>
+      </ion-item>-->
     </ion-list>
   </div>
 </ion-content>

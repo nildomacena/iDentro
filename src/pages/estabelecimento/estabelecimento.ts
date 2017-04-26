@@ -6,7 +6,7 @@ import { Tab1Page } from './../tab1/tab1';
 import { CardapioPage } from './../cardapio/cardapio';
 import { BebidasPage } from './../bebidas/bebidas';
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, Platform, ViewController, IonicPage } from 'ionic-angular';
+import { NavController, NavParams, AlertController, Platform, ViewController, IonicPage, Events } from 'ionic-angular';
 
 
 @IonicPage()
@@ -25,6 +25,7 @@ export class EstabelecimentoPage {
   abas: any[] = [];
   tabs: any[] = [];
   tabParams: any;
+  qtdeCarrinho: number = 0;
   cardapioVazio: boolean = false;
   constructor(
     public navCtrl: NavController, 
@@ -33,18 +34,23 @@ export class EstabelecimentoPage {
     public fireService: FireService,
     public platform: Platform,
     public viewCtrl: ViewController,
-    public callnumber: CallNumber
+    public callnumber: CallNumber,
+    public events: Events
     ) {
     this.tabParams = {
       estabelecimento: '',
       abas_key: []
     }
+
+    this.qtdeCarrinho = this.fireService.getQuantidadeItensCarrinho();
+    this.events.subscribe('quantidade:carrinho', qtde => {
+      console.log('quantidade:carrinho: ', qtde);
+      this.qtdeCarrinho = qtde;
+    });
     this.estabelecimento = this.navParams.get('estabelecimento');
-    console.log(this.estabelecimento);
     this.tabParams.estabelecimento = this.estabelecimento;
 
     this.abas = this.estabelecimento.abas;
-    console.log(this.abas, this.estabelecimento);
     try{
       Object.keys(this.abas).map((aba, index) => {
         if(index == 0){
@@ -69,7 +75,6 @@ export class EstabelecimentoPage {
     
 
     this.estabelecimento.imagemCapa? this.photo = this.estabelecimento.imagemCapa : this.photo = 'assets/no-photo.png';
-    console.log('user: ', this.fireService.user)
       if(this.fireService.user)
         this.logado = true;
       else{
@@ -155,5 +160,9 @@ export class EstabelecimentoPage {
             this.favorito = result;
           })
       })
+  }
+
+  goToCart(){
+    this.navCtrl.setRoot('CarrinhoPage');
   }
 }

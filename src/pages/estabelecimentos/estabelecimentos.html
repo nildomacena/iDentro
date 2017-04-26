@@ -3,7 +3,7 @@
     <button ion-button menuToggle *ngIf="!showToolbar">
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title *ngIf="!showToolbar" >Estabelecimentos</ion-title>
+    <ion-title *ngIf="!showToolbar" >Bolts</ion-title>
     <ion-searchbar #searchbar *ngIf="showToolbar"
       placeholder= "Pesquisar"
       [(ngModel)]="myInput"
@@ -22,6 +22,14 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
+  <ion-scroll scrollX="true">
+    <img src="assets/icon/pizza.png" class="categoria-img" />
+    <img src="assets/icon/hamburger.png" class="categoria-img" />
+    <img src="assets/icon/ice-cream.png" class="categoria-img" />
+    <img src="assets/icon/restaurant.png" class="categoria-img" />
+    <img src="assets/icon/acai.png" class="categoria-img" />
+  </ion-scroll>
+  
   <br>
   <div class="center-spinner" *ngIf='isLoading'>
     <ion-spinner name="crescent" mode="md"></ion-spinner>

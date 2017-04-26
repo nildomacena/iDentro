@@ -13,7 +13,7 @@
 
 
 <ion-content padding>
-  <h4 style="text-align: center">Selecione o endereço de entrega</h4>
+  <h5 style="text-align: center">Selecione o endereço de entrega</h5>
   <ion-card *ngFor="let endereco of enderecos; let i = index" [class.selecionado]="endereco == enderecoSelecionado" (click)="onSelectEndereco(endereco)" >
     <ion-card-content>
       {{endereco.descricao}}
@@ -24,15 +24,43 @@
       {{enderecoAdicional.descricao}}
     </ion-card-content>
   </ion-card>
+  <h5 style="text-align: center">Qual a forma de pagamento?</h5>
+  <ion-grid>
+    <ion-row>
+      <ion-col center-align>
+        <button style="margin-left: 60%" [color]="cartao? 'secondary': 'primary'" ion-button clear icon-only (click)="onSelectCartao()"><ion-icon name="card"></ion-icon></button>
+      </ion-col>
+      <ion-col>
+        <button ion-button clear icon-only [color]="dinheiro? 'secondary': 'primary'" (click)="onSelectDinheiro()"><ion-icon name="cash"></ion-icon></button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-item *ngIf="dinheiro">
+    <ion-label stacked >Troco para quanto?</ion-label>
+    <ion-input type="number" [(ngModel)]="troco" ></ion-input>
+  </ion-item>
+  <ion-item *ngIf="cartao">
+    <ion-label>Bandeira</ion-label>
+    <ion-select [(ngModel)]="bandeiraCartao">
+      <ion-option value="visa">Visa</ion-option>
+      <ion-option value="master">Master</ion-option>
+      <ion-option value="elo">Elo</ion-option>
+      <ion-option value="hiper">Hiper</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label stacked >Observações</ion-label>
+    <ion-textarea placeholder="Ex.: Sem presunto, com mais queijo" [(ngModel)]="observacao" ></ion-textarea>
+  </ion-item>
 </ion-content>
 <ion-footer class="footer">
   <ion-grid>
     <ion-row align-items-center>
       <ion-col col-7>
-        <span class="total_compra">Total da compra: R${{carrinho.valor}},00</span>
+        <span class="total_compra" style="font-weight: bold">Total da compra: R${{carrinho.valor}},00</span>
       </ion-col>
       <ion-col col-5>
-        <button  ion-button primary block outline (click)="fecharPedido()">Fechar pedido</button>
+        <button [disabled]="!enderecoSelecionado || (!dinheiro && !cartao)" ion-button primary block outline (click)="fecharPedido()">Fechar pedido</button>
       </ion-col>
     </ion-row>
   </ion-grid>

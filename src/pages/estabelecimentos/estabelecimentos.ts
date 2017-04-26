@@ -64,6 +64,7 @@ export class EstabelecimentosPage {
       .subscribe(estabelecimentos => {
         this.isLoading = false;
         this.estabelecimentos = this.filteredEstabelecimentos = estabelecimentos;
+        console.log(estabelecimentos);
       });
       this.fireService.getBairros()
         .subscribe(bairros => {
@@ -105,6 +106,10 @@ export class EstabelecimentosPage {
       if(data){
         this.filtroBairroEntrega = data.bairrosEntrega;
         this.filtroBairroEstabelecimento = data.bairrosEstabelecimentos;
+        this.filtrarPorBairro(); 
+      }
+      else{
+        this.filteredEstabelecimentos = this.estabelecimentos;
       }
     })
   }
@@ -152,6 +157,7 @@ export class EstabelecimentosPage {
       this.renderer.setElementStyle(this.searchbarElement.getElementRef().nativeElement, 'height', this.newSearchHeight+'px');
 
   }
+
   filter(event: Event){
     let search:string = event.srcElement['value'];
     if(!search){
@@ -169,6 +175,20 @@ export class EstabelecimentosPage {
       console.log('searchbar: ', this.searchbar);
     }
   } 
+
+  filtrarPorBairro(bairrosEntrega?: any[], bairrosEstabelecimento?: any[]){
+    this.filteredEstabelecimentos = [];
+    this.estabelecimentos.map((estabelecimento, index) => {
+      let achou = false;
+      console.log(estabelecimento);
+      this.filtroBairroEstabelecimento.map(bairro => {
+        if(estabelecimento.bairro_key.includes(bairro))
+          this.filteredEstabelecimentos.push(estabelecimento);
+      })
+    })  
+  }
+
+
   openChat(estabelecimento){
     console.log(estabelecimento);
     let chatModal = this.modalCtrl.create(ChatPage, {estabelecimento: estabelecimento});

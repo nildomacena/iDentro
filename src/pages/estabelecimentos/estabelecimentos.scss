@@ -16,4 +16,21 @@ page-estabelecimentos {
         width: 100%;
         text-align: center;
     }
+
+    .categoria-row{
+        height: 20vw;
+    }
+    .categoria-img{
+        border-radius: 50%;
+        height: 18vw;
+        width: 18vw;
+    }
+    ion-scroll {
+        margin-top: 5px;
+        white-space: nowrap;
+        height: 20vw;
+        img{
+            margin: 5px
+        }
+    }
 }

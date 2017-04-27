@@ -57,7 +57,7 @@
   <ion-grid>
     <ion-row align-items-center>
       <ion-col col-7>
-        <span class="total_compra" style="font-weight: bold">Total da compra: R${{carrinho.valor}},00</span>
+        <span class="total_compra" style="font-weight: bold">Total da compra: {{carrinho.valor | currency: 'BRL':true}}</span>
       </ion-col>
       <ion-col col-5>
         <button [disabled]="!enderecoSelecionado || (!dinheiro && !cartao)" ion-button primary block outline (click)="fecharPedido()">Fechar pedido</button>

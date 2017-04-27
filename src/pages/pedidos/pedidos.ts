@@ -16,12 +16,14 @@ export class Pedidos {
     public navParams: NavParams,
     public fireService: FireService
     ) {
-    this.fireService.getPedidosPorUid()
-      .subscribe(pedidos => {
-        this.pedidos = pedidos;
-        this.isLoading = false;
-        console.log(this.pedidos);
-      })
+    setTimeout(() => {
+        this.fireService.getPedidosPorUid()
+          .subscribe(pedidos => {
+            this.pedidos = pedidos;
+            this.isLoading = false;
+            console.log(this.pedidos);
+          })
+    }, 500);
   }
 
   ionViewDidLoad() {

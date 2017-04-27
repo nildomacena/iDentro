@@ -31,7 +31,7 @@
         <ion-img *ngIf="!entrada.item.imagem" src="assets/img/no-photo.jpg" class="imagem-lanche"></ion-img>
       </ion-thumbnail>
       <h2>{{entrada.item.nome}}</h2>
-      <p>R${{entrada.item.preco}}.00</p>
+      <p>{{entrada.item.preco | currency: 'BRL':true}}</p>
       <div item-right style="text-align: center" >
         <button class="botao-comprar" (click)="addItem(entrada)" block clear ion-button icon-only>
           <ion-icon name="add"></ion-icon>
@@ -49,7 +49,7 @@
   <ion-grid>
     <ion-row align-items-center>
       <ion-col col-7>
-        <span class="total_compra">Total da compra: R${{carrinho.valor}},00</span>
+        <span class="total_compra">Total da compra: {{carrinho.valor | currency: 'BRL':true}}</span>
       </ion-col>
       <ion-col col-5>
         <button  ion-button primary block outline (click)="fecharPedido()">Continuar</button>

@@ -42,7 +42,7 @@
                 {{item.ingredientes_truncados}}<br>
               </div>
               <div class="preco-lanche">
-                R${{item.preco}}.00
+                {{item.preco | currency: 'BRL':true}}
               </div>
             </ion-col>
             

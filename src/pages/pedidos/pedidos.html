@@ -19,7 +19,7 @@
     </ion-card-header>
     <ion-card-content>
       <b>Quantidade de itens:</b> {{pedido.itens.length}}<br>
-      <b>Valor total:</b> {{pedido.valor_total}}<br>
+      <b>Valor total:</b> {{pedido.valor_total | currency: 'BRL':true}}<br>
       <b>Endereço de entrega:</b> {{pedido.endereco}}<br>
       <b>status:</b> {{pedido.confirmado? 'Confirmado': 'Aguardando confirmação'}}
     </ion-card-content>

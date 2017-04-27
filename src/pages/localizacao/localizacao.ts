@@ -202,9 +202,13 @@ export class LocalizacaoPage {
 
   buscarPeloCep(){
     let endereco: any;
-    console.log(this.formCep.controls['cep'].value);
+    let loading = this.loadingCtrl.create({
+      content: 'Carregando localização'
+    });
+    loading.present();
     this.localizacaoService.buscarPeloCEP(this.formCep.controls['cep'].value)
       .subscribe(result => {
+        loading.dismiss();
         endereco = result.json();
         console.log('result buscar pelo cep: ', endereco)
         if(endereco.erro){

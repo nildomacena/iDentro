@@ -191,7 +191,8 @@ export class FireService {
                 estabelecimento_nome: this.cart.estabelecimento.nome,
                 itens: itens_usuario,
                 endereco: endereco.descricao,
-                valor_total: this.cart.valor
+                valor_total: this.cart.valor,
+                confirmado: false
             })
         })
     }

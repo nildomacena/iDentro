@@ -10,5 +10,18 @@
 
 
 <ion-content padding>
-
+  <div class="center-spinner" *ngIf='isLoading'>
+    <ion-spinner name="crescent" mode="md"></ion-spinner>
+  </div>
+  <ion-card *ngFor="let pedido of pedidos">
+    <ion-card-header>
+      {{pedido.estabelecimento_nome}}
+    </ion-card-header>
+    <ion-card-content>
+      <b>Quantidade de itens:</b> {{pedido.itens.length}}<br>
+      <b>Valor total:</b> {{pedido.valor_total}}<br>
+      <b>Endereço de entrega:</b> {{pedido.endereco}}<br>
+      <b>status:</b> {{pedido.confirmado? 'Confirmado': 'Aguardando confirmação'}}
+    </ion-card-content>
+  </ion-card>
 </ion-content>

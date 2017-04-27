@@ -49,14 +49,17 @@
     <form [formGroup]="formEndereco" >
       <ion-item>
         <ion-label floating>Endereço</ion-label>
-        <ion-textarea formControlName="endereco" ></ion-textarea>
+        <ion-textarea formControlName="logradouro" ></ion-textarea>
       </ion-item>
       
       <ion-item>
-        <ion-label floating>Número e complemento</ion-label>
-        <ion-input required type="text" formControlName="numero" ></ion-input>
+        <ion-label floating>Número</ion-label>
+        <ion-input type="text" formControlName="numero" ></ion-input>
       </ion-item>
-      
+      <ion-item>
+        <ion-label floating>Complemento</ion-label>
+        <ion-input type="text" formControlName="complemento" ></ion-input>
+      </ion-item>
       <ion-item>
         <ion-label floating>Nome do bairro</ion-label>
         <ion-input type="text" formControlName="bairro" ></ion-input>
@@ -64,7 +67,7 @@
 
       <ion-item>
         <ion-label floating>Ponto de referência</ion-label>
-        <ion-textarea required formControlName="referencia" ></ion-textarea>
+        <ion-textarea formControlName="referencia" ></ion-textarea>
       </ion-item>
     </form>
   </ion-list>

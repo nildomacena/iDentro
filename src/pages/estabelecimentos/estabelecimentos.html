@@ -22,7 +22,7 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
-  <ion-scroll scrollX="true">
+  <ion-scroll scrollX="true" *ngIf="estabelecimentos.length > 0">
     <img src="assets/icon/pizza.png" class="categoria-img" />
     <img src="assets/icon/hamburger.png" class="categoria-img" />
     <img src="assets/icon/ice-cream.png" class="categoria-img" />

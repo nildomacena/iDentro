@@ -51,10 +51,14 @@ export class LocalizacaoPage {
         cep: ['', [Validators.required, Validators.pattern('[0-9]{5}[0-9]{3}')]]
       })
       this.formEndereco = this.formBuilder.group({
-        endereco: ['', Validators.required],
+        logradouro: ['', Validators.required],
         numero: ['', Validators.required],
         bairro: ['', Validators.required],
         referencia: ['', Validators.required],
+        cidade: '',
+        estado: '',
+        complemento: '',
+        descricao: ''
       })
       this.enderecoAdicional = this.navParams.get('adicional');
       
@@ -136,7 +140,6 @@ export class LocalizacaoPage {
   }
   
   getLocationByMarker(marker: google.maps.LatLng){
-    console.log('get location by marker')
     let geocoder: google.maps.Geocoder = new google.maps.Geocoder(); 
     
     let request: google.maps.GeocoderRequest = {
@@ -164,14 +167,19 @@ export class LocalizacaoPage {
           component.types.map(type => {
             if(type.toLowerCase().includes('route')){
               this.fullAddress.logradouro = component.short_name;
-              this.formEndereco.controls['endereco'].setValue(component.short_name);
+              this.formEndereco.controls['logradouro'].setValue(component.short_name);
             }
             else if(type.toLowerCase().includes('sublocality_level_')){
               this.fullAddress.bairro = component.short_name
               this.formEndereco.controls['bairro'].setValue(component.short_name);
             }
+            else if(type.toLowerCase().includes('administrative_area_level_1')){
+              this.fullAddress.cidade = component.short_name
+              this.formEndereco.controls['estado'].setValue(component.short_name);
+            }
             else if(type.toLowerCase().includes('administrative_area_level_2')){
               this.fullAddress.cidade = component.short_name
+              this.formEndereco.controls['cidade'].setValue(component.short_name);
             }
           })
           console.log('objeto: ',objeto);
@@ -215,73 +223,20 @@ export class LocalizacaoPage {
           alert.present();
         }
         else{
+          this.formEndereco.controls['logradouro'].setValue(endereco.logradouro)
+          this.formEndereco.controls['bairro'].setValue(endereco.bairro)
+          this.formEndereco.controls['cidade'].setValue(endereco.localidade)
+          this.formEndereco.controls['estado'].setValue(endereco.uf)
+          this.localizado = true;
           let request: google.maps.GeocoderRequest = {
             address: endereco.logradouro,
             componentRestrictions: {
               postalCode: endereco.cep
             }
           };
-          this.geocodificar(request);
+          //this.geocodificar(request);
         }
       })
-  }
-
-  geocodificar(request: google.maps.GeocoderRequest){
-    console.log('geocodificar');
-    let loading = this.loadingCtrl.create({
-      content: 'Carregando informações'
-    })
-    loading.present();
-
-    let geocoder: google.maps.Geocoder = new google.maps.Geocoder();  
-      geocoder.geocode(request, (value) => {
-        let result = value[0];
-        console.log('resultado geocode: ', value);
-        if(result){
-          this.fullAddress.logradouro = result.address_components[0].short_name;
-          this.fullAddress.bairro = result.address_components[1].short_name;
-          this.fullAddress.cidade = result.address_components[2].short_name;
-          this.fullAddress.latitude = result.geometry.location.lat();
-          this.fullAddress.longitude = result.geometry.location.lng();
-          let enderecoControl = <FormControl>this.formEndereco.controls['endereco']
-          let bairroControl = <FormControl>this.formEndereco.controls['bairro']
-          console.log('this.bairroControl: ', bairroControl);
-          console.log('this.formcontrolsendereco: ', enderecoControl);
-          this.formEndereco.controls['endereco'].setValue(this.fullAddress.logradouro);
-          this.formEndereco.controls['bairro'].setValue(this.fullAddress.bairro);
-
-          console.log(result);
-          //this.endereco = `${result['address_components'][0].short_name}, ${result['address_components'][1].short_name}, ${result['address_components'][2].short_name}`
-          //console.log('address data = ', this.endereco);
-          console.log('geocoder result: ', result);
-          this.localizado = true;
-          loading.dismiss();
-        }
-        else{
-          loading.dismiss();
-          let alert = this.alertCtrl.create({
-            title: 'Erro',
-            message: 'Erro ao carregar as informações. Tente inserir a localização através do mapa.',
-            buttons: [
-              {
-                text: 'Cancelar',
-                role: 'cancel',
-                handler: () => {
-                  console.log('Cancel clicked');
-                }
-              },
-              {
-                text: 'Ir para o mapa',
-                handler: () => {
-                  console.log('Mapa clicked');
-                  this.navCtrl.push('MapaPage');
-                }
-              }
-            ]
-          });
-          alert.present();
-        }
-      });
   }
   
   dismiss(){
@@ -289,19 +244,25 @@ export class LocalizacaoPage {
   }
   
   onSubmitEndereco(){
+    this.formEndereco.controls['descricao'].setValue(`${this.formEndereco.value.logradouro}, ${this.formEndereco.value.numero}, ${this.formEndereco.value.bairro}. ${this.formEndereco.value.cidade}`)
+    console.log('form endereço:',this.formEndereco.value);
     this.fullAddress.numero = this.formEndereco.value.numero;
     this.fullAddress.referencia = this.formEndereco.value.referencia;
     this.fullAddress.descricao = `${this.fullAddress.logradouro}, ${this.fullAddress.numero}. ${this.fullAddress.bairro}`
-    this.fireService.salvarEndereco(this.fullAddress)
-      .then(_ => {
-        let toast = this.toastCtrl.create({
-          message: 'Endereço salvo com sucesso',
-          duration: 2000
-        });
-        toast.present();
-        this.viewCtrl.dismiss({endereco: this.fullAddress});
-      })
-    console.log( 'full Address',this.fullAddress);
+    if(this.enderecoAdicional && !this.salvarAdicional)
+        this.viewCtrl.dismiss({endereco: this.formEndereco.value});
+      else{
+        this.fireService.salvarEndereco(this.formEndereco.value)
+          .then(_ => {
+            let toast = this.toastCtrl.create({
+              message: 'Endereço salvo com sucesso',
+              duration: 2000
+            });
+            toast.present();
+            this.viewCtrl.dismiss();
+          })
+        console.log( 'full Address',this.fullAddress);
+      }
   }
 
   backButtonAction(){
@@ -349,5 +310,64 @@ export class LocalizacaoPage {
       }
     })
     modal.present();
+  }
+
+
+  geocodificar(request: google.maps.GeocoderRequest){
+    console.log('geocodificar');
+    let loading = this.loadingCtrl.create({
+      content: 'Carregando informações'
+    })
+    loading.present();
+
+    let geocoder: google.maps.Geocoder = new google.maps.Geocoder();  
+      geocoder.geocode(request, (value) => {
+        let result = value[0];
+        console.log('resultado geocode: ', value);
+        if(result){
+          this.fullAddress.logradouro = result.address_components[0].short_name;
+          this.fullAddress.bairro = result.address_components[1].short_name;
+          this.fullAddress.cidade = result.address_components[2].short_name;
+          this.fullAddress.latitude = result.geometry.location.lat();
+          this.fullAddress.longitude = result.geometry.location.lng();
+          let enderecoControl = <FormControl>this.formEndereco.controls['logradouro']
+          let bairroControl = <FormControl>this.formEndereco.controls['bairro']
+          console.log('this.bairroControl: ', bairroControl);
+          console.log('this.formcontrolsendereco: ', enderecoControl);
+          this.formEndereco.controls['logradouro'].setValue(this.fullAddress.logradouro);
+          this.formEndereco.controls['bairro'].setValue(this.fullAddress.bairro);
+
+          console.log(result);
+          //this.endereco = `${result['address_components'][0].short_name}, ${result['address_components'][1].short_name}, ${result['address_components'][2].short_name}`
+          //console.log('address data = ', this.endereco);
+          console.log('geocoder result: ', result);
+          this.localizado = true;
+          loading.dismiss();
+        }
+        else{
+          loading.dismiss();
+          let alert = this.alertCtrl.create({
+            title: 'Erro',
+            message: 'Erro ao carregar as informações. Tente inserir a localização através do mapa.',
+            buttons: [
+              {
+                text: 'Cancelar',
+                role: 'cancel',
+                handler: () => {
+                  console.log('Cancel clicked');
+                }
+              },
+              {
+                text: 'Ir para o mapa',
+                handler: () => {
+                  console.log('Mapa clicked');
+                  this.navCtrl.push('MapaPage');
+                }
+              }
+            ]
+          });
+          alert.present();
+        }
+      });
   }
  */

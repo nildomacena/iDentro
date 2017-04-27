@@ -117,7 +117,7 @@ call(){
   }
   
   goToCarrinho(){
-    this.navCtrl.setRoot('CarrinhoPage');
+    this.app.getRootNav().setRoot('CarrinhoPage');
   }
 
 }

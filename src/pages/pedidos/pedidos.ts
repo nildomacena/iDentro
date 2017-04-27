@@ -10,6 +10,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class Pedidos {
   pedidos = [];
+  isLoading = true;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -18,6 +19,7 @@ export class Pedidos {
     this.fireService.getPedidosPorUid()
       .subscribe(pedidos => {
         this.pedidos = pedidos;
+        this.isLoading = false;
         console.log(this.pedidos);
       })
   }

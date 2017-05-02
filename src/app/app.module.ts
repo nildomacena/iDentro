@@ -10,12 +10,10 @@ import { CabecalhoComponent } from './../components/cabecalho/cabecalho';
 import { ConfiguracoesPage } from './../pages/configuracoes/configuracoes';
 import { BebidasPage } from './../pages/bebidas/bebidas';
 import { CardapioPage } from './../pages/cardapio/cardapio';
-import { CategoriaPage } from './../pages/categoria/categoria';
 import { FavoritosPage } from './../pages/favoritos/favoritos';
 import { ContatoPage } from './../pages/contato/contato';
 import { ParallaxHeader } from './../components/parallax-header/parallax-header';
 import { FiltroIngredientesPage } from './../pages/filtro-ingredientes/filtro-ingredientes';
-import { MontagemPage } from './../pages/montagem/montagem';
 import { DestaquesPage } from './../pages/destaques/destaques';
 import { EstabelecimentosPage } from './../pages/estabelecimentos/estabelecimentos';
 import { FireService } from './../services/fire.service';
@@ -52,11 +50,9 @@ const config = {
     MyApp,
     EstabelecimentosPage,
     DestaquesPage,
-    MontagemPage,
     FiltroIngredientesPage,
     ContatoPage,
     FavoritosPage,
-    CategoriaPage,
     ParallaxHeader,
     CardapioPage,
     BebidasPage,
@@ -86,11 +82,9 @@ const config = {
     MyApp,
     EstabelecimentosPage,
     DestaquesPage,
-    MontagemPage,
     FiltroIngredientesPage,
     ContatoPage,
     FavoritosPage,
-    CategoriaPage,
     CardapioPage,
     BebidasPage,
     ConfiguracoesPage,

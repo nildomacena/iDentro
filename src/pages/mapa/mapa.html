@@ -13,7 +13,7 @@
     <button [disabled]="!marcadorAdicionado" ion-fab color="primary" (click)="selecionaEndereco()"><ion-icon name="checkmark"></ion-icon></button>
   </ion-fab>
 
-    <input class="autocomplete" (focus)="clearAutocomplete()" id="search" placeholder="Pesquise seu endereço" [(ngModel)]="Date"/>
+    <input [class.invisible]="!map" class="autocomplete" (focus)="clearAutocomplete()" id="search" placeholder="Pesquise seu endereço" [(ngModel)]="Date"/>
   <div id="map" style="height: 100%"></div>
   <!--<div *ngIf="!GPSHabilitado">
     <h3 style="text-align: center">Habilite o GPS para localizar lanchonetes perto de você</h3>

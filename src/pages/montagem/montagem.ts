@@ -1,9 +1,9 @@
 import { FiltroIngredientesPage } from './../filtro-ingredientes/filtro-ingredientes';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, Checkbox, AlertController } from 'ionic-angular';
+import { NavController, NavParams, Checkbox, AlertController, IonicPage } from 'ionic-angular';
 
-
+@IonicPage()
 @Component({
   selector: 'page-montagem',
   templateUrl: 'montagem.html'
@@ -62,22 +62,21 @@ export class MontagemPage {
   }
 
   onChange(event: Checkbox, ingrediente: any){
-
-      if(event.checked){
-        this.ingredientesSelecionados.push(ingrediente.nome);
-        this.checkboxes.push(event);
-      }
-      if(!event.checked){
-        let index = this.ingredientesSelecionados.findIndex((element) => {
-          return element == ingrediente.nome;
-        })
-        this.ingredientesSelecionados.splice(index,1);
-      }
-      this.selecionouIngrediente = this.ingredientesSelecionados.length > 0;
-      console.log('Event: ', event);
-      console.log('Ingrediente: ', ingrediente);
-      console.log('ingredientesSelecionados: ', this.ingredientesSelecionados);
-      console.log('Selecionou ingrediente: ', this.selecionouIngrediente);
-      }
-    
+    if(event.checked){
+      this.ingredientesSelecionados.push(ingrediente.nome);
+      this.checkboxes.push(event);
+    }
+    if(!event.checked){
+      let index = this.ingredientesSelecionados.findIndex((element) => {
+        return element == ingrediente.nome;
+      })
+      this.ingredientesSelecionados.splice(index,1);
+    }
+    this.selecionouIngrediente = this.ingredientesSelecionados.length > 0;
+    console.log('Event: ', event);
+    console.log('Ingrediente: ', ingrediente);
+    console.log('ingredientesSelecionados: ', this.ingredientesSelecionados);
+    console.log('Selecionou ingrediente: ', this.selecionouIngrediente);
+  }
+ 
 }

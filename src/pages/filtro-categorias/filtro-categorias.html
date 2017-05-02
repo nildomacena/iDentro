@@ -1,0 +1,25 @@
+<ion-header>
+
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>O que você quer comer?</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding-top>
+  <ion-list>
+    <ion-item [class.selecionada]="categoria === categoriaSelecionada" *ngFor="let categoria of categorias" (click)="onSelectCategoria(categoria)" >
+      <ion-avatar item-left>
+        <img [src]="categoria.icone"/>
+      </ion-avatar>
+      <h2>{{categoria.nome}}</h2>
+    </ion-item>
+  </ion-list>
+  <ion-fab right bottom *ngIf="categoriaSelecionada" >
+    <button ion-fab color="primary" (click)="irParaIngredientes()"><ion-icon name="arrow-forward"></ion-icon></button>
+  </ion-fab>
+</ion-content>

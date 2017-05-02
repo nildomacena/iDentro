@@ -103,4 +103,8 @@ export class ConfiguracoesPage {
       })
     }
   }
+  
+  backButtonAction(){
+    this.viewCtrl.dismiss();
+  }
 }

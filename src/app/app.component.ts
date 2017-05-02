@@ -49,6 +49,7 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.statusBar.overlaysWebView(true);
       this.splashscreen.hide();
+      /*
       this.platform.registerBackButtonAction(() => {
           let nav = app.getActiveNav();
           let activeView: ViewController = nav.getActive();
@@ -66,36 +67,36 @@ export class MyApp {
             }
             else nav.parent.select(0); // goes to the first tab
           }  
-      }, 100)
+      }, 100)*/
     }); 
   }
 
 
   goToPerfil(){
-    this.nav.setRoot('PerfilPage', {user: this.user });
+    this.app.getRootNav().push('PerfilPage', {user: this.user });
   }
   goToHome(){
-    this.nav.setRoot('HomePage');
+    this.app.getRootNav().push('HomePage');
   }
 
   goToCarrinho(){
-    this.nav.setRoot('CarrinhoPage');
+    this.app.getRootNav().push('CarrinhoPage');
   }
   goToLocalizacao(){
     this.nav.push(LocalizacaoPage);
   }
 
   goToContato(){
-    this.nav.setRoot(ContatoPage);
+    this.app.getRootNav().push(ContatoPage);
   }
   goToFavoritos(){
-    this.nav.setRoot(FavoritosPage);
+    this.app.getRootNav().push(FavoritosPage);
   }
   goToPedidos(){
-    this.nav.setRoot('Pedidos');
+    this.app.getRootNav().push('Pedidos');
   }
   login(){
-    this.nav.setRoot(HomePage);
+    this.app.getRootNav().push(HomePage);
   }
   logout(){
     this.fireService.logout()

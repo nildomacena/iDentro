@@ -166,4 +166,8 @@ export class FiltroIngredientesPage {
       'pesquisa': true,
     });
   }
+
+  backButtonAction(){
+    this.navCtrl.pop();
+  }
 }

@@ -17,7 +17,7 @@ export class HomePage {
   estabelecimentos: any[];
   estabelecimentosPage = EstabelecimentosPage;
   destaquesPage = DestaquesPage;
-  categoriaPage = CategoriaPage;
+  categoriaPage = 'FiltroCategorias';
   mapaPage = MapaPage;
   constructor(
     public navCtrl: NavController,

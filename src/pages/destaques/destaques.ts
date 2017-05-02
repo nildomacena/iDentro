@@ -23,13 +23,13 @@ export class DestaquesPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad DestaquesPage');
     this.fireService.getEstabelecimentos()
-      .subscribe(estabelecimentos => {
+      .then(estabelecimentos => {
         this.estabelecimentos = estabelecimentos;
       })
   }
 
   onSelectEstabelecimento(estabelecimento){
-    this.app.getRootNav().push(EstabelecimentoPage,{'estabelecimento': estabelecimento});
+    this.app.getRootNav().push('EstabelecimentoPage',{'estabelecimento': estabelecimento});
   }
 
   call(estabelecimento){

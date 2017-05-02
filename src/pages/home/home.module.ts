@@ -1,10 +1,11 @@
+import { FiltroCategorias } from './../filtro-categorias/filtro-categorias';
 import { HomePage } from './home';
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 
 @NgModule({
   declarations: [
-    HomePage,
+    HomePage
   ],
   imports: [
     IonicPageModule.forChild(HomePage),

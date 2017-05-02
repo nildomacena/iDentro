@@ -4,7 +4,6 @@ import { Facebook } from '@ionic-native/facebook';
 import { lanches, estabelecimentos, lanches_por_estabelecimento } from './dados';
 import { Injectable } from '@angular/core';
 import { AngularFire, FirebaseListObservable, AuthMethods, AuthProviders, FirebaseAuthState } from 'angularfire2';
-import { AngularFireOffline, ListObservable, ObjectObservable } from 'angularfire2-offline';
 import { Observable } from 'rxjs';
 import * as firebase from 'firebase';
 import 'rxjs/add/operator/toPromise';
@@ -20,7 +19,6 @@ export class FireService {
     public marcador:google.maps.LatLng;
 
     constructor(
-        private afo: AngularFireOffline,
         private af: AngularFire,
         private facebook: Facebook,
         public alertCtrl: AlertController,
@@ -39,8 +37,8 @@ export class FireService {
         }
     }
 
-    getEstabelecimentos(){
-        return this.af.database.list('estabelecimentos');
+    getEstabelecimentos():firebase.Promise<any>{
+        return this.af.database.list('estabelecimentos').first().toPromise();
     }
 
     getEstabelecimentoByKey(estabelecimento_key: string): Observable<any>{
@@ -83,8 +81,8 @@ export class FireService {
             }
         })
     }
-    getCategorias(): Observable<any>{
-        return this.af.database.list('categorias');
+    getCategorias(): firebase.Promise<any>{
+        return this.af.database.list('categorias').first().toPromise();
     }
     getUid(){
         return this.uid;

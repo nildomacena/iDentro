@@ -76,6 +76,7 @@ export class MapaPage {
       console.log('Sudoeste: ', targetSouthWest.toString())
       this.autocomplete.setBounds(lngLatBounds);
     })
+
     this.autocomplete = new google.maps.places.Autocomplete(this.autocompleteSearchbox, autocompleteOptions);
     this.autocomplete.addListener('place_changed', () => {
       let latLng = this.autocomplete.getPlace().geometry.location;

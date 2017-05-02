@@ -3,7 +3,7 @@ import { ConfiguracoesPage } from './../configuracoes/configuracoes';
 import { EstabelecimentoPage } from './../estabelecimento/estabelecimento';
 import { FireService } from './../../services/fire.service';
 import { Component, ViewChildren, ChangeDetectorRef, ViewChild, QueryList, ElementRef, Renderer } from '@angular/core';
-import { NavController, NavParams, App, Searchbar, Content, Navbar, Header, Toolbar, AlertController, ToastController, Platform, ViewController, ModalController, IonicPage, ActionSheetController } from 'ionic-angular';
+import { NavController, NavParams, App, Searchbar, Content, Navbar, Header, Toolbar, AlertController, ToastController, Platform, ViewController, ModalController, IonicPage, ActionSheetController, Alert, Refresher } from 'ionic-angular';
 import { CallNumber } from '@ionic-native/call-number';
 
 //@IonicPage()
@@ -24,7 +24,7 @@ export class EstabelecimentosPage {
   newSearchHeight: any;
   filtroBairroEntrega: any[];
   filtroBairroEstabelecimento: any[];
-
+  alertSair: Alert;
   @ViewChildren('searchbar') searchbar: QueryList<Searchbar>;
   @ViewChild(Content) content: Content;
   @ViewChild(Header) header: Header;
@@ -49,6 +49,23 @@ export class EstabelecimentosPage {
     public actionSheet: ActionSheetController
     ) {
       this.searchHeight = 56;
+      this.alertSair = this.alertCtrl.create({
+        title: 'Deseja sair?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+            handler: () => {
+            }
+          },
+          {
+            text: 'Sair',
+            handler: () => {
+              this.exitApp();
+            }
+          }
+        ]
+      });
   }
 
   ionViewDidLoad(){
@@ -60,24 +77,15 @@ export class EstabelecimentosPage {
     })
     */
 
-    this.fireService.getEstabelecimentos()
-      .subscribe(estabelecimentos => {
-        this.isLoading = false;
-        this.estabelecimentos = this.filteredEstabelecimentos = estabelecimentos;
-        console.log(estabelecimentos);
-      });
-      this.fireService.getBairros()
-        .subscribe(bairros => {
-          this.bairros = bairros;
-        })
+    this.getEstabelecimentos();
   }
 
   backButtonAction(){
-    console.log(this.viewCtrl);
     if(this.isSearch){
       this.toggleSearchbar();
     }
     else{
+      
       let alert = this.alertCtrl.create({
         title: 'Deseja sair?',
         buttons: [
@@ -98,7 +106,21 @@ export class EstabelecimentosPage {
       alert.present();
     }  
   }
-
+  getEstabelecimentos(refresher?:Refresher){
+    this.isLoading = true;
+    this.fireService.getEstabelecimentos()
+      .then(estabelecimentos => {
+        this.isLoading = false;
+        this.estabelecimentos = this.filteredEstabelecimentos = estabelecimentos;
+        console.log(estabelecimentos);
+        if(refresher)
+          refresher.complete();
+      });
+      this.fireService.getBairros()
+        .subscribe(bairros => {
+          this.bairros = bairros;
+        })
+  }
   openModal(){
     let modal = this.modalCtrl.create(ConfiguracoesPage,{bairros: this.bairros});
     modal.present();
@@ -133,6 +155,7 @@ export class EstabelecimentosPage {
         console.log('content resize toggle searchbar');
         let searchbar = <Searchbar>result.toArray()[0];
         if(searchbar){
+          //searchbar.setFocus();
           searchbar.setFocus();
           this.changeDetectionRef.detectChanges();  
         }

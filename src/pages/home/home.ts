@@ -15,8 +15,8 @@ import { NavController, IonicPage } from 'ionic-angular';
 })
 export class HomePage {
   estabelecimentos: any[];
-  estabelecimentosPage = EstabelecimentosPage;
-  destaquesPage = DestaquesPage;
+  estabelecimentosPage = 'EstabelecimentosPage';
+  destaquesPage = 'DestaquesPage';
   categoriaPage = 'FiltroCategorias';
   mapaPage = MapaPage;
   constructor(

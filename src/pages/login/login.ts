@@ -1,9 +1,11 @@
 import { FireService } from './../../services/fire.service';
 import { HomePage } from './../home/home';
 import { Component } from '@angular/core';
-import { NavController, NavParams, LoadingController, Loading, Platform, AlertController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, Loading, Platform, AlertController, IonicPage } from 'ionic-angular';
 import * as firebase from 'firebase';
 
+
+@IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',

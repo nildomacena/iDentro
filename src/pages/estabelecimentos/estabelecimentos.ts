@@ -6,7 +6,7 @@ import { Component, ViewChildren, ChangeDetectorRef, ViewChild, QueryList, Eleme
 import { NavController, NavParams, App, Searchbar, Content, Navbar, Header, Toolbar, AlertController, ToastController, Platform, ViewController, ModalController, IonicPage, ActionSheetController, Alert, Refresher } from 'ionic-angular';
 import { CallNumber } from '@ionic-native/call-number';
 
-//@IonicPage()
+@IonicPage()
 @Component({
   selector: 'page-estabelecimentos',
   templateUrl: 'estabelecimentos.html'

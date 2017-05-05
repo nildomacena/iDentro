@@ -1,7 +1,8 @@
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, ToastController, IonicPage } from 'ionic-angular';
 
+@IonicPage()
 @Component({
   selector: 'page-contato',
   templateUrl: 'contato.html'

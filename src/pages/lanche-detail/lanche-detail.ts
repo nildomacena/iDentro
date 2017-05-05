@@ -3,6 +3,7 @@ import { EstabelecimentoPage } from './../estabelecimento/estabelecimento';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController, AlertController, IonicPage, Toast } from 'ionic-angular';
+import * as firebase from 'firebase';
 
 @IonicPage()
 @Component({
@@ -16,6 +17,7 @@ export class LancheDetailPage {
   pesquisa: boolean; //Variável testa se a página anterior foi a página de pesquisa
   toast: Toast;
   ingredientes_truncados: string = '';
+  currentUser: any;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -36,6 +38,7 @@ export class LancheDetailPage {
         .subscribe(lanche => {
           this.lanche = lanche;
           this.truncarIngredientes();
+          this.currentUser = firebase.auth().currentUser;
         })
 
         if(!this.estabelecimento){

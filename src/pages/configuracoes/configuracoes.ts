@@ -1,6 +1,5 @@
 import { Component, ElementRef} from '@angular/core';
-import { NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
-
+import { NavController, NavParams, ViewController, AlertController, IonicPage } from 'ionic-angular';
 
 @Component({
   selector: 'page-configuracoes',

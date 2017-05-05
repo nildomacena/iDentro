@@ -5,7 +5,7 @@ import { LancheDetailPage } from './../lanche-detail/lanche-detail';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
 import { NavController, NavParams, App, AlertController, ViewController, ModalController, ToastController, Toast, IonicPage, Events } from 'ionic-angular';
-
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'page-tab1',
@@ -19,6 +19,7 @@ export class Tab1Page {
   toast: Toast;
   qtdeCarrinho: number = 0;
   linkLocalizacao: string = '';
+  currentUser: any;
   constructor(
     public navCtrl: NavController, 
     public alertCtrl: AlertController,
@@ -53,6 +54,7 @@ export class Tab1Page {
         this.loading = false;
         this.itens = itens;
         this.truncarIngredientes();
+        this.currentUser = firebase.auth().currentUser;
       })
   }
 
@@ -189,6 +191,6 @@ export class Tab1Page {
   }
 
   goToCarrinho(){
-    this.app.getRootNav().setRoot('CarrinhoPage');
+    this.app.getRootNav().push('CarrinhoPage');
   }
 }

@@ -1,41 +1,43 @@
-import { LocalizacaoService } from './../services/localizacao.service';
-import { CardapioVazioPage } from './../pages/cardapio-vazio/cardapio-vazio';
+//IMPORTS
+
+//Angular e Ionic
+import { ConfiguracoesPage } from './../pages/configuracoes/configuracoes';
+import { AngularFireOfflineModule } from 'angularfire2-offline';
+import { NgModule, ErrorHandler } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule } from '@angular/http'
+import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+
+
+//Pages
+import { MyApp } from './app.component';
 import { Tab3Page } from './../pages/tab3/tab3';
 import { Tab2Page } from './../pages/tab2/tab2';
 import { Tab1Page } from './../pages/tab1/tab1';
-import { AutocompletePage } from './../pages/autocomplete/autocomplete';
-import { LoginPage } from './../pages/login/login';
-import { ChatPage } from './../pages/chat/chat';
-import { CabecalhoComponent } from './../components/cabecalho/cabecalho';
-import { ConfiguracoesPage } from './../pages/configuracoes/configuracoes';
-import { BebidasPage } from './../pages/bebidas/bebidas';
-import { CardapioPage } from './../pages/cardapio/cardapio';
-import { FavoritosPage } from './../pages/favoritos/favoritos';
-import { ContatoPage } from './../pages/contato/contato';
-import { ParallaxHeader } from './../components/parallax-header/parallax-header';
-import { FiltroIngredientesPage } from './../pages/filtro-ingredientes/filtro-ingredientes';
-import { DestaquesPage } from './../pages/destaques/destaques';
-import { EstabelecimentosPage } from './../pages/estabelecimentos/estabelecimentos';
+import { CardapioVazioPage } from './../pages/cardapio-vazio/cardapio-vazio';
+
+//Services
+import { LocalizacaoService } from './../services/localizacao.service';
 import { FireService } from './../services/fire.service';
-import { GoogleMaps } from '@ionic-native/google-maps';
-import { Diagnostic } from '@ionic-native/diagnostic';
-import { Geolocation } from '@ionic-native/geolocation';
-import { HeaderColor } from '@ionic-native/header-color';
-import { NativeGeocoder} from '@ionic-native/native-geocoder';
-import { LocationAccuracy } from '@ionic-native/location-accuracy'
-import { NgModule, ErrorHandler } from '@angular/core';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-import { MyApp } from './app.component';
-import { AngularFireModule } from 'angularfire2';
-import { AngularFireOfflineModule } from 'angularfire2-offline';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { StatusBar } from '@ionic-native/status-bar';
-import { CallNumber } from '@ionic-native/call-number';
-import { Facebook } from '@ionic-native/facebook';
-import { Keyboard } from '@ionic-native/keyboard';
-import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http'
-import { ReactiveFormsModule } from '@angular/forms';
+
+
+//Ionic Native
+import { GoogleMaps }         from '@ionic-native/google-maps';
+import { Diagnostic }         from '@ionic-native/diagnostic';
+import { Geolocation }        from '@ionic-native/geolocation';
+import { HeaderColor }        from '@ionic-native/header-color';
+import { NativeGeocoder}      from '@ionic-native/native-geocoder';
+import { LocationAccuracy }   from '@ionic-native/location-accuracy'
+import { Deeplinks }          from '@ionic-native/deeplinks';
+import { AngularFireModule }  from 'angularfire2';
+import { SplashScreen }       from '@ionic-native/splash-screen';
+import { StatusBar }          from '@ionic-native/status-bar';
+import { CallNumber }         from '@ionic-native/call-number';
+import { Facebook }           from '@ionic-native/facebook';
+import { Keyboard }           from '@ionic-native/keyboard';
+import { Push }               from '@ionic-native/push';
+import { Firebase }           from '@ionic-native/firebase';
 
 const config = {
     apiKey: "AIzaSyCZHJ2ywN6nMq8I_KvGlI6jjh1kcZmZC50",
@@ -48,22 +50,10 @@ const config = {
 @NgModule({
   declarations: [
     MyApp,
-    EstabelecimentosPage,
-    DestaquesPage,
-    FiltroIngredientesPage,
-    ContatoPage,
-    FavoritosPage,
-    ParallaxHeader,
-    CardapioPage,
-    BebidasPage,
-    ConfiguracoesPage,
-    CabecalhoComponent,
-    ChatPage,
-    LoginPage,
     Tab1Page,
     Tab2Page,
     Tab3Page,
-    AutocompletePage
+    ConfiguracoesPage,
   ],
   imports: [
     BrowserModule,
@@ -80,20 +70,10 @@ const config = {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    EstabelecimentosPage,
-    DestaquesPage,
-    FiltroIngredientesPage,
-    ContatoPage,
-    FavoritosPage,
-    CardapioPage,
-    BebidasPage,
-    ConfiguracoesPage,
-    ChatPage,
-    LoginPage,
     Tab1Page,
     Tab2Page,
     Tab3Page,
-    AutocompletePage
+    ConfiguracoesPage
   ],
   providers: [
     FireService, 
@@ -109,6 +89,9 @@ const config = {
     Facebook,
     NativeGeocoder,
     LocationAccuracy,
+    Deeplinks,
+    Push,
+    Firebase,
     {provide: ErrorHandler, useClass: IonicErrorHandler}]
 })
 export class AppModule {}

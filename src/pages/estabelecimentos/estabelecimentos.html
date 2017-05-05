@@ -25,7 +25,7 @@
   <ion-refresher (ionRefresh)="getEstabelecimentos($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-scroll scrollX="true" *ngIf="estabelecimentos.length > 0">
+  <ion-scroll scrollX="true" *ngIf="estabelecimentos.length > 0 && !isLoading">
     <img src="assets/icon/pizza.png" class="categoria-img" />
     <img src="assets/icon/hamburger.png" class="categoria-img" />
     <img src="assets/icon/ice-cream.png" class="categoria-img" />
@@ -34,7 +34,7 @@
   </ion-scroll>
   
   <br>
-  <div class="center-spinner" *ngIf='isLoading'>
+  <div class="center-spinner" *ngIf='isLoading && !updating'>
     <ion-spinner name="crescent" mode="md"></ion-spinner>
   </div>
   <ion-list [virtualScroll]="filteredEstabelecimentos" approxItemHeight="60px">

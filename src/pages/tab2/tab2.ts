@@ -4,6 +4,7 @@ import { FireService } from './../../services/fire.service';
 import { LancheDetailPage } from './../lanche-detail/lanche-detail';
 import { Component } from '@angular/core';
 import { NavController, NavParams, App, AlertController, ModalController, IonicPage, Events } from 'ionic-angular';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'page-tab2',
@@ -16,6 +17,7 @@ export class Tab2Page {
   aba_key: string = '';
   qtdeCarrinho: number = 0;
   linkLocalizacao: string = '';
+  currentUser: any;
   constructor(
     public navCtrl: NavController, 
     public alertCtrl: AlertController,
@@ -44,7 +46,7 @@ export class Tab2Page {
       .subscribe(itens => {
         this.loading = false;
         this.itens = itens;
-        console.log(itens);
+        this.currentUser = firebase.auth().currentUser;
       })
   }
 
@@ -115,6 +117,6 @@ export class Tab2Page {
   }
 
   goToCarrinho(){
-    this.app.getRootNav().setRoot('CarrinhoPage');
+    this.app.getRootNav().push('CarrinhoPage');
   }
 }

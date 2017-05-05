@@ -1,9 +1,9 @@
 import { LancheDetailPage } from './../lanche-detail/lanche-detail';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, App } from 'ionic-angular';
+import { NavController, NavParams, App, IonicPage } from 'ionic-angular';
 
-
+@IonicPage()
 @Component({
   selector: 'page-filtro-ingredientes',
   templateUrl: 'filtro-ingredientes.html'

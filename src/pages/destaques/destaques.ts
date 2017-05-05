@@ -1,10 +1,10 @@
 import { EstabelecimentoPage } from './../estabelecimento/estabelecimento';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, App, AlertController } from 'ionic-angular';
+import { NavController, NavParams, App, AlertController, IonicPage } from 'ionic-angular';
 import { CallNumber } from '@ionic-native/call-number';
 
-
+@IonicPage()
 @Component({
   selector: 'page-destaques',
   templateUrl: 'destaques.html'

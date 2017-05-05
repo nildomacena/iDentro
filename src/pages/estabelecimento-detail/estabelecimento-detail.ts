@@ -1,18 +1,22 @@
+import { Component, NgZone } from '@angular/core';
+import { NavController, NavParams, AlertController, Platform, ViewController, IonicPage, Events } from 'ionic-angular';
 import { CallNumber } from '@ionic-native/call-number';
 import { FireService } from './../../services/fire.service';
 import { Tab3Page } from './../tab3/tab3';
 import { Tab2Page } from './../tab2/tab2';
 import { Tab1Page } from './../tab1/tab1';
-import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, Platform, ViewController, IonicPage, Events } from 'ionic-angular';
 
-
-@IonicPage()
-@Component({
-  selector: 'page-estabelecimento',
-  templateUrl: 'estabelecimento.html'
+@IonicPage({
+  name: 'estabelecimento',
+  segment: 'estabelecimento/:estabelecimentoKey',
+  defaultHistory: ['HomePage']
 })
-export class EstabelecimentoPage {
+@Component({
+  selector: 'page-estabelecimento-detail',
+  templateUrl: 'estabelecimento-detail.html',
+})
+export class EstabelecimentoDetail {
+  estabelecimentoKey: string;
   estabelecimento: any;
   photo: string;
   favorito: boolean;
@@ -23,6 +27,8 @@ export class EstabelecimentoPage {
   tabParams: any;
   qtdeCarrinho: number = 0;
   cardapioVazio: boolean = false;
+  carregado: boolean = false;   // Controla se o estabelecimento já foi carregado
+
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -31,63 +37,65 @@ export class EstabelecimentoPage {
     public platform: Platform,
     public viewCtrl: ViewController,
     public callnumber: CallNumber,
-    public events: Events
+    public events: Events,
+    public zone: NgZone
     ) {
-    this.tabParams = {
-      estabelecimento: '',
-      abas_key: []
-    }
-
-    this.qtdeCarrinho = this.fireService.getQuantidadeItensCarrinho();
-    this.events.subscribe('quantidade:carrinho', qtde => {
-      this.qtdeCarrinho = qtde;
-    });
-    this.estabelecimento = this.navParams.get('estabelecimento');
-    this.tabParams.estabelecimento = this.estabelecimento;
-
-    this.abas = this.estabelecimento.abas;
-    try{
-      Object.keys(this.abas).map((aba, index) => {
-        if(index == 0){
-          this.tabParams.abas_key[0] = aba;
-          this.tabs.push({titulo: this.abas[aba].nome, root: Tab1Page})
-        }
-        else if(index == 1){
-          this.tabParams.abas_key[1] = aba;
-          this.tabs.push({titulo: this.abas[aba].nome, root: Tab2Page})
-        }
-        else if(index == 2){
-          this.tabParams.abas_key[2] = aba;
-          this.tabs.push({titulo: this.abas[aba].nome, root: Tab3Page})
-        }
-      });
-      console.log(this.tabParams);
-    }
-    catch(err){
-      this.cardapioVazio = true;
-      console.log(err);
-    }
-    
-
-    this.estabelecimento.imagemCapa? this.photo = this.estabelecimento.imagemCapa : this.photo = 'assets/no-photo.png';
-      if(this.fireService.user)
-        this.logado = true;
-      else{
-        this.logado = false;
+      this.estabelecimentoKey = this.navParams.get('estabelecimentoKey');
+      this.tabParams = {
+        estabelecimento: '',
+        abas_key: []
       }
-  }
+      this.fireService.getEstabelecimentoByKey(this.estabelecimentoKey)
+        .subscribe(estabelecimento => {
+          this.zone.run(() => {
+            this.carregado = true;
+            this.estabelecimento = estabelecimento;
+            this.abas = this.estabelecimento.abas;
+            console.log('this.estabelecimento.abas', this.estabelecimento.abas)
+            this.tabParams.estabelecimento = this.estabelecimento;
+            this.estabelecimento.imagemCapa? this.photo = this.estabelecimento.imagemCapa : this.photo = 'assets/no-photo.png';
+            console.log('estabelecimento ngzone: ',this.estabelecimento);
+            try{
+              Object.keys(this.abas).map((aba, index) => {
+                if(index == 0){
+                  this.tabParams.abas_key[0] = aba;
+                  this.tabs.push({titulo: this.abas[aba].nome, root: Tab1Page})
+                }
+                else if(index == 1){
+                  this.tabParams.abas_key[1] = aba;
+                  this.tabs.push({titulo: this.abas[aba].nome, root: Tab2Page})
+                }
+                else if(index == 2){
+                  this.tabParams.abas_key[2] = aba;
+                  this.tabs.push({titulo: this.abas[aba].nome, root: Tab3Page})
+                }
+              });
+              console.log(this.tabParams);
+            }
+            catch(err){
+              this.cardapioVazio = true;
+              console.log(err);
+            }
+
+            if(this.fireService.user)
+              this.logado = true;
+            else{
+              this.logado = false;
+            }
+          console.log('abas: ', this.abas)
+          })
+        })
+      this.qtdeCarrinho = this.fireService.getQuantidadeItensCarrinho();
+      this.events.subscribe('quantidade:carrinho', qtde => {
+        this.qtdeCarrinho = qtde;
+      });
+      
+  } 
 
   ionViewDidLoad() {
-    this.logado = this.fireService.checkAuth();
-    console.log(this.abas);
-    this.fireService.checkFavorito(this.estabelecimento.$key)
-      .then(result => {
-        console.log('result load: ',result);
-        this.favorito = result;
-      })
-  }
 
-  call(){
+  }
+   call(){
     let buttons;
     let subTitle;
     

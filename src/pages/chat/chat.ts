@@ -1,8 +1,10 @@
 import { FireService } from './../../services/fire.service';
 import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams, ViewController, Content } from 'ionic-angular';
+import { NavController, NavParams, ViewController, Content, IonicPage } from 'ionic-angular';
 import { Keyboard } from '@ionic-native/keyboard';
 
+
+@IonicPage()
 @Component({
   selector: 'page-chat',
   templateUrl: 'chat.html'

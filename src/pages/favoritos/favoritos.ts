@@ -2,8 +2,10 @@ import { CallNumber } from '@ionic-native/call-number';
 import { EstabelecimentoPage } from './../estabelecimento/estabelecimento';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, IonicPage } from 'ionic-angular';
 
+
+@IonicPage()
 @Component({
   selector: 'page-favoritos',
   templateUrl: 'favoritos.html'

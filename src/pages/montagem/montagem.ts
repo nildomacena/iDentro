@@ -58,7 +58,7 @@ export class MontagemPage {
       alert.present();
     }
     else
-      this.navCtrl.push(FiltroIngredientesPage, {'ingredientes': this.ingredientesSelecionados, 'categoria': this.categoria},{animate: false});
+      this.navCtrl.push('FiltroIngredientesPage', {'ingredientes': this.ingredientesSelecionados, 'categoria': this.categoria},{animate: false});
   }
 
   onChange(event: Checkbox, ingrediente: any){

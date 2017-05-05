@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "875199458176",
+    "firebase_url": "https://identro-61529.firebaseio.com",
+    "project_id": "identro-61529",
+    "storage_bucket": "identro-61529.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875199458176:android:39ff4660673f0493",
+        "android_client_info": {
+          "package_name": "com.koine.bolts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "875199458176-3ejihpv1901nc48e5g38lnc7bgemkh5r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.koine.bolts",
+            "certificate_hash": "b1b8ba4a9f570fb384bb947047067f32d25e1550"
+          }
+        },
+        {
+          "client_id": "875199458176-mkt7r1of6kt9dchi8farijthkkgalvhq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgAQFgihQwCb0LEXKAk8em-d3yHs-0VNY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "875199458176-mkt7r1of6kt9dchi8farijthkkgalvhq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "875199458176-aomtuibhnul9iu7kqj24njfq3f4cgcep.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.koine.bolts"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

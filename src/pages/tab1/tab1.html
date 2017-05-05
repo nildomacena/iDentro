@@ -46,7 +46,7 @@
               </div>
             </ion-col>
             
-            <ion-col col-2 align-self-center > 
+            <ion-col col-2 align-self-center *ngIf="currentUser"> 
                 <button (click)="addToCart(item)" clear ion-button icon-only>
                   <ion-icon name="cart"></ion-icon>
                 </button>

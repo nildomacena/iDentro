@@ -1,5 +1,6 @@
+import { Firebase } from '@ionic-native/firebase';
 import { Marker, LatLng } from '@ionic-native/google-maps';
-import { AlertController, Events } from 'ionic-angular';
+import { AlertController, Events, App } from 'ionic-angular';
 import { Facebook } from '@ionic-native/facebook';
 import { lanches, estabelecimentos, lanches_por_estabelecimento } from './dados';
 import { Injectable } from '@angular/core';
@@ -13,6 +14,7 @@ import 'rxjs/add/operator/toPromise';
 export class FireService {
     uid = 'uid';
     cart: any = {};
+    token: string;
     public auth$ = this.af.auth;
     public auth = firebase.auth();
     public user = this.auth.currentUser;
@@ -22,7 +24,9 @@ export class FireService {
         private af: AngularFire,
         private facebook: Facebook,
         public alertCtrl: AlertController,
-        public events: Events
+        public events: Events,
+        public firebasePlugin: Firebase,
+        public app: App
     ) {
          firebase.auth().onAuthStateChanged(user => {
             if(user){
@@ -37,6 +41,29 @@ export class FireService {
         }
     }
 
+    getToken(){
+        this.firebasePlugin.getToken()
+          .then(token => {
+              this.token = token;
+            console.log(`The token is ${token}`)
+            }) // save the token server-side and use it to push notifications to this device
+          .catch(error => console.error('Error getting token', error));
+
+        this.firebasePlugin.onTokenRefresh()
+          .subscribe((token: string) => {
+              this.token = token;
+            console.log(`Got a new token ${token}`)
+            });
+
+        this.firebasePlugin.onNotificationOpen().subscribe(data => {
+          if(data.tap){
+            if(data.funcao == 'pedido')
+              this.app.getRootNav().push('Pedidos');
+          }
+          console.log('notificação aberta',data);
+
+        })
+    }
     getEstabelecimentos():firebase.Promise<any>{
         return this.af.database.list('estabelecimentos').first().toPromise();
     }
@@ -129,6 +156,7 @@ export class FireService {
         let itens_estabelecimento = [];
         let itens_usuario = [];
         let aux = [];
+        let timestamp:number = new Date().getTime();
         this.cart.itens.map(entrada => {
             itens.push(entrada);
         })
@@ -139,13 +167,15 @@ export class FireService {
             nome_usuario: currentUser.displayName,
             endereco: endereco,
             itens: itens,
-            valor_total: this.cart.valor
+            valor_total: this.cart.valor,
+            status: 'novo'
         };
         let pedidos_por_clientes = {
             idEstabelecimento: this.cart.estabelecimento.$key,
             itens: itens,
             valor_total: this.cart.valor,
-            pagamento: dinheiro? 'Dinheiro': bandeira
+            pagamento: dinheiro? 'Dinheiro': bandeira,
+            status: 'novo'
         }
         console.log(this.cart);
         this.cart.itens.map(entrada =>{
@@ -182,7 +212,9 @@ export class FireService {
             pagamento: dinheiro? 'Dinheiro': bandeira,
             troco: troco,
             observacao: observacao,
-            confirmado: false
+            confirmado: false,
+            timestamp: timestamp,
+            usuario_token: this.token
         }).then( _ => {
             this.af.database.list(`pedidos_usuarios/${currentUser.uid}`).push({
                 estabelecimento_id: this.cart.estabelecimento.$key,
@@ -190,7 +222,8 @@ export class FireService {
                 itens: itens_usuario,
                 endereco: endereco.descricao,
                 valor_total: this.cart.valor,
-                confirmado: false
+                confirmado: false,
+                timestamp: timestamp,
             })
         })
     }

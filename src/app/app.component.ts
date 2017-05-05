@@ -1,3 +1,6 @@
+import { EstabelecimentoDetail } from './../pages/estabelecimento-detail/estabelecimento-detail';
+import { EstabelecimentoPage } from './../pages/estabelecimento/estabelecimento';
+import { Deeplinks } from '@ionic-native/deeplinks';
 import { HomePage } from './../pages/home/home';
 import { PerfilPage } from './../pages/perfil/perfil';
 import { LoginPage } from './../pages/login/login';
@@ -11,6 +14,7 @@ import { CarrinhoPage } from './../pages/carrinho/carrinho';
 import { Component, ViewChild } from '@angular/core';
 import { Platform, App, ViewController, NavController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
+import { Firebase } from '@ionic-native/firebase';
 import * as firebase from 'firebase';
 
 
@@ -30,7 +34,10 @@ export class MyApp {
     public fireService: FireService, 
     public statusBar: StatusBar,
     public splashscreen: SplashScreen,
-    public app: App) {
+    public deeplinks: Deeplinks,
+    public app: App,
+    public firebasePlugin: Firebase 
+    ) {
     platform.ready().then(() => {
       this.headerColor.tint('#e65100');
       firebase.auth().onAuthStateChanged(user => {
@@ -38,17 +45,50 @@ export class MyApp {
         if(!user){
           console.log('Logout');
           this.logado = false;
-          this.nav.setRoot(LoginPage);
+          this.nav.setRoot('LoginPage');
+          this.deeplinks.route({
+            '/estabelecimento/:estabelecimentoKey': EstabelecimentoDetail,
+            '/estabelecimento/': EstabelecimentoDetail
+          })
+            .subscribe(match => {
+              console.log(match);
+              this.nav.push('estabelecimento',{
+                estabelecimentoKey: match.$args.estabelecimentoKey
+              })
+
+            },
+              nomatch => {
+                console.log('error deeplink : ',nomatch);
+              })
+
         }
         else{
           this.nav.setRoot('HomePage');
           this.user = user;
           this.logado = true;
+          this.deeplinks.route({
+            '/estabelecimento/:estabelecimentoKey': EstabelecimentoDetail,
+            '/estabelecimento/': EstabelecimentoDetail
+          })
+            .subscribe(match => {
+              console.log(match);
+              this.nav.push('estabelecimento',{
+                estabelecimentoKey: match.$args.estabelecimentoKey
+              })
+
+            },
+              nomatch => {
+                console.log('error deeplink : ',nomatch);
+              })
+              this.fireService.getToken();
         } 
       })
+
       this.statusBar.styleDefault();
       this.statusBar.overlaysWebView(true);
       this.splashscreen.hide();
+
+      
       /*
       this.platform.registerBackButtonAction(() => {
           let nav = app.getActiveNav();
@@ -87,10 +127,10 @@ export class MyApp {
   }
 
   goToContato(){
-    this.app.getRootNav().push(ContatoPage);
+    this.app.getRootNav().push('ContatoPage');
   }
   goToFavoritos(){
-    this.app.getRootNav().push(FavoritosPage);
+    this.app.getRootNav().push('FavoritosPage');
   }
   goToPedidos(){
     this.app.getRootNav().push('Pedidos');

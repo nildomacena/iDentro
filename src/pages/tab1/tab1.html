@@ -11,8 +11,8 @@
         <h4>{{estabelecimento.nome}}</h4>
         <div class="endereco">
           <ion-label>{{estabelecimento.endereco}} <a style="text-decoration: none" [href]="linkLocalizacao"><b>Ver no mapa</b></a> </ion-label> 
-          <ion-label>Telefone: {{estabelecimento.telefone}}</ion-label>
-          <ion-label *ngIf="estabelecimento.celular">Celular: {{estabelecimento.celular.numero}} &nbsp;<ion-icon *ngIf="estabelecimento.celular.whatsapp" name="logo-whatsapp"></ion-icon></ion-label>
+          <ion-label *ngIf="estabelecimento.telefone1">Telefone: {{estabelecimento.telefone1.numero}}<ion-icon *ngIf="estabelecimento.telefone1.whatsapp" name="logo-whatsapp"></ion-icon></ion-label>
+          <ion-label *ngIf="estabelecimento.telefone2">Celular: {{estabelecimento.telefone2.numero}} &nbsp;<ion-icon *ngIf="estabelecimento.telefone2.whatsapp" name="logo-whatsapp"></ion-icon></ion-label>
           <label class="aberto">Aberto</label>
         </div>
       </ion-col>
@@ -57,11 +57,7 @@
     </ion-card>
     <br><br>
   <ion-fab left bottom>
-    <button ion-fab color="primary"><ion-icon name="call"></ion-icon></button>
-    <ion-fab-list side="top">
-      <button ion-fab (click)="goToChat()"><ion-icon name="text"></ion-icon></button>
-      <button ion-fab (click)="call()"><ion-icon name="call"></ion-icon></button>
-    </ion-fab-list>
+    <button ion-fab color="primary" (click)="call()"><ion-icon name="call"></ion-icon></button>
   </ion-fab>
   <ion-fab right bottom *ngIf="qtdeCarrinho > 0">
     <button ion-fab color="primary" (click)="goToCarrinho()" >

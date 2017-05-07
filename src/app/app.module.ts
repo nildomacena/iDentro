@@ -11,15 +11,15 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 
 
 //Pages
-import { MyApp } from './app.component';
-import { Tab3Page } from './../pages/tab3/tab3';
-import { Tab2Page } from './../pages/tab2/tab2';
-import { Tab1Page } from './../pages/tab1/tab1';
-import { CardapioVazioPage } from './../pages/cardapio-vazio/cardapio-vazio';
+import { MyApp }              from './app.component';
+import { Tab3Page }           from './../pages/tab3/tab3';
+import { Tab2Page }           from './../pages/tab2/tab2';
+import { Tab1Page }           from './../pages/tab1/tab1';
+import { CardapioVazioPage }  from './../pages/cardapio-vazio/cardapio-vazio';
 
 //Services
 import { LocalizacaoService } from './../services/localizacao.service';
-import { FireService } from './../services/fire.service';
+import { FireService }        from './../services/fire.service';
 
 
 //Ionic Native
@@ -38,6 +38,7 @@ import { Facebook }           from '@ionic-native/facebook';
 import { Keyboard }           from '@ionic-native/keyboard';
 import { Push }               from '@ionic-native/push';
 import { Firebase }           from '@ionic-native/firebase';
+import { SocialSharing }      from '@ionic-native/social-sharing';
 
 const config = {
     apiKey: "AIzaSyCZHJ2ywN6nMq8I_KvGlI6jjh1kcZmZC50",
@@ -92,6 +93,7 @@ const config = {
     Deeplinks,
     Push,
     Firebase,
+    SocialSharing,
     {provide: ErrorHandler, useClass: IonicErrorHandler}]
 })
 export class AppModule {}

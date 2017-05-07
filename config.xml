@@ -51,4 +51,5 @@
         <variable name="APP_NAME" value="iDentro" />
     </plugin>
     <plugin name="cordova-plugin-firebase" spec="~0.1.20" />
+    <plugin name="cordova-plugin-x-socialsharing" spec="~5.1.8" />
 </widget>

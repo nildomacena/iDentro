@@ -3,7 +3,7 @@ import { HomePage } from './../home/home';
 import { CallNumber } from '@ionic-native/call-number';
 import { LancheDetailPage } from './../lanche-detail/lanche-detail';
 import { FireService } from './../../services/fire.service';
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { NavController, NavParams, App, AlertController, ViewController, ModalController, ToastController, Toast, IonicPage, Events } from 'ionic-angular';
 import * as firebase from 'firebase';
 
@@ -30,9 +30,13 @@ export class Tab1Page {
     public toastCtrl: ToastController,
     public callnumber: CallNumber,
     public app: App,
-    public events: Events
+    public events: Events,
+    public zone: NgZone
     ) {
-      this.estabelecimento = this.navParams.data.estabelecimento;
+      this.zone.run(() => {
+        this.estabelecimento = this.navParams.data.estabelecimento;
+      });
+      
       if(this.estabelecimento.localizacao.lat && this.estabelecimento.localizacao.lng){
         this.linkLocalizacao = "http://maps.google.com/maps?q=" + this.estabelecimento.localizacao.lat + ',' + this.estabelecimento.localizacao.lng + "("+ this.estabelecimento.nome +")&z=15";
       }
@@ -46,6 +50,7 @@ export class Tab1Page {
         console.log('quantidade:carrinho: ', qtde);
         this.qtdeCarrinho = qtde;
       });
+      console.log('estabeleicmento: ',this.estabelecimento);
     }
 
   ionViewDidLoad() {
@@ -56,6 +61,7 @@ export class Tab1Page {
         this.truncarIngredientes();
         this.currentUser = firebase.auth().currentUser;
       })
+      console.log('estabeleicmento: ',this.estabelecimento);
   }
 
   addToCart(item: any){
@@ -126,7 +132,7 @@ export class Tab1Page {
       
       this.estabelecimento.telefone2 && this.estabelecimento.telefone1? subTitle = 'Selecione o número para o qual deseja ligar.': 'Deseja realmente ligar?'
 
-      if(this.estabelecimento.telefone1 && this.estabelecimento.telefone1){
+      if(this.estabelecimento.telefone1 && this.estabelecimento.telefone2){
         buttons = [
           {
             text: this.estabelecimento.telefone1.numero,

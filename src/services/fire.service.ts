@@ -60,6 +60,18 @@ export class FireService {
             if(data.funcao == 'pedido')
               this.app.getRootNav().push('Pedidos');
           }
+          else{
+              let alert = this.alertCtrl.create({
+                  title: data.titulo?data.titulo: 'Notificação',
+                  subTitle: data.titulo?data.subtitulo: 'Você recebeu uma notificação, cheque seus pedidos.',
+                  buttons: [{
+                      text: 'Ok',
+                      role: 'cancel'
+                  }]
+
+              })
+              alert.present();
+          }
           console.log('notificação aberta',data);
 
         })
@@ -226,6 +238,7 @@ export class FireService {
                 timestamp: timestamp,
             })
         })
+
     }
 
     /*

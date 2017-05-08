@@ -2,7 +2,7 @@
   <ion-navbar>
     <ion-title>{{estabelecimento.nome}}</ion-title>
     
-    <ion-buttons end>
+    <ion-buttons end *ngIf="!estabelecimento.organico">
       <button ion-button icon-only (click)="openSettings()">
         <ion-icon name="more" ></ion-icon>
       </button>
@@ -17,7 +17,8 @@
   <div *ngIf="cardapioVazio">
     <ion-grid no-padding>
       <ion-row>
-        <ion-col col-4 >
+        <ion-col col-4 style="position: relative" >
+          <ion-icon name="heart" class="icone-favorito" *ngIf="favorito"></ion-icon>
           <ion-avatar>
             <img *ngIf="estabelecimento.imagemCapa" [src]="estabelecimento.imagemCapa">
             <img *ngIf="!estabelecimento.imagemCapa" src="assets/img/no-photo.jpg">
@@ -26,7 +27,7 @@
         <ion-col col-8 style="padding-left: 6px">
           <h4>{{estabelecimento.nome}}</h4>
           <div class="endereco">
-            <ion-label>{{estabelecimento.endereco}}</ion-label>
+            <p no-margin no-padding>{{estabelecimento.endereco}} <a *ngIf="estabelecimento.localizacao" style="text-decoration: none" [href]="linkLocalizacao"><b>Ver no mapa</b></a> </p> 
             <ion-label *ngIf="estabelecimento.telefone1">Telefone: {{estabelecimento.telefone1.numero}}<ion-icon *ngIf="estabelecimento.telefone1.whatsapp" name="logo-whatsapp"></ion-icon></ion-label>
           <ion-label *ngIf="estabelecimento.celular">Celular: {{estabelecimento.telefone2.numero}} &nbsp;<ion-icon *ngIf="estabelecimento.telefone2.whatsapp" name="logo-whatsapp"></ion-icon></ion-label>
             <label class="aberto">Aberto</label>

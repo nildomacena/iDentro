@@ -1,3 +1,4 @@
+import { FireService } from './../../services/fire.service';
 import { Component, ElementRef} from '@angular/core';
 import { NavController, NavParams, ViewController, AlertController, IonicPage } from 'ionic-angular';
 
@@ -10,17 +11,26 @@ export class ConfiguracoesPage {
   bairrosEntrega: any[] = [];
   bairrosLocalizacao: any[] = [];
   categorias: any[] = [];
+  categoriaSelecionada: any;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams, 
     public viewCtrl: ViewController,
     public alertCtrl: AlertController,
-    public element: ElementRef
+    public element: ElementRef,
+    public fireService: FireService
     ) {}
 
   ionViewDidLoad() {
     this.bairros = this.navParams.get('bairros');
     this.element.nativeElement.parentElement.parentElement.setAttribute("class",this.element.nativeElement.parentElement.parentElement.getAttribute("class")+ " settings")
+    this.fireService.getCategoriasEstabelecimento()
+      .then(categorias => {
+        this.categorias = categorias;
+      })
+      .catch(err => {
+        console.error(err);
+      })
     //this.entregaSelect.setTitle('Bairro de Entrega')
   }
 
@@ -102,7 +112,10 @@ export class ConfiguracoesPage {
       })
     }
   }
-  
+  onSelectCategoria(categoria){
+    this.categoriaSelecionada = categoria;
+  } 
+
   backButtonAction(){
     this.viewCtrl.dismiss();
   }

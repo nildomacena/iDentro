@@ -181,7 +181,7 @@ export class EstabelecimentoPage {
             message: `Venha conferir as ofertas do ${this.estabelecimento.nome} no aplicativo Bolts:`, // not supported on some apps (Facebook, Instagram)
             subject: 'Bolts', // fi. for email
             files: '', // an array of filenames either locally or remotely
-            url: 'meubiu.com.br/estabelecimento/1',
+            url: `meubiu.com.br/estabelecimento/${this.estabelecimento.$key}`,
             chooserTitle: 'Bolts' // Android only, you can override the default share sheet title
           }
            this.share.shareWithOptions(options)
@@ -211,41 +211,44 @@ export class EstabelecimentoPage {
         }
       ]
     });
-    if(!this.favorito){
-      action.addButton({
-        text: 'Adicionar aos favoritos',
-        role: 'destructive',
-        icon: 'heart',
-        handler: () => {
-          this.addToFavorito();
-        }
-      })
-    }
-    else{
-      action.addButton({
-        text: 'Retirar dos favoritos',
-        role: 'destructive',
-        icon: 'heart-outline',
-        handler: () => {
-          this.addToFavorito();
-        }
-      })
-    }
-    try{
-      if(this.estabelecimento.localizacao.lat && this.estabelecimento.localizacao.lng){
+    if(!this.estabelecimento.organico){
+      if(!this.favorito){
         action.addButton({
-          text: 'Abrir localização no mapa',
+          text: 'Adicionar aos favoritos',
           role: 'destructive',
-          icon: 'map',
+          icon: 'heart',
           handler: () => {
-            let linkLocalizacao = "http://maps.google.com/maps?q=" + this.estabelecimento.localizacao.lat + ',' + this.estabelecimento.localizacao.lng + "("+ this.estabelecimento.nome +")&z=15";
-            window.open(linkLocalizacao);
+            this.addToFavorito();
           }
         })
       }
-    }
-    catch(err){
-      console.log(err);
+      else{
+        action.addButton({
+          text: 'Retirar dos favoritos',
+          role: 'destructive',
+          icon: 'heart-outline',
+          handler: () => {
+            this.addToFavorito();
+          }
+        })
+      }
+      
+      try{
+        if(this.estabelecimento.localizacao.lat && this.estabelecimento.localizacao.lng){
+          action.addButton({
+            text: 'Abrir localização no mapa',
+            role: 'destructive',
+            icon: 'map',
+            handler: () => {
+              let linkLocalizacao = "http://maps.google.com/maps?q=" + this.estabelecimento.localizacao.lat + ',' + this.estabelecimento.localizacao.lng + "("+ this.estabelecimento.nome +")&z=15";
+              window.open(linkLocalizacao);
+            }
+          })
+        }
+      }
+      catch(err){
+        console.log(err);
+      }
     }
     
     action.present();

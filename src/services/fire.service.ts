@@ -123,6 +123,11 @@ export class FireService {
     getCategorias(): firebase.Promise<any>{
         return this.af.database.list('categorias').first().toPromise();
     }
+
+    getCategoriasEstabelecimento(): firebase.Promise<any>{
+        return this.af.database.list('categorias_estab').first().toPromise();
+    }
+
     getUid(){
         return this.uid;
     }

@@ -2,15 +2,21 @@
   <h4 style="margin: 15px">Filtros</h4>
 </ion-header>
 <ion-content>
+  <h5 style="text-align: center">Categorias</h5>
+  <ion-chip [color]="categoria == categoriaSelecionada? 'primary': '' " *ngFor="let categoria of categorias" (click)="onSelectCategoria(categoria)" >
+    <ion-label>{{categoria.nome}}</ion-label>
+  </ion-chip>
   <hr>
   <div>
     <ion-list>
+      <!--
       <ion-item class="options">
         <ion-label stacked>Bairro de Entrega</ion-label>
         <ion-select [(ngModel)]="bairrosEntrega" placeholder="Selecione o bairro" multiple="true" >
           <ion-option *ngFor="let bairro of bairros" [value]="bairro.$key" > {{bairro.nome}} </ion-option>
         </ion-select>
       </ion-item>
+      -->
       <ion-item class="options">
         <ion-label stacked>Bairro do estabelecimento</ion-label>
         <ion-select [(ngModel)]="bairrosLocalizacao" placeholder="Selecione o bairro" multiple="true" >

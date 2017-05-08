@@ -70,9 +70,13 @@ page-tab2 {
     }
 
     .botao-comprar{
-        height: 100%
+        height: 100%;
     }
-
+    .icone-favorito{
+        position: absolute;
+        top: 80%;
+        left: 80%;
+    }
     .aberto{
         background-color: #66bb6a;
         font-style: bold;

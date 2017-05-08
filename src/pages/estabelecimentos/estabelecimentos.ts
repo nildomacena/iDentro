@@ -2,7 +2,7 @@ import { ChatPage } from './../chat/chat';
 import { ConfiguracoesPage } from './../configuracoes/configuracoes';
 import { EstabelecimentoPage } from './../estabelecimento/estabelecimento';
 import { FireService } from './../../services/fire.service';
-import { Component, ViewChildren, ChangeDetectorRef, ViewChild, QueryList, ElementRef, Renderer } from '@angular/core';
+import { Component, ViewChildren, ChangeDetectorRef, ViewChild, QueryList, ElementRef, Renderer, NgZone } from '@angular/core';
 import { NavController, NavParams, App, Searchbar, Content, Navbar, Header, Toolbar, AlertController, ToastController, Platform, ViewController, ModalController, IonicPage, ActionSheetController, Alert, Refresher } from 'ionic-angular';
 import { CallNumber } from '@ionic-native/call-number';
 
@@ -46,7 +46,8 @@ export class EstabelecimentosPage {
     public renderer: Renderer,
     public modalCtrl: ModalController,
     public callnumber: CallNumber,
-    public actionSheet: ActionSheetController
+    public actionSheet: ActionSheetController,
+    public zone: NgZone
     ) {
       this.searchHeight = 56;
       this.alertSair = this.alertCtrl.create({
@@ -122,9 +123,10 @@ export class EstabelecimentosPage {
         })
   }
   openModal(){
-    let modal = this.modalCtrl.create(ConfiguracoesPage,{bairros: this.bairros});
+    let modal = this.modalCtrl.create(ConfiguracoesPage, {bairros: this.bairros});
     modal.present();
     modal.onDidDismiss(data => {
+      console.log('dismiss modal: ', data);
       if(data){
         this.filtroBairroEntrega = data.bairrosEntrega;
         this.filtroBairroEstabelecimento = data.bairrosEstabelecimentos;
@@ -201,16 +203,30 @@ export class EstabelecimentosPage {
 
   filtrarPorBairro(bairrosEntrega?: any[], bairrosEstabelecimento?: any[]){
     this.filteredEstabelecimentos = [];
-    this.estabelecimentos.map((estabelecimento, index) => {
-      let achou = false;
-      console.log(estabelecimento);
-      this.filtroBairroEstabelecimento.map(bairro => {
-        if(estabelecimento.bairro_key.includes(bairro))
-          this.filteredEstabelecimentos.push(estabelecimento);
-      })
-    })  
+    if(this.filtroBairroEstabelecimento){
+      try{
+        this.estabelecimentos.map((estabelecimento, index) => {
+          let achou = false;
+          console.log(estabelecimento);
+          this.filtroBairroEstabelecimento.map(bairro => {
+            if(estabelecimento.bairro_key)
+              if(estabelecimento.bairro_key.includes(bairro))
+                this.filteredEstabelecimentos.push(estabelecimento);
+          })
+        })  
+      }
+      catch (err){
+        console.error(err);
+      }
+      console.log('filtered estabelecimentos: ', this.filteredEstabelecimentos);
+    }
   }
 
+  limparFiltros(){
+    this.zone.run(() => {
+      this.filteredEstabelecimentos = this.estabelecimentos;
+    })
+  }
 
   openChat(estabelecimento){
     console.log(estabelecimento);

@@ -1,24 +1,22 @@
 import { ChatPage } from './../chat/chat';
 import { ConfiguracoesPage } from './../configuracoes/configuracoes';
-import { EstabelecimentoPage } from './../estabelecimento/estabelecimento';
 import { FireService } from './../../services/fire.service';
 import { Component, ViewChildren, ChangeDetectorRef, ViewChild, QueryList, ElementRef, Renderer, NgZone } from '@angular/core';
 import { NavController, NavParams, App, Searchbar, Content, Navbar, Header, Toolbar, AlertController, ToastController, Platform, ViewController, ModalController, IonicPage, ActionSheetController, Alert, Refresher } from 'ionic-angular';
 import { CallNumber } from '@ionic-native/call-number';
-
 @IonicPage()
 @Component({
-  selector: 'page-estabelecimentos',
-  templateUrl: 'estabelecimentos.html'
+  selector: 'page-home2',
+  templateUrl: 'home2.html',
 })
-export class EstabelecimentosPage {
+export class Home2 {
 
+  filtro = '';
   estabelecimentos: any[] =[];
   filteredEstabelecimentos: any[];
   showToolbar:boolean = false;
   isSearch: boolean = false;
   isSearchEmpty: boolean = true;
-  myInput: string = '';
   isLoading: boolean = true;
   bairros: any[];
   searchHeight: any;
@@ -26,6 +24,7 @@ export class EstabelecimentosPage {
   filtroBairroEntrega: any[];
   filtroBairroEstabelecimento: any[];
   alertSair: Alert;
+
   @ViewChildren('searchbar') searchbar: QueryList<Searchbar>;
   @ViewChild(Content) content: Content;
   @ViewChild(Header) header: Header;
@@ -81,6 +80,15 @@ export class EstabelecimentosPage {
 
     this.getEstabelecimentos();
   }
+
+  onTabSelect(event){
+    console.log(event);
+  }
+
+
+
+
+
 
   backButtonAction(){
     if(this.isSearch){
@@ -186,7 +194,9 @@ export class EstabelecimentosPage {
 
   filter(event: Event){
     let search:string = event.srcElement['value'];
+    
     if(!search){
+      this.filtro = search;
       this.isSearchEmpty = true;
       this.filteredEstabelecimentos = this.estabelecimentos;
     }
@@ -231,7 +241,7 @@ export class EstabelecimentosPage {
 
   openChat(estabelecimento){
     console.log(estabelecimento);
-    let chatModal = this.modalCtrl.create(ChatPage, {estabelecimento: estabelecimento});
+    let chatModal = this.modalCtrl.create('ChatPage', {estabelecimento: estabelecimento});
     chatModal.present();
   }
   call(estabelecimento){

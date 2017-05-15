@@ -5,7 +5,7 @@ import { FireService } from './../../services/fire.service';
 import { Tab3Page } from './../tab3/tab3';
 import { Tab2Page } from './../tab2/tab2';
 import { Tab1Page } from './../tab1/tab1';
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { NavController, NavParams, AlertController, Platform, ViewController, IonicPage, Events, ActionSheetController, ModalController } from 'ionic-angular';
 
 
@@ -36,7 +36,8 @@ export class EstabelecimentoPage {
     public events: Events,
     public actionSheet: ActionSheetController,
     public modalCtrl: ModalController,
-    public share: SocialSharing
+    public share: SocialSharing,
+    public zone: NgZone
     ) {
     this.tabParams = {
       estabelecimento: '',
@@ -52,21 +53,23 @@ export class EstabelecimentoPage {
 
     this.abas = this.estabelecimento.abas;
     try{
-      Object.keys(this.abas).map((aba, index) => {
-        if(index == 0){
-          this.tabParams.abas_key[0] = aba;
-          this.tabs.push({titulo: this.abas[aba].nome, root: Tab1Page})
-        }
-        else if(index == 1){
-          this.tabParams.abas_key[1] = aba;
-          this.tabs.push({titulo: this.abas[aba].nome, root: Tab2Page})
-        }
-        else if(index == 2){
-          this.tabParams.abas_key[2] = aba;
-          this.tabs.push({titulo: this.abas[aba].nome, root: Tab3Page})
-        }
-      });
-      console.log(this.tabParams);
+      this.zone.run(() => {
+        Object.keys(this.abas).map((aba, index) => {
+          if(index == 0){
+            this.tabParams.abas_key[0] = aba;
+            this.tabs.push({titulo: this.abas[aba].nome, root: Tab1Page})
+          }
+          else if(index == 1){
+            this.tabParams.abas_key[1] = aba;
+            this.tabs.push({titulo: this.abas[aba].nome, root: Tab2Page})
+          }
+          else if(index == 2){
+            this.tabParams.abas_key[2] = aba;
+            this.tabs.push({titulo: this.abas[aba].nome, root: Tab3Page})
+          }
+        });
+        console.log(this.tabParams);
+      })
     }
     catch(err){
       this.cardapioVazio = true;

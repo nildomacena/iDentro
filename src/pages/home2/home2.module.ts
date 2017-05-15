@@ -1,19 +1,18 @@
 import { SuperTabsModule } from 'ionic2-super-tabs';
-import { EstabelecimentoPage } from './estabelecimento';
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-
+import { Home2 } from './home2';
 
 @NgModule({
   declarations: [
-    EstabelecimentoPage,
+    Home2,
   ],
   imports: [
-    IonicPageModule.forChild(EstabelecimentoPage),
+    IonicPageModule.forChild(Home2),
     SuperTabsModule
   ],
   exports: [
-    EstabelecimentoPage
+    Home2
   ]
 })
-export class EstabelecimentosPageModule {}
+export class Home2Module {}

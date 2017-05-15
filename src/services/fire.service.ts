@@ -461,6 +461,25 @@ export class FireService {
                 })
                 
     }
+    updateAvatar(urlAvatar: File): firebase.Promise<any>{
+        let user = firebase.auth().currentUser;
+        return firebase.storage().ref(`avatar/${user.uid}`).put(urlAvatar)
+            .then(valueStorage => {
+                return user.updateProfile({
+                            displayName: user.displayName,
+                            photoURL: valueStorage.downloadURL
+                        })
+                            .then(valueUpdate => {
+                                console.log(valueUpdate)
+                            })
+                            .catch(err => {
+                                console.error(err);
+                            })
+            })
+            .catch(err => {
+                console.error(err);
+            })
+    }
 
     saveUserInfoCurrent():firebase.Promise<any>{
         console.log('saveuser info');
@@ -493,13 +512,10 @@ export class FireService {
     }
 
     checkAuth(): boolean{
-        console.log('User: ', firebase.auth().currentUser);
         if(firebase.auth().currentUser){
-            console.log('retorna true');
             return true;
         }
         else    
-            console.log('retorna false');
             return false;
     }
     registerUser(email: string, password: string){
@@ -605,18 +621,36 @@ export class FireService {
     getCadastroUsuarioById(uid: string): Observable<any>{
         return this.af.database.object(`usuarios_app/${this.uid}`);
     }
-    updateCadastroUsuario(nome:string, telefone:string): firebase.Promise<any>{
+    updateCadastroUsuario(nome:string, telefone:string, urlAvatar?:File): firebase.Promise<any>{  //Ao submeter o cadastro o usuário pode ou não enviar uma nova foto. Caso ele envie, o procedimento para salvar será diferente
+        console.log('Avatar no service: ', urlAvatar);
         let user = firebase.auth().currentUser;
-        return user.updateProfile({
-            displayName: nome,
-            photoURL: user.photoURL
-        })
-            .then(_ => {
-                return firebase.database().ref(`usuarios_app/${this.uid}`).update({
-                    telefone: telefone,
-                    nome: nome
-                })
+        if(!urlAvatar){                         //Caso não haja avatar, apenas o nome é atualizado e o telefone depois.
+            return user.updateProfile({
+                displayName: nome,
+                photoURL: user.photoURL
             })
+                .then(_ => {
+                    return firebase.database().ref(`usuarios_app/${this.uid}`).update({
+                        telefone: telefone,
+                        nome: nome
+                    })
+                })
+        }
+        else{                               //Se houver uma imagem nova, primeiro é feito o upload da imagem para o storage e depois é feito o procedimento do IF anterior
+            this.updateAvatar(urlAvatar)
+                .then(_ => {
+                    return user.updateProfile({
+                        displayName: nome,
+                        photoURL: user.photoURL
+                    })
+                        .then(_ => {
+                            return firebase.database().ref(`usuarios_app/${this.uid}`).update({
+                                telefone: telefone,
+                                nome: nome
+                            })
+                        })
+                })
+        }
     }
 
     getEnderecos(): Observable<any>{

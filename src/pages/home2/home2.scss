@@ -1,0 +1,36 @@
+page-home2 {
+ion-header{
+        display: block;
+    }
+    ion-item{
+        height: 75px;
+        font-weight: 600;
+        font-size: 120%;
+    }
+    .telefone-wrapper{
+        font-size: 75%;
+        font-weight: 100;
+    }
+
+    .aviso{
+        width: 100%;
+        text-align: center;
+    }
+
+    .categoria-row{
+        height: 20vw;
+    }
+    .categoria-img{
+        border-radius: 50%;
+        height: 18vw;
+        width: 18vw;
+    }
+    ion-scroll {
+        margin-top: 5px;
+        white-space: nowrap;
+        height: 20vw;
+        img{
+            margin: 5px
+        }
+    }
+}

@@ -37,8 +37,11 @@
             </ion-grid>
             -->
             <div *ngIf="logado">
-              <button class="item-menu" ion-item menuClose clear (click)="goToHome()" >
-                <ion-icon item-left name="home"></ion-icon>Home
+              <button class="item-menu" ion-item menuClose clear (click)="goToDestaques()" >
+                <ion-icon item-left name="star"></ion-icon>Destaques
+              </button>
+              <button class="item-menu" ion-item menuClose clear (click)="goToFiltroCategoria()" >
+                <ion-icon item-left name="color-wand"></ion-icon>Procure seu lanche
               </button>
               <button class="item-menu" ion-item menuClose clear (click)="goToFavoritos()" >
                 <ion-icon item-left name="heart"></ion-icon>Favoritos

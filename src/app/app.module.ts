@@ -1,14 +1,14 @@
 //IMPORTS
 
 //Angular e Ionic
-import { ConfiguracoesPage } from './../pages/configuracoes/configuracoes';
-import { AngularFireOfflineModule } from 'angularfire2-offline';
-import { NgModule, ErrorHandler } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http'
+import { ConfiguracoesPage }                        from './../pages/configuracoes/configuracoes';
+import { AngularFireOfflineModule }                 from 'angularfire2-offline';
+import { NgModule, ErrorHandler }                   from '@angular/core';
+import { ReactiveFormsModule }                      from '@angular/forms';
+import { BrowserModule }                            from '@angular/platform-browser';
+import { HttpModule }                               from '@angular/http'
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-
+import { SuperTabsModule }                          from 'ionic2-super-tabs';
 
 //Pages
 import { MyApp }              from './app.component';
@@ -65,7 +65,8 @@ const config = {
     AngularFireModule.initializeApp(config),
     AngularFireOfflineModule,
     HttpModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SuperTabsModule.forRoot()
 
   ],
   bootstrap: [IonicApp],

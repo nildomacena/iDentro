@@ -10,7 +10,7 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
-  <ion-tabs tabsHighlight="true" color="primary" class="tabs-basic" *ngIf="!cardapioVazio">
+  <ion-tabs tabsPlacement="bottom" tabsHighlight="true" color="primary" class="tabs-basic" *ngIf="!cardapioVazio">
     <ion-tab *ngFor="let tab of tabs" [root]="tab.root" [tabTitle]="tab.titulo" [rootParams]="tabParams" ></ion-tab>
   </ion-tabs>
   

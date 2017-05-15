@@ -12,7 +12,7 @@ import { ContatoPage } from './../pages/contato/contato';
 import { LocalizacaoPage } from './../pages/localizacao/localizacao';
 import { CarrinhoPage } from './../pages/carrinho/carrinho';
 import { Component, ViewChild } from '@angular/core';
-import { Platform, App, ViewController, NavController } from 'ionic-angular';
+import { Platform, App, ViewController, NavController, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Firebase } from '@ionic-native/firebase';
 import * as firebase from 'firebase';
@@ -28,6 +28,7 @@ export class MyApp {
   public nav: any;
   user: any;
   logado = true;
+  token: string;
   constructor(
     public platform: Platform, 
     public headerColor: HeaderColor,
@@ -36,7 +37,8 @@ export class MyApp {
     public splashscreen: SplashScreen,
     public deeplinks: Deeplinks,
     public app: App,
-    public firebasePlugin: Firebase 
+    public firebasePlugin: Firebase ,
+    public alertCtrl: AlertController
     ) {
     platform.ready().then(() => {
       this.headerColor.tint('#e65100');
@@ -80,9 +82,43 @@ export class MyApp {
               nomatch => {
                 console.log('error deeplink : ',nomatch);
               })
-              this.fireService.getToken();
-        } 
-      })
+              //this.fireService.getToken();
+              this.firebasePlugin.getToken()
+                .then(token => {
+                    this.token = token;
+                  console.log(`The token is ${token}`)
+                  }) // save the token server-side and use it to push notifications to this device
+                .catch(error => console.error('Error getting token', error));
+
+              this.firebasePlugin.onTokenRefresh()
+                .subscribe((token: string) => {
+                    this.token = token;
+                  console.log(`Got a new token ${token}`)
+                  });
+
+                  this.firebasePlugin.onNotificationOpen().subscribe(data => {
+                    console.log('onnotificationopen : ', data);
+                    if(data.tap){
+                      if(data.funcao == 'pedido')
+                        this.app.getRootNav().push('Pedidos');
+                    }
+                    else{
+                        let alert = this.alertCtrl.create({
+                            title: data.titulo?data.titulo: 'Notificação',
+                            subTitle: data.titulo?data.subtitulo: 'Você recebeu uma notificação, cheque seus pedidos.',
+                            buttons: [{
+                                text: 'Ok',
+                                role: 'cancel'
+                            }]
+
+                        })
+                        alert.present();
+                    }
+                    console.log('notificação aberta',data);
+
+                  })
+              } 
+            })
 
       this.statusBar.styleDefault();
       this.statusBar.overlaysWebView(true);
@@ -125,7 +161,12 @@ export class MyApp {
   goToLocalizacao(){
     this.nav.push(LocalizacaoPage);
   }
-
+  goToDestaques(){
+    this.nav.push('DestaquesPage');
+  }
+  goToFiltroCategoria(){
+    this.nav.push('FiltroCategorias');
+  }
   goToContato(){
     this.app.getRootNav().push('ContatoPage');
   }

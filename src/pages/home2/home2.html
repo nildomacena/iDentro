@@ -1,4 +1,35 @@
-<ion-header>
+<ion-header no-border no-shadow>
+  <ion-navbar>
+    <button ion-button menuToggle *ngIf="!showToolbar">
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title *ngIf="!showToolbar" >Bolts</ion-title>
+    <ion-searchbar #searchbar *ngIf="showToolbar"
+      placeholder= "Pesquisar"
+      [showCancelButton]="true"
+      (ionInput)="filter($event)"
+      (ionCancel)="toggleSearchbar()"
+      animated = "true"
+      >
+    </ion-searchbar>
+    
+    <ion-buttons end *ngIf="!showToolbar">
+      <button ion-button icon-only (click)="toggleSearchbar()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <super-tabs  toolbarColor="light" toolbarBackground="primary" indicatorColor="light" badgeColor="light" [config]="{ sideMenu: 'left' }" (tabSelect)="onTabSelect($event)">
+    <super-tab root="EstabelecimentosPage" icon="home" id="homeTab" ></super-tab>
+    <super-tab root="DestaquesPage" icon="pin" id="destaquesTab"></super-tab>
+    <super-tab root="FiltroCategorias" icon="heart" id="filtroTab"></super-tab>
+  </super-tabs>
+</ion-content>
+
+<!--<ion-header>
   <ion-navbar>
     <button ion-button menuToggle *ngIf="!showToolbar">
       <ion-icon name="menu"></ion-icon>
@@ -21,7 +52,6 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-
 <ion-content>
   <ion-refresher (ionRefresh)="getEstabelecimentos($event)">
     <ion-refresher-content></ion-refresher-content>
@@ -35,6 +65,7 @@
     <img src="assets/icon/acai.png" class="categoria-img" />
   </ion-scroll>
   -->
+  <!--
   <br>
   <div class="center-spinner" *ngIf='isLoading && !updating'>
     <ion-spinner name="crescent" mode="md"></ion-spinner>
@@ -52,9 +83,6 @@
       <ion-avatar item-left >
         <ion-img *ngIf="estabelecimento.imagemCapa" alt="imagemCapa" [src]="estabelecimento.imagemCapa"></ion-img>
         <ion-img *ngIf="!estabelecimento.imagemCapa" src="assets/img/no-photo.jpg"></ion-img>
-        <!--<img *ngIf="!loaded && estabelecimento.imagemCapa" src="assets/img/loading.gif"/>
-        <img *ngIf="!estabelecimento.imagemCapa" src="assets/img/no-photo.jpg">
-        <img *ngIf="estabelecimento.imagemCapa" [hidden]="!loaded" alt="imagemCapa" (load)="loaded = true" [src]="estabelecimento.imagemCapa"/> -->
       </ion-avatar>
       <div (click)="onSelectEstabelecimento(estabelecimento)" >
         <span style="font-weight: 500">{{ estabelecimento.nome }}</span><br>
@@ -77,3 +105,5 @@
     <button ion-fab color="primary" (click)="openModal()"><ion-icon name="options"></ion-icon></button>
   </ion-fab>
 </ion-content>
+
+-->

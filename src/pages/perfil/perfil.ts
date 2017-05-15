@@ -15,13 +15,14 @@ export class PerfilPage {
   telefone: string = '';
   userInfo: any;
   isLoading: boolean = true;
+  urlAvatar: any;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
     public fireService: FireService,
     public modalCtrl: ModalController,
     public alertCtrl: AlertController,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
     ) {
       this.user = this.navParams.get('user');
       console.log(this.user);
@@ -58,16 +59,35 @@ export class PerfilPage {
   }
 
   onSubmit(){
-    this.fireService.updateCadastroUsuario(this.nome,this.telefone)
-      .then(_ => {
-        let toast = this.toastCtrl.create({
-          message: 'Dados salvos com sucesso.',
-          duration: 2500,
-          showCloseButton: true,
-          closeButtonText: 'X'
+    console.log('avatar no perfil', this.urlAvatar);
+    let blob: Blob;
+    if(!this.urlAvatar){
+      this.fireService.updateCadastroUsuario(this.nome,this.telefone)
+        .then(_ => {
+          let toast = this.toastCtrl.create({
+            message: 'Dados salvos com sucesso.',
+            duration: 2500,
+            showCloseButton: true,
+            closeButtonText: 'X'
+          })
+          toast.present();
         })
-        toast.present();
-      })
+    }
+    else{
+    blob = new Blob()
+    let file: File = new File(this.urlAvatar, 'avatar')
+
+      this.fireService.updateCadastroUsuario(this.nome,this.telefone, file)
+        .then(_ => {
+          let toast = this.toastCtrl.create({
+            message: 'Dados salvos com sucesso.',
+            duration: 2500,
+            showCloseButton: true,
+            closeButtonText: 'X'
+          })
+          toast.present();
+        })
+    }
   }
   excluirEndereco(endereco: any){
     console.log('endereco: ', endereco)

@@ -11,21 +11,6 @@
 
 
 <ion-content>
-  <div class="top">
-    <ion-grid>
-      <ion-row align-items-center>
-        <ion-col col-4 offset-1>
-          <ion-avatar>
-            <img [src]="user.photoURL? user.photoURL: 'assets/img/no-photo.jpg'">
-          </ion-avatar>
-        </ion-col>
-
-        <ion-col>
-          <span class="titulo">{{user.displayName? user.displayName: 'Cadastre seu nome'}}</span>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </div>
   <div class="center-spinner" *ngIf='isLoading'>
     <ion-spinner name="crescent" mode="md"></ion-spinner>
   </div>

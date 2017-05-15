@@ -61,62 +61,68 @@ export class Tab3Page {
 
   }
 call(){
-    let buttons;
-    let subTitle;
-    
-    this.estabelecimento.telefone2 && this.estabelecimento.telefone1? subTitle = 'Selecione o número para o qual deseja ligar.': 'Deseja realmente ligar?'
+      let buttons;
+      let subTitle;
+      
+      this.estabelecimento.telefone2 && this.estabelecimento.telefone1? subTitle = 'Selecione o número para o qual deseja ligar.': 'Deseja realmente ligar?'
 
-    if(this.estabelecimento.telefone2 && this.estabelecimento.telefone1){
-      buttons = [
-        {
-          text: this.estabelecimento.telefone1.numero,
-          handler: () => {console.log(this.estabelecimento.telefone1)}
-        },
-        {
-          text: this.estabelecimento.telefone2.numero,
-          handler: () => {console.log(this.estabelecimento.telefone2.numero)}
-        },
-        {
-          text: 'Cancelar',
-          role: 'cancel'
+      if(this.estabelecimento.telefone1 && this.estabelecimento.telefone2){
+        buttons = [
+          {
+            text: this.estabelecimento.telefone1.numero,
+            handler: () => {
+              this.callnumber.callNumber(this.estabelecimento.telefone1.numero, true)
+            }
+          },
+          {
+            text: this.estabelecimento.telefone2.numero,
+            handler: () => {
+              this.callnumber.callNumber(this.estabelecimento.telefone2.numero, true)
+            }
+          },
+          {
+            text: 'Cancelar',
+            role: 'cancel'
+          }
+        ]
+      }
+      else if(this.estabelecimento.telefone2){
+          buttons = [
+            {
+              text: 'Cancelar',
+              role: 'cancel'
+            },
+            {
+              text: 'Ligar',
+              handler: () => {
+                this.callnumber.callNumber(this.estabelecimento.telefone2, true)
+              }
+            }
+          ]
         }
-      ]
-    }
 
-    else if(this.estabelecimento.telefone2){
-      buttons = [
-        {
-          text: 'Cancelar',
-          role: 'cancel'
-        },
-        {
-          text: 'Ligar',
-          handler: () => {this.callnumber.callNumber(this.estabelecimento.telefone2.numero, false)}
+        else if(this.estabelecimento.telefone1){
+          buttons = [
+            {
+              text: 'Cancelar',
+              role: 'cancel'
+            },
+            {
+              text: 'Ligar',
+              handler: () => {
+                this.callnumber.callNumber(this.estabelecimento.telefone2.numero, true)
+              }
+            }
+          ]
         }
-      ]
-    }
 
-    else if(this.estabelecimento.telefone1){
-      buttons = [
-        {
-          text: 'Cancelar',
-          role: 'cancel'
-        },
-        {
-          text: 'Ligar',
-          handler: () => {console.log(this.estabelecimento.telefone2.numero)}
-        }
-      ]
-    }
-
-    let alert = this.alertCtrl.create({
-      title: 'Ligar para '+this.estabelecimento.nome,
-      subTitle: subTitle,
-      buttons: buttons
-    });
-    alert.present();
-  }
-  
+        let alert = this.alertCtrl.create({
+          title: 'Ligar para '+this.estabelecimento.nome,
+          subTitle: subTitle,
+          buttons: buttons
+        });
+        alert.present();
+  }   
   goToCarrinho(){
     this.app.getRootNav().push('CarrinhoPage');
   }

@@ -15,6 +15,7 @@ export class FireService {
     uid = 'uid';
     cart: any = {};
     token: string;
+    public quantidade = 0;
     public auth$ = this.af.auth;
     public auth = firebase.auth();
     public user = this.auth.currentUser;
@@ -43,36 +44,36 @@ export class FireService {
 
     getToken(){
         this.firebasePlugin.getToken()
-          .then(token => {
-              this.token = token;
-            console.log(`The token is ${token}`)
+            .then(token => {
+                this.token = token;
+                console.log(`The token is ${token}`)
             }) // save the token server-side and use it to push notifications to this device
-          .catch(error => console.error('Error getting token', error));
+            .catch(error => console.error('Error getting token', error));
 
         this.firebasePlugin.onTokenRefresh()
-          .subscribe((token: string) => {
-              this.token = token;
-            console.log(`Got a new token ${token}`)
+            .subscribe((token: string) => {
+                this.token = token;
+                console.log(`Got a new token ${token}`)
             });
 
         this.firebasePlugin.onNotificationOpen().subscribe(data => {
-          if(data.tap){
-            if(data.funcao == 'pedido')
-              this.app.getRootNav().push('Pedidos');
-          }
-          else{
-              let alert = this.alertCtrl.create({
-                  title: data.titulo?data.titulo: 'Notificação',
-                  subTitle: data.titulo?data.subtitulo: 'Você recebeu uma notificação, cheque seus pedidos.',
-                  buttons: [{
-                      text: 'Ok',
-                      role: 'cancel'
-                  }]
+            if(data.tap){
+                if(data.funcao == 'pedido')
+                    this.app.getRootNav().push('Pedidos');
+                }
+                else{
+                    let alert = this.alertCtrl.create({
+                        title: data.titulo?data.titulo: 'Notificação',
+                        subTitle: data.titulo?data.subtitulo: 'Você recebeu uma notificação, cheque seus pedidos.',
+                        buttons: [{
+                            text: 'Ok',
+                            role: 'cancel'
+                        }]
 
-              })
-              alert.present();
-          }
-          console.log('notificação aberta',data);
+                    })
+                    alert.present();
+                }
+            console.log('notificação aberta',data);
 
         })
     }

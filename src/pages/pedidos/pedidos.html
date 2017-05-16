@@ -13,6 +13,12 @@
   <div class="center-spinner" *ngIf='isLoading'>
     <ion-spinner name="crescent" mode="md"></ion-spinner>
   </div>
+  <div *ngIf="!isLoading && pedidos.length == 0">
+    <h4>Você ainda não tem pedidos registrados. Não perca tempo, peça já seu lanche!</h4>
+    <button ion-button primary style="width: 100%" (click)="goBack()" >
+        Visualizar ofertas
+    </button>
+  </div>
   <ion-card *ngFor="let pedido of pedidos">
     <ion-card-header>
       {{pedido.estabelecimento_nome}}
@@ -21,7 +27,7 @@
       <b>Quantidade de itens:</b> {{pedido.itens.length}}<br>
       <b>Valor total:</b> {{pedido.valor_total | currency: 'BRL':true}}<br>
       <b>Endereço de entrega:</b> {{pedido.endereco}}<br>
-      <b>status:</b> {{pedido.confirmado? 'Confirmado': 'Aguardando confirmação'}}<br>
+      <b>Status:</b> {{pedido.confirmado? 'Confirmado': 'Aguardando confirmação'}}<br>
       <b *ngIf="pedido.timestamp">Data:</b> {{pedido.timestamp | date:'dd/MM/yyyy'}}
     </ion-card-content>
   </ion-card>

@@ -31,16 +31,12 @@
     <ion-card *ngFor="let item of itens" >
       <ion-card-content>
         <ion-grid no-padding>
-          <ion-row>
+          <ion-row no-padding>
             <ion-col col-3>
-              <div>
-                <ion-avatar>
-                  <img *ngIf="item.imagem"[src]="item.imagem"/>
-                  <img *ngIf="!item.imagem" src="assets/img/no-photo.jpg">
-                </ion-avatar>
-              </div>
+              <img *ngIf="item.imagem"[src]="item.imagem" class="foto-lanche"/>
+              <img *ngIf="!item.imagem" src="assets/img/no-photo.jpg" class="foto-lanche"/>
             </ion-col>
-            <ion-col col-8 offset-1 (click)="goToItem(item)" >
+            <ion-col col-6 offset-1 (click)="goToItem(item)" >
               
               <b>{{item.nome}}</b>
               <div class="descricao-lanche" *ngIf="item.ingredientes_truncados">
@@ -50,6 +46,7 @@
                 {{item.preco | currency: 'BRL':true}}
               </div>
             </ion-col>
+            
             <ion-col col-2 align-self-center *ngIf="currentUser"> 
                 <button (click)="addToCart(item)" clear ion-button icon-only>
                   <ion-icon name="cart"></ion-icon>
@@ -59,7 +56,7 @@
         </ion-grid>
       </ion-card-content>
     </ion-card>
-
+    <br><br>
   <ion-fab left bottom>
     <button ion-fab color="primary" (click)="call()"><ion-icon name="call"></ion-icon></button>
   </ion-fab>

@@ -54,6 +54,7 @@ export class Tab1Page {
     }
 
   ionViewDidLoad() {
+    this.qtdeCarrinho = this.fireService.getQuantidadeItensCarrinho();
     this.fireService.getItensByAba(this.estabelecimento.$key, this.aba_key)
       .subscribe(itens => {
         this.loading = false;

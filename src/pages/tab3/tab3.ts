@@ -3,7 +3,7 @@ import { CallNumber } from '@ionic-native/call-number';
 import { LancheDetailPage } from './../lanche-detail/lanche-detail';
 import { FireService } from './../../services/fire.service';
 import { Component } from '@angular/core';
-import { NavController, NavParams, App, AlertController, ModalController, IonicPage, Events } from 'ionic-angular';
+import { NavController, NavParams, App, AlertController, ModalController, IonicPage, Events, ToastController } from 'ionic-angular';
 import * as firebase from 'firebase';
 
 @Component({
@@ -18,6 +18,7 @@ export class Tab3Page {
   qtdeCarrinho: number = 0;
   linkLocalizacao: string = '';
   currentUser: any;
+  toast: any;
   constructor(
     public navCtrl: NavController, 
     public alertCtrl: AlertController,
@@ -26,7 +27,8 @@ export class Tab3Page {
     public modalCtrl: ModalController,
     public callnumber: CallNumber,
     public app: App,
-    public events: Events
+    public events: Events,
+    public toastCtrl: ToastController
     ) {
       this.estabelecimento = this.navParams.data.estabelecimento;
       this.aba_key = this.navParams.data.abas_key[2];
@@ -37,6 +39,7 @@ export class Tab3Page {
       if(this.estabelecimento.localizacao.lat && this.estabelecimento.localizacao.lng){
         this.linkLocalizacao = "http://maps.google.com/maps?q=" + this.estabelecimento.localizacao.lat + ',' + this.estabelecimento.localizacao.lng + "("+ this.estabelecimento.nome +")&z=15";
       }
+      this.qtdeCarrinho = this.fireService.getQuantidadeItensCarrinho();
     }
 
   ionViewDidLoad() {
@@ -49,6 +52,37 @@ export class Tab3Page {
       })
   }
 
+  addToCart(item: any){
+    try{
+      let result = this.fireService.addToCart(item, this.estabelecimento);
+      if(result != true){
+        let alert = this.alertCtrl.create({
+          title: 'Erro',
+          subTitle: 'Você possui itens de outro estabelecimento adicionados no carrinho. Deseja limpar o carrinho?',
+          buttons: [
+            {
+              text: 'Cancelar',
+              role: 'cancel'
+            },
+            {
+              text: 'Ok',
+              handler: () => {
+                this.fireService.limpaCarrinho()
+              }
+            }
+          ]
+        })
+        alert.present();  
+      }
+      else{
+        this.toast.present();
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+  
   goToItem(item){
     console.log(item);
     this.app.getRootNav().push('LancheDetailPage', {lanche: item, estabelecimento: this.estabelecimento});

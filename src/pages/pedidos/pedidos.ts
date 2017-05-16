@@ -30,4 +30,7 @@ export class Pedidos {
     console.log('ionViewDidLoad Pedidos');
   }
 
+  goBack(){
+    this.navCtrl.pop();
+  }
 }

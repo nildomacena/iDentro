@@ -10,7 +10,7 @@ import { NavController, NavParams, Card, AlertController, ToastController, Modal
   templateUrl: 'fechamento-pedido.html'
 })
 export class FechamentoPedidoPage {
-  enderecos: any[];
+  enderecos: any[] = [];
   enderecoSelecionado: any;
   carrinho: any;
   enderecoAdicional: any;
@@ -31,7 +31,8 @@ export class FechamentoPedidoPage {
       this.carrinho = this.fireService.getCart();
       this.fireService.getEnderecos()
         .subscribe(enderecos => {
-          this.enderecos = enderecos;
+          if(enderecos)
+            this.enderecos = enderecos;
         });
     }
 

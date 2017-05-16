@@ -13,12 +13,18 @@
 
 
 <ion-content padding>
-  <h5 style="text-align: center">Selecione o endereço de entrega</h5>
+  <h5 style="text-align: center" *ngIf="enderecos.length > 0">Selecione o endereço de entrega</h5>
   <ion-card *ngFor="let endereco of enderecos; let i = index" [class.selecionado]="endereco == enderecoSelecionado" (click)="onSelectEndereco(endereco)" >
     <ion-card-content>
       {{endereco.descricao}}
     </ion-card-content>
   </ion-card>
+  <div *ngIf="enderecos.length == 0">
+    <h5 style="text-align: center" >Para finalizar seu pedido você precisa adicionar um endereço.</h5>
+    <button ion-button primary style="width: 100%" (click)="addEndereco()" >
+        Adicionar endereço
+    </button>
+  </div>
   <ion-card *ngIf="enderecoAdicional" [class.selecionado]="enderecoAdicional == enderecoSelecionado" (click)="onSelectEndereco(enderecoAdicional)" >
     <ion-card-content>
       {{enderecoAdicional.descricao}}

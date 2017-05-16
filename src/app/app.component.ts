@@ -1,3 +1,4 @@
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { EstabelecimentoDetail } from './../pages/estabelecimento-detail/estabelecimento-detail';
 import { EstabelecimentoPage } from './../pages/estabelecimento/estabelecimento';
 import { Deeplinks } from '@ionic-native/deeplinks';
@@ -38,10 +39,12 @@ export class MyApp {
     public deeplinks: Deeplinks,
     public app: App,
     public firebasePlugin: Firebase ,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public orientation: ScreenOrientation
     ) {
     platform.ready().then(() => {
       this.headerColor.tint('#e65100');
+      this.orientation.lock(this.orientation.ORIENTATIONS.PORTRAIT);
       firebase.auth().onAuthStateChanged(user => {
         console.log('User app component: ', user);
         if(!user){
@@ -81,42 +84,9 @@ export class MyApp {
             },
               nomatch => {
                 console.log('error deeplink : ',nomatch);
-              })
-              //this.fireService.getToken();
-              this.firebasePlugin.getToken()
-                .then(token => {
-                    this.token = token;
-                  console.log(`The token is ${token}`)
-                  }) // save the token server-side and use it to push notifications to this device
-                .catch(error => console.error('Error getting token', error));
-
-              this.firebasePlugin.onTokenRefresh()
-                .subscribe((token: string) => {
-                    this.token = token;
-                  console.log(`Got a new token ${token}`)
-                  });
-
-                  this.firebasePlugin.onNotificationOpen().subscribe(data => {
-                    console.log('onnotificationopen : ', data);
-                    if(data.tap){
-                      if(data.funcao == 'pedido')
-                        this.app.getRootNav().push('Pedidos');
-                    }
-                    else{
-                        let alert = this.alertCtrl.create({
-                            title: data.titulo?data.titulo: 'Notificação',
-                            subTitle: data.titulo?data.subtitulo: 'Você recebeu uma notificação, cheque seus pedidos.',
-                            buttons: [{
-                                text: 'Ok',
-                                role: 'cancel'
-                            }]
-
-                        })
-                        alert.present();
-                    }
-                    console.log('notificação aberta',data);
-
-                  })
+              });
+              this.fireService.getToken();
+              
               } 
             })
 
@@ -149,7 +119,7 @@ export class MyApp {
 
 
   goToPerfil(){
-    this.app.getRootNav().push('PerfilPage', {user: this.user });
+    this.nav.push('PerfilPage', {user: this.user });
   }
   goToHome(){
     this.app.getRootNav().push('HomePage');

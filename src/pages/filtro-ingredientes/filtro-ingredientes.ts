@@ -45,9 +45,9 @@ export class FiltroIngredientesPage {
         let tamanho = Object.keys(item.ingredientes).length
         if(item.ingredientes){
           Object.keys(item.ingredientes).map((key, index) => {
-            console.log(tamanho);
-            console.log(index);
-            console.log(item.ingredientes[key]);
+            //console.log(tamanho);
+            //console.log(index);
+            //console.log(item.ingredientes[key]);
             if(index == 0 )
               item.ingredientes_truncados = item.ingredientes[key].nome; 
             
@@ -65,6 +65,7 @@ export class FiltroIngredientesPage {
     })
     return itens;
   }
+  
   filtrarLanches(lanches: any[]){
 
     let ingredientes_truncados:string = '';
@@ -72,12 +73,12 @@ export class FiltroIngredientesPage {
     this.ingredientes.map(ingrediente => {
       ingredientes_truncados += ingrediente;
     })
-    console.log('ingredientes truncados: ', ingredientes_truncados);
+    //console.log('ingredientes truncados: ', ingredientes_truncados);
     lanches.map(lanche => {
       if(lanche.ingredientes){
-        console.log('lanche: ', lanche);
+        //console.log('lanche: ', lanche);
         let ingredientes = lanche.ingredientes;
-        console.log('let ingredientes: ', ingredientes);
+        //console.log('let ingredientes: ', ingredientes);
         Object.keys(lanche.ingredientes).map((key, index) => {
           let repetido = false;
           if(ingredientes_truncados.toUpperCase().includes(ingredientes[key].nome.toUpperCase())){
@@ -108,6 +109,7 @@ export class FiltroIngredientesPage {
       }
     })
     console.log(aux_filtro);
+    
     this.ingredientes.map(ingrediente => {
       aux_filtro.map((lanche, index) => {
     //    console.log('lanche: ', lanche);
@@ -133,7 +135,7 @@ export class FiltroIngredientesPage {
       console.log(this.lanchesFiltrados, lanche);
       if(this.lanchesFiltrados.length == 0){
         this.lanchesFiltrados.push({
-          key: lanche.key_estabelecimento,
+          key: lanche.estabelecimento_key,
           nome: lanche.nome_estabelecimento,
           lanches: [lanche]
         })
@@ -142,7 +144,7 @@ export class FiltroIngredientesPage {
       else{
         this.lanchesFiltrados.map(estabelecimento => {
           console.log(estabelecimento)
-          if(estabelecimento.key == lanche.key_estabelecimento){
+          if(estabelecimento.key == lanche.estabelecimento_key){
             estabelecimento.lanches.push(lanche);
             inserido = true;
             console.log(estabelecimento);

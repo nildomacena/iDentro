@@ -39,6 +39,7 @@ import { Keyboard }           from '@ionic-native/keyboard';
 import { Push }               from '@ionic-native/push';
 import { Firebase }           from '@ionic-native/firebase';
 import { SocialSharing }      from '@ionic-native/social-sharing';
+import { ScreenOrientation }  from '@ionic-native/screen-orientation';
 
 const config = {
     apiKey: "AIzaSyCZHJ2ywN6nMq8I_KvGlI6jjh1kcZmZC50",
@@ -95,6 +96,7 @@ const config = {
     Push,
     Firebase,
     SocialSharing,
+    ScreenOrientation,
     {provide: ErrorHandler, useClass: IonicErrorHandler}]
 })
 export class AppModule {}

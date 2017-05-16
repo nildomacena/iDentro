@@ -95,17 +95,20 @@ export class MyApp {
       this.splashscreen.hide();
 
       
-      /*
+      
       this.platform.registerBackButtonAction(() => {
           let nav = app.getActiveNav();
           let activeView: ViewController = nav.getActive();
           console.log('activeView: ',activeView);
           console.log('nav: ', nav);
           console.log('this.nav.getActive(): ',this.nav.getActive());
-          console.log('this.nav.getActive().component: ',this.nav.getActive().component);
+          console.log('this.nav.getActive().name: ',this.nav.getActive().name);
           if(activeView != null){
             if(nav.canGoBack()) {
               nav.pop();
+            }
+            else if(this.nav.getActive().name != 'HomePage'){
+              this.nav.getActive().dismiss()
             }
             else if (typeof activeView.instance.backButtonAction === 'function'){
               console.log('activeviewInstance: ', activeView.instance);
@@ -113,7 +116,7 @@ export class MyApp {
             }
             else nav.parent.select(0); // goes to the first tab
           }  
-      }, 100)*/
+      }, 100)
     }); 
   }
 

@@ -36,6 +36,7 @@ export class LancheDetailPage {
       });
       this.fireService.getLancheByKey(key_lanche)
         .subscribe(lanche => {
+          console.log(lanche);
           this.lanche = lanche;
           this.truncarIngredientes();
           this.currentUser = firebase.auth().currentUser;

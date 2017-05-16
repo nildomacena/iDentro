@@ -43,6 +43,7 @@ export class ConfiguracoesPage {
     this.viewCtrl.dismiss({
       bairrosEntrega: this.bairrosEntrega,
       bairrosEstabelecimentos: this.bairrosLocalizacao,
+      categoria: this.categoriaSelecionada
     })
   }
 

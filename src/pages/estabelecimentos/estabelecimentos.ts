@@ -108,6 +108,7 @@ export class EstabelecimentosPage {
       alert.present();
     }  
   }
+
   getEstabelecimentos(refresher?:Refresher){
     this.isLoading = true;
     this.fireService.getEstabelecimentos()
@@ -123,6 +124,7 @@ export class EstabelecimentosPage {
           this.bairros = bairros;
         })
   }
+
   openModal(){
     let modal = this.modalCtrl.create(ConfiguracoesPage, {bairros: this.bairros});
     modal.present();
@@ -131,7 +133,7 @@ export class EstabelecimentosPage {
       if(data){
         this.filtroBairroEntrega = data.bairrosEntrega;
         this.filtroBairroEstabelecimento = data.bairrosEstabelecimentos;
-        this.filtrarPorBairro(); 
+        this.filtrarPorBairro(data.categoria); 
       }
       else{
         this.filteredEstabelecimentos = this.estabelecimentos;
@@ -199,21 +201,41 @@ export class EstabelecimentosPage {
 
       console.log(this.filteredEstabelecimentos);
       console.log('searchbar: ', this.searchbar);
+      
     }
   } 
 
-  filtrarPorBairro(bairrosEntrega?: any[], bairrosEstabelecimento?: any[]){
+  filtrarPorBairro(categoria?:any){
     this.filteredEstabelecimentos = [];
+    console.log('categoria: ', categoria);
     if(this.filtroBairroEstabelecimento){
       try{
         this.estabelecimentos.map((estabelecimento, index) => {
           let achou = false;
           console.log(estabelecimento);
-          this.filtroBairroEstabelecimento.map(bairro => {
-            if(estabelecimento.bairro_key)
-              if(estabelecimento.bairro_key.includes(bairro))
-                this.filteredEstabelecimentos.push(estabelecimento);
-          })
+          if(this.filtroBairroEstabelecimento.length > 0 && categoria){
+            this.filtroBairroEstabelecimento.map(bairro => {
+              console.log('estabelecimento.categoria_key == categoria.$key: ', estabelecimento.categoria_key == categoria.$key)
+              if(estabelecimento.bairro_key)
+                if((estabelecimento.bairro_key.includes(bairro) || !bairro ) && (estabelecimento.categoria_key == categoria.$key || !categoria.$key))
+                  this.filteredEstabelecimentos.push(estabelecimento);
+            })
+          }
+          else if(categoria){
+            if(estabelecimento.categoria_key == categoria.$key || !categoria.$key){
+              this.filteredEstabelecimentos.push(estabelecimento);
+            }
+          }
+          else if(this.filtroBairroEstabelecimento.length > 0){
+            this.filtroBairroEstabelecimento.map(bairro => {
+              if(estabelecimento.bairro_key)
+                if(estabelecimento.bairro_key.includes(bairro))
+                  this.filteredEstabelecimentos.push(estabelecimento);
+            })
+          }
+          else{
+            this.filteredEstabelecimentos = this.estabelecimentos;
+          }
         })  
       }
       catch (err){

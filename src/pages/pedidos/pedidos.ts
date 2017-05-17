@@ -20,7 +20,6 @@ export class Pedidos {
         this.fireService.getPedidosPorUid()
           .subscribe(pedidos => {
             let aux_pedidos = pedidos;
-            this.ordenarPedidos(aux_pedidos);
             this.pedidos = aux_pedidos.sort((a, b) => {
               console.log(a,b);
               return a.timestamp < b.timestamp? 1: a.timestamp > b.timestamp? -1 : 0
@@ -33,10 +32,6 @@ export class Pedidos {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad Pedidos');
-  }
-
-  ordenarPedidos(pedidos){
-
   }
 
   goBack(){

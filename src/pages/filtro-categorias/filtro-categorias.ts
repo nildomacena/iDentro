@@ -37,7 +37,7 @@ export class FiltroCategorias {
   }
 
   irParaIngredientes(){
-    this.app.getRootNav().push('MontagemPage', {'categoria': this.categoriaSelecionada})
+    this.app.getRootNav().push('MontagemPage', {'categoria': this.categoriaSelecionada, adicional: true})
   }
 
 }

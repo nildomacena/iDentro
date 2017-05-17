@@ -105,10 +105,12 @@ export class MyApp {
           console.log('this.nav.getActive().name: ',this.nav.getActive().name);
           if(activeView != null){
             if(nav.canGoBack()) {
+              console.log('can go back')
               nav.pop();
             }
-            else if(this.nav.getActive().name != 'HomePage'){
-              this.nav.getActive().dismiss()
+            else if(this.nav.getActive().data.adicional){
+              console.log('this.nav.getActive().data.adicional');
+              this.nav.getActive().dismiss();
             }
             else if (typeof activeView.instance.backButtonAction === 'function'){
               console.log('activeviewInstance: ', activeView.instance);
@@ -122,14 +124,14 @@ export class MyApp {
 
 
   goToPerfil(){
-    this.nav.push('PerfilPage', {user: this.user });
+    this.nav.push('PerfilPage', {user: this.user, adicional:true }); // O campo adicional serve para verificar se a página não é a root e usar o comando dismiss ao ser presionado o botão físico de voltar.
   }
   goToHome(){
     this.app.getRootNav().push('HomePage');
   }
 
   goToCarrinho(){
-    this.app.getRootNav().push('CarrinhoPage');
+    this.app.getRootNav().push('CarrinhoPage', {adicional:true});
   }
   goToLocalizacao(){
     this.nav.push(LocalizacaoPage);
@@ -141,13 +143,13 @@ export class MyApp {
     this.nav.push('FiltroCategorias');
   }
   goToContato(){
-    this.app.getRootNav().push('ContatoPage');
+    this.app.getRootNav().push('ContatoPage', {adicional:true});
   }
   goToFavoritos(){
     this.app.getRootNav().push('FavoritosPage');
   }
   goToPedidos(){
-    this.app.getRootNav().push('Pedidos');
+    this.app.getRootNav().push('Pedidos', {adicional:true});
   }
   login(){
     this.app.getRootNav().push(HomePage);

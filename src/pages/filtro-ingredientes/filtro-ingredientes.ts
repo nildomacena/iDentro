@@ -166,6 +166,7 @@ export class FiltroIngredientesPage {
     this.app.getRootNav().push('LancheDetailPage',{
       'lanche': lanche, 
       'pesquisa': true,
+      adicional: true
     });
   }
 

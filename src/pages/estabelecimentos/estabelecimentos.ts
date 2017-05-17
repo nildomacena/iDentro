@@ -71,6 +71,7 @@ export class EstabelecimentosPage {
   }
 
   ionViewDidLoad(){
+    console.log('ionViewDidLoad')
     this.filteredEstabelecimentos = this.estabelecimentos = [];
     // descomentar quando a função de redimensionar cabeçalho estiver funcionando
     /*
@@ -82,30 +83,27 @@ export class EstabelecimentosPage {
     this.getEstabelecimentos();
   }
 
+  ionViewWillLeave(){
+    console.log('ionViewWillLeave estabelecimentos');
+  }
   backButtonAction(){
+    console.log('is active estabeleimentos: ', this.navCtrl.isActive(this.viewCtrl))
     if(this.isSearch){
       this.toggleSearchbar();
     }
     else{
+      this.exitApp();
+      /*
+      if(this.alertSair.isFirst()){
+        this.alertSair.dismiss()
+          .then(_ => {
+            this.alertSair.present();
+          })
+      }
+      else{
+        this.alertSair.present();
+    }*/
       
-      let alert = this.alertCtrl.create({
-        title: 'Deseja sair?',
-        buttons: [
-          {
-            text: 'Cancelar',
-            role: 'cancel',
-            handler: () => {
-            }
-          },
-          {
-            text: 'Sair',
-            handler: () => {
-              this.exitApp();
-            }
-          }
-        ]
-      })
-      alert.present();
     }  
   }
 

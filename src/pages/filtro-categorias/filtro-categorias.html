@@ -11,10 +11,13 @@
 
 
 <ion-content padding-top>
+  <div class="center-spinner" *ngIf='isLoading && !updating'>
+    <ion-spinner name="crescent" mode="md"></ion-spinner>
+  </div>
   <ion-list>
     <ion-item [class.selecionada]="categoria === categoriaSelecionada" *ngFor="let categoria of categorias" (click)="onSelectCategoria(categoria)" >
       <ion-avatar item-left>
-        <img [src]="categoria.icone"/>
+        <img [src]="'assets/icon/'+categoria.$key+'.png'? 'assets/icon/'+categoria.$key+'.png': categoria.icone"/>
       </ion-avatar>
       <h2>{{categoria.nome}}</h2>
     </ion-item>

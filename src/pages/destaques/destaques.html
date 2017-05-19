@@ -41,6 +41,9 @@
 -->
 
 <ion-content padding>
+  <div class="center-spinner" *ngIf='isLoading'>
+    <ion-spinner name="crescent" mode="md"></ion-spinner>
+  </div>
   <ion-card *ngFor="let estabelecimento of estabelecimentos; let i = index" (click)="onSelectEstabelecimento(estabelecimento)" >
     <ion-card-content>
       <ion-row no-padding>

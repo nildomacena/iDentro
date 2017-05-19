@@ -11,6 +11,7 @@ import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
 export class FiltroCategorias {
   categorias: any[] = [];
   categoriaSelecionada: any;
+  isLoading: boolean = true;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -28,6 +29,7 @@ export class FiltroCategorias {
     this.fireService.getCategorias()
       .then(categorias => {
         this.categorias = categorias;
+        this.isLoading = false;
       })
   }
 

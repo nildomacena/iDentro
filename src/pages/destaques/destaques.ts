@@ -10,7 +10,8 @@ import { CallNumber } from '@ionic-native/call-number';
   templateUrl: 'destaques.html'
 })
 export class DestaquesPage {
-  estabelecimentos: any[];
+  estabelecimentos: any[] = [];
+  isLoading:boolean = true;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -24,8 +25,12 @@ export class DestaquesPage {
     console.log('ionViewDidLoad DestaquesPage');
     this.fireService.getEstabelecimentos()
       .then(estabelecimentos => {
+        this.isLoading = false;
         this.estabelecimentos = estabelecimentos;
       })
+      if(this.estabelecimentos.length > 0){
+        this.isLoading = false;
+      }
   }
 
   onSelectEstabelecimento(estabelecimento){

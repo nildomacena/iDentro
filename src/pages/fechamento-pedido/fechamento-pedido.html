@@ -19,7 +19,7 @@
       {{endereco.descricao}}
     </ion-card-content>
   </ion-card>
-  <div *ngIf="enderecos.length == 0">
+  <div *ngIf="enderecos.length == 0 && !enderecoAdicional">
     <h5 style="text-align: center" >Para finalizar seu pedido você precisa adicionar um endereço.</h5>
     <button ion-button primary style="width: 100%" (click)="addEndereco()" >
         Adicionar endereço

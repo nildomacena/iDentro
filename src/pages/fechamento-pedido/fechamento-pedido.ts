@@ -45,6 +45,52 @@ export class FechamentoPedidoPage {
   onSelectDinheiro(){
     this.dinheiro = true;
     this.cartao = false;
+    let erro = false;
+    let alertTroco = this.alertCtrl.create({
+      title: 'Pagamento em dinheiro',
+      subTitle: 'Você vai precisar de troco?',
+      inputs: [
+        {
+          name: 'troco',
+          placeholder: 'Digite o valor (apenas números)'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Não',
+          handler: data => {
+            console.log('troco: ', data);
+            this.troco = '0'
+          }
+        },
+        {
+          text: 'Sim',
+          handler: data => {
+            this.troco = data.troco;
+            console.log('troco: ', data);
+          }
+        }
+      ]
+    })
+
+    alertTroco.present();
+    alertTroco.onDidDismiss(() => {
+      if(this.troco == ''){
+        let alert = this.alertCtrl.create({
+          title: 'Erro',
+          subTitle: 'Digite o valor corretamente',
+          buttons: [{
+            text: 'Ok',
+            role: 'cancel',
+            handler: () => {
+              this.dinheiro = false;
+            }
+          }]
+        })
+        alert.present();
+      }
+    })
+
   }
   onSelectCartao(){
     this.dinheiro = false;

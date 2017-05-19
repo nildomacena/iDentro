@@ -122,7 +122,11 @@ export class FireService {
         })
     }
     getCategorias(): firebase.Promise<any>{
-        return this.af.database.list('categorias').first().toPromise();
+        return this.af.database.list('categorias',{query: 
+            {
+                orderByChild: 'pesquisavel',
+                equalTo: true
+            }}).first().toPromise();
     }
 
     getCategoriasEstabelecimento(): firebase.Promise<any>{

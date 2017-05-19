@@ -263,7 +263,7 @@ export class LocalizacaoPage {
               duration: 2000
             });
             toast.present();
-            this.viewCtrl.dismiss();
+            this.viewCtrl.dismiss({endereco:this.formEndereco.value});
           })
         console.log( 'full Address',this.fullAddress);
       }

@@ -34,6 +34,10 @@ export class Pedidos {
     console.log('ionViewDidLoad Pedidos');
   }
 
+  goToPedido(pedido){
+    this.navCtrl.push('PedidoDetail', {pedido:pedido})
+  }
+
   goBack(){
     this.navCtrl.pop();
   }

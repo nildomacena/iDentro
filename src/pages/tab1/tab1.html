@@ -32,7 +32,7 @@
       <ion-card-content>
         <ion-grid no-padding>
           <ion-row no-padding>
-            <ion-col col-3>
+            <ion-col col-3 (click)="goToItem(item)">
               <img *ngIf="item.imagem"[src]="item.imagem" class="foto-lanche"/>
               <img *ngIf="!item.imagem" src="assets/img/no-photo.jpg" class="foto-lanche"/>
             </ion-col>

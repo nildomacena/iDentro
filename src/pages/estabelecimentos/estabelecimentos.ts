@@ -144,7 +144,7 @@ export class EstabelecimentosPage {
   }
 
   onSelectEstabelecimento(estabelecimento){
-    this.app.getRootNav().push('EstabelecimentoPage',{'estabelecimento': estabelecimento});
+    this.app.getRootNav().push('EstabelecimentoPage',{'estabelecimento': estabelecimento, adicional: true});
   }
 
   toggleSearchbar(){

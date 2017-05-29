@@ -43,6 +43,6 @@
   </button>
 </ion-content>
 
-<ion-footer>
+<ion-footer *ngIf="!isLoading">
   <button ion-button block color="primary" (click)="onSubmit()" >Salvar</button>
 </ion-footer>

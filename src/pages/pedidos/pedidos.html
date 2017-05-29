@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Pedidos</ion-title>
+    <ion-title>Pedidos realizados</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -13,12 +13,23 @@
   <div class="center-spinner" *ngIf='isLoading'>
     <ion-spinner name="crescent" mode="md"></ion-spinner>
   </div>
+  <ion-list [virtualScroll]="pedidos" approxItemHeight="60px">
+    <ion-item *virtualItem="let pedido" (click)="goToPedido(pedido)" >
+      <b>{{pedido.estabelecimento_nome}}</b>
+      <p style="font-size: 80%">
+        Valor total: {{pedido.valor_total | currency: 'BRL':true}}<br>
+        Endereço: {{pedido.endereco}}
+      </p>
+      <p *ngIf="pedido.timestamp" style="font-size: 80%">Data: {{pedido.timestamp | date:'dd/MM/yyyy'}}</p>
+    </ion-item>
+  </ion-list>
   <div *ngIf="!isLoading && pedidos.length == 0">
     <h4>Você ainda não tem pedidos registrados. Não perca tempo, peça já seu lanche!</h4>
     <button ion-button primary style="width: 100%" (click)="goBack()" >
         Visualizar ofertas
     </button>
   </div>
+  <!--
   <ion-card *ngFor="let pedido of pedidos">
     <ion-card-header>
       {{pedido.estabelecimento_nome}}
@@ -30,5 +41,5 @@
       <b>Status:</b> {{pedido.confirmado? 'Confirmado': 'Aguardando confirmação'}}<br>
       <b *ngIf="pedido.timestamp">Data:</b> {{pedido.timestamp | date:'dd/MM/yyyy'}}
     </ion-card-content>
-  </ion-card>
+  </ion-card>-->
 </ion-content>

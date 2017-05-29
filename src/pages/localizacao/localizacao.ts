@@ -265,7 +265,6 @@ export class LocalizacaoPage {
             toast.present();
             this.viewCtrl.dismiss({endereco:this.formEndereco.value});
           })
-        console.log( 'full Address',this.fullAddress);
       }
   }
 

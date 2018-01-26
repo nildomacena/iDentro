@@ -8,46 +8,7 @@
           <h4 light (click)="goToPerfil()" >{{user? user.displayName: 'Bolts'}}</h4>
           <hr>
           <ion-list class="list-full-border">
-            <!-- Os itens comentados são funcionalidades a serem adicionadas depois de implementada a parte de pedidos -->
-            
-            <!--
-            <button class="item-menu" ion-item menuClose clear (click)="goToCarrinho()" >
-              <ion-icon item-left name="cart"></ion-icon>Carrinho
-            </button>
-            -->
-            <!--
-            <button class="item-menu" ion-item menuClose clear (click)="goToLocalizacao()" >  
-              <ion-icon item-left name="locate"></ion-icon> Definir localização
-            </button>
-            -->
-            <!--
-            <button class="item-menu" ion-item menuClose clear (click)="goToCarrinho()" >
-              <ion-icon item-left name="checkmark"></ion-icon>Pedidos realizados
-            </button>
-            
-            <ion-grid *ngIf="!logado">
-              <ion-row>
-                <ion-col>
-                  <button style="background-color: #3b5997" ion-button full (click)="loginWithFacebook()" ><ion-icon name="logo-facebook"></ion-icon>&nbsp;&nbsp;Login com Facebook</button>
-                </ion-col>
-              </ion-row>
-              <button class="item-menu" ion-item menuClose clear (click)="goToCarrinho()" >
-                <ion-icon item-left name="cart"></ion-icon>Carrinho
-              </button>
-            </ion-grid>
-            -->
             <div *ngIf="logado">
-              <!--
-              <button class="item-menu" ion-item menuClose clear (click)="goToDestaques()" >
-                <ion-icon item-left name="star"></ion-icon>Destaques
-              </button>
-              <button class="item-menu" ion-item menuClose clear (click)="goToFiltroCategoria()" >
-                <ion-icon item-left name="color-wand"></ion-icon>Procure seu lanche
-              </button>
-              <button class="item-menu" ion-item menuClose clear (click)="goToFavoritos()" >
-                <ion-icon item-left name="heart"></ion-icon>Favoritos
-              </button>
-              -->
               <button class="item-menu" ion-item menuClose clear (click)="goToPerfil()" >
                 <ion-icon item-left name="person"></ion-icon>Perfil
               </button>
